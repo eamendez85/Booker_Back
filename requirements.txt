@@ -1,0 +1,4 @@
+django
+mysqlclient
+django-rest-framework
+pillow
