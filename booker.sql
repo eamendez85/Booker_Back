@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `bookerbd` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
-USE `bookerbd`;
+CREATE DATABASE  IF NOT EXISTS `booker` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+USE `booker`;
 -- MariaDB dump 10.19  Distrib 10.4.21-MariaDB, for Win64 (AMD64)
 --
--- Host: 127.0.0.1    Database: bookerbd
+-- Host: 127.0.0.1    Database: booker
 -- ------------------------------------------------------
 -- Server version	10.4.21-MariaDB
 
@@ -73,7 +73,7 @@ CREATE TABLE `api_usuario` (
 
 LOCK TABLES `api_usuario` WRITE;
 /*!40000 ALTER TABLE `api_usuario` DISABLE KEYS */;
-INSERT INTO `api_usuario` VALUES ('pbkdf2_sha256$260000$lB4PlJfy1pnaKcP1Q8N5NI$0U8IIsQjXHqswIlqQW17nK3600S5r5D38NKYvzTdNNA=','2022-04-02 22:41:33.449953','1','Booker','eamendez85@misena.edu.co','',1,1);
+INSERT INTO `api_usuario` VALUES ('pbkdf2_sha256$260000$aL7CiIOS2XYg6xAdD7XaUh$SbmXSy7Z9eycBUmlYW1LV5Dlki+aE+ZK24V1bq3tTG8=','2022-04-04 01:28:36.859677','1','Booker','eamendez85@misena.edu.co','',1,1),('pbkdf2_sha256$260000$ozypWDJvZ8ETD88LMsPMdL$+omNUF6Nr1+s/BVY7dOi4WpCwpLxy3dl31gsDlKy9FE=','2022-04-04 01:27:06.000000','2','prueba2',NULL,'',1,1);
 /*!40000 ALTER TABLE `api_usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -144,7 +144,7 @@ CREATE TABLE `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
   CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -153,97 +153,8 @@ CREATE TABLE `auth_permission` (
 
 LOCK TABLES `auth_permission` WRITE;
 /*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can view log entry',1,'view_logentry'),(5,'Can add permission',2,'add_permission'),(6,'Can change permission',2,'change_permission'),(7,'Can delete permission',2,'delete_permission'),(8,'Can view permission',2,'view_permission'),(9,'Can add group',3,'add_group'),(10,'Can change group',3,'change_group'),(11,'Can delete group',3,'delete_group'),(12,'Can view group',3,'view_group'),(13,'Can add user',4,'add_user'),(14,'Can change user',4,'change_user'),(15,'Can delete user',4,'delete_user'),(16,'Can view user',4,'view_user'),(17,'Can add content type',5,'add_contenttype'),(18,'Can change content type',5,'change_contenttype'),(19,'Can delete content type',5,'delete_contenttype'),(20,'Can view content type',5,'view_contenttype'),(21,'Can add session',6,'add_session'),(22,'Can change session',6,'change_session'),(23,'Can delete session',6,'delete_session'),(24,'Can view session',6,'view_session'),(25,'Can add administradores',7,'add_administradores'),(26,'Can change administradores',7,'change_administradores'),(27,'Can delete administradores',7,'delete_administradores'),(28,'Can view administradores',7,'view_administradores'),(29,'Can add autores',8,'add_autores'),(30,'Can change autores',8,'change_autores'),(31,'Can delete autores',8,'delete_autores'),(32,'Can view autores',8,'view_autores'),(33,'Can add categorias',9,'add_categorias'),(34,'Can change categorias',9,'change_categorias'),(35,'Can delete categorias',9,'delete_categorias'),(36,'Can view categorias',9,'view_categorias'),(37,'Can add editoriales',10,'add_editoriales'),(38,'Can change editoriales',10,'change_editoriales'),(39,'Can delete editoriales',10,'delete_editoriales'),(40,'Can view editoriales',10,'view_editoriales'),(41,'Can add ejemplares',11,'add_ejemplares'),(42,'Can change ejemplares',11,'change_ejemplares'),(43,'Can delete ejemplares',11,'delete_ejemplares'),(44,'Can view ejemplares',11,'view_ejemplares'),(45,'Can add estudiantes',12,'add_estudiantes'),(46,'Can change estudiantes',12,'change_estudiantes'),(47,'Can delete estudiantes',12,'delete_estudiantes'),(48,'Can view estudiantes',12,'view_estudiantes'),(49,'Can add grados',13,'add_grados'),(50,'Can change grados',13,'change_grados'),(51,'Can delete grados',13,'delete_grados'),(52,'Can view grados',13,'view_grados'),(53,'Can add grupos',14,'add_grupos'),(54,'Can change grupos',14,'change_grupos'),(55,'Can delete grupos',14,'delete_grupos'),(56,'Can view grupos',14,'view_grupos'),(57,'Can add idiomas',15,'add_idiomas'),(58,'Can change idiomas',15,'change_idiomas'),(59,'Can delete idiomas',15,'delete_idiomas'),(60,'Can view idiomas',15,'view_idiomas'),(61,'Can add tipo infraccion',16,'add_tipoinfraccion'),(62,'Can change tipo infraccion',16,'change_tipoinfraccion'),(63,'Can delete tipo infraccion',16,'delete_tipoinfraccion'),(64,'Can view tipo infraccion',16,'view_tipoinfraccion'),(65,'Can add usuario',17,'add_usuario'),(66,'Can change usuario',17,'change_usuario'),(67,'Can delete usuario',17,'delete_usuario'),(68,'Can view usuario',17,'view_usuario'),(69,'Can add reservas',18,'add_reservas'),(70,'Can change reservas',18,'change_reservas'),(71,'Can delete reservas',18,'delete_reservas'),(72,'Can view reservas',18,'view_reservas'),(73,'Can add prestados',19,'add_prestados'),(74,'Can change prestados',19,'change_prestados'),(75,'Can delete prestados',19,'delete_prestados'),(76,'Can view prestados',19,'view_prestados'),(77,'Can add libros',20,'add_libros'),(78,'Can change libros',20,'change_libros'),(79,'Can delete libros',20,'delete_libros'),(80,'Can view libros',20,'view_libros'),(81,'Can add infracciones',21,'add_infracciones'),(82,'Can change infracciones',21,'change_infracciones'),(83,'Can delete infracciones',21,'delete_infracciones'),(84,'Can view infracciones',21,'view_infracciones'),(85,'Can add favoritos',22,'add_favoritos'),(86,'Can change favoritos',22,'change_favoritos'),(87,'Can delete favoritos',22,'delete_favoritos'),(88,'Can view favoritos',22,'view_favoritos'),(89,'Can add de prestamos',23,'add_deprestamos'),(90,'Can change de prestamos',23,'change_deprestamos'),(91,'Can delete de prestamos',23,'delete_deprestamos'),(92,'Can view de prestamos',23,'view_deprestamos');
+INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can view log entry',1,'view_logentry'),(5,'Can add permission',2,'add_permission'),(6,'Can change permission',2,'change_permission'),(7,'Can delete permission',2,'delete_permission'),(8,'Can view permission',2,'view_permission'),(9,'Can add group',3,'add_group'),(10,'Can change group',3,'change_group'),(11,'Can delete group',3,'delete_group'),(12,'Can view group',3,'view_group'),(13,'Can add content type',4,'add_contenttype'),(14,'Can change content type',4,'change_contenttype'),(15,'Can delete content type',4,'delete_contenttype'),(16,'Can view content type',4,'view_contenttype'),(17,'Can add session',5,'add_session'),(18,'Can change session',5,'change_session'),(19,'Can delete session',5,'delete_session'),(20,'Can view session',5,'view_session'),(21,'Can add usuario',6,'add_usuario'),(22,'Can change usuario',6,'change_usuario'),(23,'Can delete usuario',6,'delete_usuario'),(24,'Can view usuario',6,'view_usuario'),(25,'Can add estudiantes',7,'add_estudiantes'),(26,'Can change estudiantes',7,'change_estudiantes'),(27,'Can delete estudiantes',7,'delete_estudiantes'),(28,'Can view estudiantes',7,'view_estudiantes'),(29,'Can add favoritos',8,'add_favoritos'),(30,'Can change favoritos',8,'change_favoritos'),(31,'Can delete favoritos',8,'delete_favoritos'),(32,'Can view favoritos',8,'view_favoritos'),(33,'Can add de prestamos',9,'add_deprestamos'),(34,'Can change de prestamos',9,'change_deprestamos'),(35,'Can delete de prestamos',9,'delete_deprestamos'),(36,'Can view de prestamos',9,'view_deprestamos'),(37,'Can add prestados',10,'add_prestados'),(38,'Can change prestados',10,'change_prestados'),(39,'Can delete prestados',10,'delete_prestados'),(40,'Can view prestados',10,'view_prestados'),(41,'Can add infracciones',11,'add_infracciones'),(42,'Can change infracciones',11,'change_infracciones'),(43,'Can delete infracciones',11,'delete_infracciones'),(44,'Can view infracciones',11,'view_infracciones'),(45,'Can add idiomas',12,'add_idiomas'),(46,'Can change idiomas',12,'change_idiomas'),(47,'Can delete idiomas',12,'delete_idiomas'),(48,'Can view idiomas',12,'view_idiomas'),(49,'Can add reservas',13,'add_reservas'),(50,'Can change reservas',13,'change_reservas'),(51,'Can delete reservas',13,'delete_reservas'),(52,'Can view reservas',13,'view_reservas'),(53,'Can add categorias',14,'add_categorias'),(54,'Can change categorias',14,'change_categorias'),(55,'Can delete categorias',14,'delete_categorias'),(56,'Can view categorias',14,'view_categorias'),(57,'Can add editoriales',15,'add_editoriales'),(58,'Can change editoriales',15,'change_editoriales'),(59,'Can delete editoriales',15,'delete_editoriales'),(60,'Can view editoriales',15,'view_editoriales'),(61,'Can add grupos',16,'add_grupos'),(62,'Can change grupos',16,'change_grupos'),(63,'Can delete grupos',16,'delete_grupos'),(64,'Can view grupos',16,'view_grupos'),(65,'Can add tipo infraccion',17,'add_tipoinfraccion'),(66,'Can change tipo infraccion',17,'change_tipoinfraccion'),(67,'Can delete tipo infraccion',17,'delete_tipoinfraccion'),(68,'Can view tipo infraccion',17,'view_tipoinfraccion'),(69,'Can add autores',18,'add_autores'),(70,'Can change autores',18,'change_autores'),(71,'Can delete autores',18,'delete_autores'),(72,'Can view autores',18,'view_autores'),(73,'Can add ejemplares',19,'add_ejemplares'),(74,'Can change ejemplares',19,'change_ejemplares'),(75,'Can delete ejemplares',19,'delete_ejemplares'),(76,'Can view ejemplares',19,'view_ejemplares'),(77,'Can add libros',20,'add_libros'),(78,'Can change libros',20,'change_libros'),(79,'Can delete libros',20,'delete_libros'),(80,'Can view libros',20,'view_libros'),(81,'Can add administradores',21,'add_administradores'),(82,'Can change administradores',21,'change_administradores'),(83,'Can delete administradores',21,'delete_administradores'),(84,'Can view administradores',21,'view_administradores'),(85,'Can add grados',22,'add_grados'),(86,'Can change grados',22,'change_grados'),(87,'Can delete grados',22,'delete_grados'),(88,'Can view grados',22,'view_grados');
 /*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `auth_user`
---
-
-DROP TABLE IF EXISTS `auth_user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `auth_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `password` varchar(128) NOT NULL,
-  `last_login` datetime(6) DEFAULT NULL,
-  `is_superuser` tinyint(1) NOT NULL,
-  `username` varchar(150) NOT NULL,
-  `first_name` varchar(150) NOT NULL,
-  `last_name` varchar(150) NOT NULL,
-  `email` varchar(254) NOT NULL,
-  `is_staff` tinyint(1) NOT NULL,
-  `is_active` tinyint(1) NOT NULL,
-  `date_joined` datetime(6) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auth_user`
---
-
-LOCK TABLES `auth_user` WRITE;
-/*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `auth_user_groups`
---
-
-DROP TABLE IF EXISTS `auth_user_groups`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `auth_user_groups` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `group_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_user_groups_user_id_group_id_94350c0c_uniq` (`user_id`,`group_id`),
-  KEY `auth_user_groups_group_id_97559544_fk_auth_group_id` (`group_id`),
-  CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
-  CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auth_user_groups`
---
-
-LOCK TABLES `auth_user_groups` WRITE;
-/*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_user_groups` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `auth_user_user_permissions`
---
-
-DROP TABLE IF EXISTS `auth_user_user_permissions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `auth_user_user_permissions` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_user_user_permissions_user_id_permission_id_14a6b632_uniq` (`user_id`,`permission_id`),
-  KEY `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` (`permission_id`),
-  CONSTRAINT `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
-  CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auth_user_user_permissions`
---
-
-LOCK TABLES `auth_user_user_permissions` WRITE;
-/*!40000 ALTER TABLE `auth_user_user_permissions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_user_user_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -367,13 +278,13 @@ CREATE TABLE `django_admin_log` (
   `action_flag` smallint(5) unsigned NOT NULL CHECK (`action_flag` >= 0),
   `change_message` longtext NOT NULL,
   `content_type_id` int(11) DEFAULT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `django_admin_log_content_type_id_c4bce8eb_fk_django_co` (`content_type_id`),
-  KEY `django_admin_log_user_id_c564eba6_fk_auth_user_id` (`user_id`),
+  KEY `django_admin_log_user_id_c564eba6_fk_api_usuario_doc` (`user_id`),
   CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
-  CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  CONSTRAINT `django_admin_log_user_id_c564eba6_fk_api_usuario_doc` FOREIGN KEY (`user_id`) REFERENCES `api_usuario` (`doc`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -382,6 +293,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
+INSERT INTO `django_admin_log` VALUES (1,'2022-04-04 01:26:53.418150','2','prueba2,  doc: 2',2,'[{\"changed\": {\"fields\": [\"Usuario administrador\"]}}]',6,'1'),(2,'2022-04-04 01:28:45.586415','3','prueba2,  doc: 3',3,'',6,'1'),(3,'2022-04-04 01:28:57.329950','2','prueba2,  doc: 2',2,'[]',6,'1');
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -398,7 +310,7 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -407,7 +319,7 @@ CREATE TABLE `django_content_type` (
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(7,'api','administradores'),(8,'api','autores'),(9,'api','categorias'),(23,'api','deprestamos'),(10,'api','editoriales'),(11,'api','ejemplares'),(12,'api','estudiantes'),(22,'api','favoritos'),(13,'api','grados'),(14,'api','grupos'),(15,'api','idiomas'),(21,'api','infracciones'),(20,'api','libros'),(19,'api','prestados'),(18,'api','reservas'),(16,'api','tipoinfraccion'),(17,'api','usuario'),(3,'auth','group'),(2,'auth','permission'),(4,'auth','user'),(5,'contenttypes','contenttype'),(6,'sessions','session');
+INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(21,'api','administradores'),(18,'api','autores'),(14,'api','categorias'),(9,'api','deprestamos'),(15,'api','editoriales'),(19,'api','ejemplares'),(7,'api','estudiantes'),(8,'api','favoritos'),(22,'api','grados'),(16,'api','grupos'),(12,'api','idiomas'),(11,'api','infracciones'),(20,'api','libros'),(10,'api','prestados'),(13,'api','reservas'),(17,'api','tipoinfraccion'),(6,'api','usuario'),(3,'auth','group'),(2,'auth','permission'),(4,'contenttypes','contenttype'),(5,'sessions','session');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -433,7 +345,7 @@ CREATE TABLE `django_migrations` (
 
 LOCK TABLES `django_migrations` WRITE;
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2022-04-02 22:31:49.504693'),(2,'auth','0001_initial','2022-04-02 22:32:03.160300'),(3,'admin','0001_initial','2022-04-02 22:32:06.062450'),(4,'admin','0002_logentry_remove_auto_add','2022-04-02 22:32:06.135409'),(5,'admin','0003_logentry_add_action_flag_choices','2022-04-02 22:32:06.242364'),(6,'api','0001_initial','2022-04-02 22:33:00.608140'),(7,'contenttypes','0002_remove_content_type_name','2022-04-02 22:33:02.160287'),(8,'auth','0002_alter_permission_name_max_length','2022-04-02 22:33:03.525568'),(9,'auth','0003_alter_user_email_max_length','2022-04-02 22:33:03.791603'),(10,'auth','0004_alter_user_username_opts','2022-04-02 22:33:03.882887'),(11,'auth','0005_alter_user_last_login_null','2022-04-02 22:33:04.373260'),(12,'auth','0006_require_contenttypes_0002','2022-04-02 22:33:04.420136'),(13,'auth','0007_alter_validators_add_error_messages','2022-04-02 22:33:04.549196'),(14,'auth','0008_alter_user_username_max_length','2022-04-02 22:33:04.891611'),(15,'auth','0009_alter_user_last_name_max_length','2022-04-02 22:33:05.049296'),(16,'auth','0010_alter_group_name_max_length','2022-04-02 22:33:05.244569'),(17,'auth','0011_update_proxy_permissions','2022-04-02 22:33:05.441856'),(18,'auth','0012_alter_user_first_name_max_length','2022-04-02 22:33:05.611699'),(19,'sessions','0001_initial','2022-04-02 22:33:06.190185'),(20,'api','0002_libros_imagen','2022-04-02 23:49:18.285806');
+INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2022-04-04 01:15:48.958670'),(2,'api','0001_initial','2022-04-04 01:15:49.277665'),(3,'admin','0001_initial','2022-04-04 01:15:51.367509'),(4,'admin','0002_logentry_remove_auto_add','2022-04-04 01:15:51.427645'),(5,'admin','0003_logentry_add_action_flag_choices','2022-04-04 01:15:51.480612'),(6,'contenttypes','0002_remove_content_type_name','2022-04-04 01:15:52.122725'),(7,'auth','0001_initial','2022-04-04 01:16:00.705089'),(8,'auth','0002_alter_permission_name_max_length','2022-04-04 01:16:02.301114'),(9,'auth','0003_alter_user_email_max_length','2022-04-04 01:16:02.374066'),(10,'auth','0004_alter_user_username_opts','2022-04-04 01:16:02.472011'),(11,'auth','0005_alter_user_last_login_null','2022-04-04 01:16:02.522972'),(12,'auth','0006_require_contenttypes_0002','2022-04-04 01:16:02.639898'),(13,'auth','0007_alter_validators_add_error_messages','2022-04-04 01:16:02.767815'),(14,'auth','0008_alter_user_username_max_length','2022-04-04 01:16:02.892117'),(15,'auth','0009_alter_user_last_name_max_length','2022-04-04 01:16:02.978059'),(16,'auth','0010_alter_group_name_max_length','2022-04-04 01:16:03.240021'),(17,'auth','0011_update_proxy_permissions','2022-04-04 01:16:03.368467'),(18,'auth','0012_alter_user_first_name_max_length','2022-04-04 01:16:03.472938'),(19,'sessions','0001_initial','2022-04-04 01:16:04.443550'),(20,'api','0002_auto_20220403_2019','2022-04-04 01:20:02.945799');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -459,7 +371,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('ofy4i6rzd1awy3y0hb2ql2hyxtdq69lo','.eJxVjDsOwjAQBe_iGlkLZv2hpM8ZorV3jQPIluKkQtwdIqWA9s3Me6mR1qWMa5d5nFhd1FEdfrdI6SF1A3ynems6tbrMU9Sbonfa9dBYntfd_Tso1Mu3dhQy8gltziLsz9FaBwFcsp5NBCEAkZCEjEFmQWKHkLzJzjrygur9AQCyOKo:1namR3:GCPdVBS0RrSdgrf_eJb7INLT5y-2eWOwBcKuPYr8zRg','2022-04-16 22:41:33.584251');
+INSERT INTO `django_session` VALUES ('zvf3ii9djom5sgjk0o6g6bfnm09jpwkv','.eJxVjMsOwiAQRf-FtSEMb1y69xvIAINUDU1KuzL-uzbpQrf3nHNfLOK2trgNWuJU2JkBO_1uCfOD-g7KHftt5nnu6zIlviv8oINf50LPy-H-HTQc7Vv7YCVI7bWu4J0CZ0gLJQQJsM6jAxDVVR-qDcoqmbKwaKSpQSEEQ569P4hJNdI:1nbBWG:80Vs1RO-Y2Mb_CRFQXdIqjZvnTqHtP0aijBrB00Asvc','2022-04-18 01:28:36.901686');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -531,9 +443,9 @@ CREATE TABLE `estudiantes` (
   `id_grado` int(11) DEFAULT NULL,
   `id_grupo` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_estudiante`),
-  KEY `estudiantes_doc_08258e00_fk_api_usuario_doc` (`doc`),
   KEY `estudiantes_id_grado_c1f574c6_fk_grados_id_grado` (`id_grado`),
   KEY `estudiantes_id_grupo_0cbc96d9_fk_grupos_id_grupo` (`id_grupo`),
+  KEY `estudiantes_doc_08258e00_fk_api_usuario_doc` (`doc`),
   CONSTRAINT `estudiantes_doc_08258e00_fk_api_usuario_doc` FOREIGN KEY (`doc`) REFERENCES `api_usuario` (`doc`),
   CONSTRAINT `estudiantes_id_grado_c1f574c6_fk_grados_id_grado` FOREIGN KEY (`id_grado`) REFERENCES `grados` (`id_grado`),
   CONSTRAINT `estudiantes_id_grupo_0cbc96d9_fk_grupos_id_grupo` FOREIGN KEY (`id_grupo`) REFERENCES `grupos` (`id_grupo`)
@@ -742,6 +654,7 @@ DROP TABLE IF EXISTS `libros`;
 CREATE TABLE `libros` (
   `id_libro` int(11) NOT NULL AUTO_INCREMENT,
   `isbn` varchar(20) NOT NULL,
+  `imagen` varchar(200) DEFAULT NULL,
   `nombre` varchar(150) NOT NULL,
   `edicion` varchar(50) DEFAULT NULL,
   `descripcion` longtext DEFAULT NULL,
@@ -755,7 +668,6 @@ CREATE TABLE `libros` (
   `estado` varchar(3) DEFAULT NULL,
   `id_editorial` int(11) DEFAULT NULL,
   `id_idioma` int(11) DEFAULT NULL,
-  `imagen` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id_libro`),
   KEY `libros_id_editorial_ee987fee_fk_editoriales_id_editorial` (`id_editorial`),
   KEY `libros_id_idioma_a39a8bd6_fk_idiomas_id_idioma` (`id_idioma`),
@@ -944,4 +856,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-02 19:03:18
+-- Dump completed on 2022-04-03 20:30:31

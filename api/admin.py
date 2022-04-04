@@ -6,5 +6,6 @@ from api.models import Usuario
 
 class UsuariosAdmin(admin.ModelAdmin):
     list_display=('doc', 'name')
+    
 
 admin.site.register(Usuario, UsuariosAdmin)

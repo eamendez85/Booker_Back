@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'Booker_Back.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bookerbd',
+        'NAME': 'booker',
         'USER':'root',
         'PASSWORD': '',
         'HOST':'localhost',
