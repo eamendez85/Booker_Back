@@ -28,16 +28,12 @@ class UsuariosSerializer(serializers.ModelSerializer):
         return value
     """
 
-class EstudiantesListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Estudiantes
-        fields  ="__all__"
-            
 class UsuariosListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields="__all__"
-    """"
+        exclude = ('password',)
+
+        """"
     def to_representation(self, instance):
         return {
             'id_libro': instance.id_libro,
@@ -57,3 +53,31 @@ class UsuariosListSerializer(serializers.ModelSerializer):
         }
         
     """
+
+
+
+class EstudiantesListSerializer(serializers.ModelSerializer):
+
+    doc_estudiante = UsuariosListSerializer(many=False,  read_only=True)
+
+
+    class Meta:
+        model = Estudiantes
+        fields  =['id_estudiante', 'tipodoc', 'nombres', 'apellidos', 'telefono',  'direccion', 'doc_estudiante', 'id_grado', 'id_grupo']
+
+
+
+class EstudiantesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Estudiantes
+        fields="__all__"
+        
+    def create(self, validated_data):
+        estudiante = Estudiantes(**validated_data)
+        estudiante.save()
+        return estudiante
+    
+    def update(self, instance, validated_data):
+        update_usuario = super().update(instance, validated_data)
+        update_usuario.save()
+        return update_usuario
