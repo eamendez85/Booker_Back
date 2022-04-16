@@ -14,14 +14,20 @@ class UsuariosSerializer(serializers.ModelSerializer):
         return usuario
     
     def update(self, instance, validated_data):
-        update_usuario = super().update(instance, validated_data)
-        update_usuario.set_password(validated_data['password'])
-        update_usuario.save()
-        return update_usuario
-    
-    
-    
-    """ Validacion
+        
+        if "password" not in validated_data:
+            
+            update_usuario = super().update(instance, validated_data)
+            update_usuario.save()
+            return update_usuario
+        else:
+            update_usuario = super().update(instance, validated_data)
+            update_usuario.set_password(validated_data['password'])
+            update_usuario.save()
+            return update_usuario
+  
+"""       
+    Validacion
     def validate_name(self, value):
         if 'pepe' in value:
             raise serializers.ValidationError('Error, no puede existir un usuario con este nombre') 

@@ -1,3 +1,4 @@
+from functools import partial
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -27,7 +28,7 @@ def usuario_api_view(request):
         return Response(usuario_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
     
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE', 'PATCH'])
 def usuario_detalle_api_view(request, pk):
     #consulta
     usuario = Usuario.objects.filter(doc=pk).first()
@@ -42,7 +43,16 @@ def usuario_detalle_api_view(request, pk):
         
         #Actualizar
         elif request.method =='PUT':
+                
             usuario_serializer = UsuariosSerializer(usuario, data = request.data)
+            if usuario_serializer.is_valid():
+                usuario_serializer.save()
+                return Response(usuario_serializer.data, status = status.HTTP_200_OK)
+            return Response(usuario_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+        
+        elif request.method =='PATCH':
+                
+            usuario_serializer = UsuariosSerializer(usuario, data = request.data, partial=True)
             if usuario_serializer.is_valid():
                 usuario_serializer.save()
                 return Response(usuario_serializer.data, status = status.HTTP_200_OK)
@@ -88,9 +98,10 @@ def estudiantes_api_view(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def estudiante_detalle_api_view(request, doc):
+def estudiante_detalle_api_view(request, pk):
     #consulta
-    estudiante = Estudiantes.objects.filter(doc_estudiante=doc).first()
+    estudiante = Estudiantes.objects.filter(doc_estudiante=pk).first()
+    usuario = Usuario.objects.filter(doc=pk).first()
     
     #validacion
     if estudiante:
@@ -100,28 +111,30 @@ def estudiante_detalle_api_view(request, doc):
             estudiante_serializer= EstudiantesListSerializer(estudiante)
             return Response(estudiante_serializer.data, status = status.HTTP_200_OK)
 
+
         #Actualizar
         elif request.method =='PUT':
-            estudiante_serializer = UsuariosSerializer(usuario, data = request.data)
+            data_estudiante = request.data
+            data_usuario = request.data['doc_estudiante']
+            data_estudiante['doc_estudiante'] = data_usuario['doc']
+            usuario_serializer = UsuariosSerializer(usuario, data = data_usuario, partial=True)
+            estudiante_serializer = EstudiantesSerializer(estudiante, data = data_estudiante)
+            
             if usuario_serializer.is_valid():
                 usuario_serializer.save()
-                return Response(usuario_serializer.data, status = status.HTTP_200_OK)
+            
+            if estudiante_serializer.is_valid():
+                estudiante_serializer.save()
+                return Response({"mensaje": "Estudiante actualizado correctamente"}, status = status.HTTP_200_OK)
             return Response(usuario_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+        
 
         elif request.method == 'DELETE':
+            usuario.delete()
             estudiante.delete()
             return Response({"mensaje": "Estudiante eliminado correctamente"}, status = status.HTTP_200_OK)
     
 
-    """
-    elif request.method == 'POST':
-        usuario_serializer = UsuariosSerializer(data = request.data)
-        
-        #validacion
-        if usuario_serializer.is_valid():
-            usuario_serializer.save()
-            return Response({"mensaje": "Usuario creado correctamente"}, status = status.HTTP_201_CREATED)
-        return Response(usuario_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-    """
-    #Crear
+    
+    return Response({'mensaje': "Este estudiante no existe"}, status = status.HTTP_400_BAD_REQUEST)
     
