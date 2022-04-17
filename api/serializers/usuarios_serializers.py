@@ -78,12 +78,19 @@ class EstudiantesSerializer(serializers.ModelSerializer):
         model = Estudiantes
         fields="__all__"
         
-    def create(self, validated_data):
-        estudiante = Estudiantes(**validated_data)
-        estudiante.save()
-        return estudiante
+
+class AdministradoresListSerializer(serializers.ModelSerializer):
     
-    def update(self, instance, validated_data):
-        update_usuario = super().update(instance, validated_data)
-        update_usuario.save()
-        return update_usuario
+    doc_administrador = UsuariosListSerializer(many=False,  read_only=True)
+
+
+    class Meta:
+        model = Administradores
+        fields  =['id_administrador', 'tipodoc', 'nombres', 'apellidos', 'telefono',  'direccion', 'doc_administrador']
+
+
+
+class AdministradoresSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Administradores
+        fields="__all__"

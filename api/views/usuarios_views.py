@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from api.models import Usuario
-from api.serializers import *
+from api.serializers.usuarios_serializers import *
 from rest_framework import status
 
 
@@ -126,7 +126,7 @@ def estudiante_detalle_api_view(request, pk):
             if estudiante_serializer.is_valid():
                 estudiante_serializer.save()
                 return Response({"mensaje": "Estudiante actualizado correctamente"}, status = status.HTTP_200_OK)
-            return Response(usuario_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+            return Response(estudiante_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
         
 
         elif request.method == 'DELETE':
@@ -137,4 +137,75 @@ def estudiante_detalle_api_view(request, pk):
 
     
     return Response({'mensaje': "Este estudiante no existe"}, status = status.HTTP_400_BAD_REQUEST)
+    
+    
+@api_view(['GET', 'POST'])
+def administradores_api_view(request):
+    
+    #listado
+    if request.method == 'GET':
+        #consulta
+
+        administradores= Administradores.objects.all()
+        administradores_serializer = AdministradoresListSerializer(administradores, many=True)
+        return Response(administradores_serializer.data, status = status.HTTP_200_OK)
+
+    elif request.method == 'POST':
+        usuario_serializer = UsuariosSerializer(data = request.data['doc_administrador'])
+        data_administrador = request.data
+        data_usuario = request.data['doc_administrador']
+        data_administrador['doc_administrador']=data_usuario['doc']
+        administrador_serializer = AdministradoresSerializer(data = data_administrador)
+        
+
+        #validacion
+        if usuario_serializer.is_valid():
+            usuario_serializer.save()
+
+        #validacion
+        if administrador_serializer.is_valid():
+            administrador_serializer.save()
+            return Response({"mensaje": "Administrador creado correctamente"}, status = status.HTTP_201_CREATED)
+        return Response(administrador_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def administrador_detalle_api_view(request, pk):
+    #consulta
+    administrador = Administradores.objects.filter(doc_administrador=pk).first()
+    usuario = Usuario.objects.filter(doc=pk).first()
+    
+    #validacion
+    if administrador:
+    
+        #get
+        if request.method=='GET':
+            administrador_serializer= AdministradoresListSerializer(administrador)
+            return Response(administrador_serializer.data, status = status.HTTP_200_OK)
+
+
+        #Actualizar
+        elif request.method =='PUT':
+            data_administrador = request.data
+            data_usuario = request.data['doc_administrador']
+            data_administrador['doc_administrador'] = data_usuario['doc']
+            usuario_serializer = UsuariosSerializer(usuario, data = data_usuario, partial=True)
+            administrador_serializer = AdministradoresSerializer(administrador, data = data_administrador)
+            
+            if usuario_serializer.is_valid():
+                usuario_serializer.save()
+            
+            if administrador_serializer.is_valid():
+                administrador_serializer.save()
+                return Response({"mensaje": "Administrador actualizado correctamente"}, status = status.HTTP_200_OK)
+            return Response(administrador_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+        
+
+        elif request.method == 'DELETE':
+            usuario.delete()
+            administrador.delete()
+            return Response({"mensaje": "Administrador eliminado correctamente"}, status = status.HTTP_200_OK)
+    
+
+    
+    return Response({'mensaje': "Este administrador no existe"}, status = status.HTTP_400_BAD_REQUEST)
     
