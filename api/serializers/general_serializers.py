@@ -1,7 +1,6 @@
-from attr import fields
 from django.forms import ValidationError
 from rest_framework import serializers
-from api.models import Grados, Grupos, Categorias
+from api.models import Autores, Editoriales, Grados, Grupos, Categorias
 
 #Serializer grados
 class GradosSerializer(serializers.ModelSerializer):
@@ -20,4 +19,15 @@ class CategoriasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Categorias
         fields = '__all__'
+
+#Serializer autores
+class AutoresSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Autores
+        fields = '__all__'
         
+#Serializer editoriales
+class EditorialesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Editoriales
+        fields = '__all__'
