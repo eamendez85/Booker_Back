@@ -2,8 +2,8 @@ from telnetlib import STATUS
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
-from api.models import Autores, Categorias, Editoriales, Grados, Grupos
-from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, EditorialesSerializer, GradosSerializer, GruposSerializer
+from api.models import Autores, Categorias, Editoriales, Favoritos, Grados, Grupos, Idiomas
+from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, EditorialesSerializer, FavoritosSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer
 
 
 #Viewset del modelo grados
@@ -132,3 +132,40 @@ class EditorialesViewSet(viewsets.ModelViewSet):
         editorial = Editoriales.objects.filter(id_editorial = pk).first()
         editorial.delete()
         return Response({'message':'Editorial eliminada correctamente'}, status= status.HTTP_200_OK)
+
+#ViewSet del modelo idiomas
+class IdiomasViewSet(viewsets.ModelViewSet):
+    serializer_class = IdiomasSerializer
+    def get_queryset(self, pk=None):
+        if pk == None:
+            return IdiomasSerializer.Meta.model.objects.all()
+        return Idiomas.objects.filter(id_idioma = pk).first()
+
+    def create(self, request):
+            serializer = IdiomasSerializer(data = request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'data' : serializer.data, 'message':'Se ha agregado el idioma correctamente'}, status= status.HTTP_201_CREATED)
+        
+            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk):
+        idioma = Idiomas.objects.filter(id_idioma = pk).first()
+        serializer = IdiomasSerializer(idioma, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'data' : serializer.data, 'message':'Idioma actualizado correctamente'}, status= status.HTTP_200_OK)
+        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, pk):
+        idioma = Idiomas.objects.filter(id_editorial = pk).first()
+        idioma.delete()
+        return Response({'message':'Idioma eliminada correctamente'}, status= status.HTTP_200_OK)
+
+#ViewSet del modelo Favoritos
+class FavoritosViewSet(viewsets.ModelViewSet):
+    serializer_class = FavoritosSerializer
+    def get_queryset(self, pk=None):
+        if pk == None:
+            return FavoritosSerializer.Meta.model.objects.all()
+        return Favoritos.objects.filter(id_idioma = pk).first()
