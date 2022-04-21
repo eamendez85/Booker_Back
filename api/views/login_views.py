@@ -19,8 +19,7 @@ class Login(ObtainAuthToken):
             if user.usuario_activo:
                 token,created = Token.objects.get_or_create(user = user)
                 if user.usuario_administrador:
-                    administrador = Administradores.objects.filter(doc_administrador = user.doc).first()
-                    print("ADMINISTRADOR: ",administrador)
+                    administrador = Administradores.objects.filter(doc_administrador=user.doc).first()
                     user_serializer = AdministradoresListSerializer(administrador)
                 elif user.usuario_administrador==False:
                     estudiante = Estudiantes.objects.filter(doc_estudiante = user.doc).first()
