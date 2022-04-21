@@ -151,10 +151,12 @@ def administradores_api_view(request):
         return Response(administradores_serializer.data, status = status.HTTP_200_OK)
 
     elif request.method == 'POST':
-        usuario_serializer = UsuariosSerializer(data = request.data['doc_administrador'])
         data_administrador = request.data
         data_usuario = request.data['doc_administrador']
+        data_usuario['usuario_administrador'] = True
         data_administrador['doc_administrador']=data_usuario['doc']
+        
+        usuario_serializer = UsuariosSerializer(data = data_usuario)
         administrador_serializer = AdministradoresSerializer(data = data_administrador)
         
 

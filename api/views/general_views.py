@@ -14,27 +14,6 @@ class GradoViewSet(viewsets.ModelViewSet):
         if pk == None:
             return GradosSerializer.Meta.model.objects.all()
         return Grados.objects.filter(id_grado = pk).first()
-
-    def create(self, request):
-        serializer = GradosSerializer(data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'data' : serializer.data, 'message':'Se ha creado el grado correctamente'}, status= status.HTTP_201_CREATED)
-        
-        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-
-    def update(self, request, pk):
-        grado = Grados.objects.filter(id_grado = pk).first()
-        serializer = GradosSerializer(grado, data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'data' : serializer.data, 'message': "Grado actualizado correctamente"}, status= status.HTTP_200_OK)
-        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-
-    def destroy(self, request, pk):
-        grado = Grados.objects.filter(id_grado = pk).first()
-        grado.delete()
-        return Response({'message':'Grado eliminado correctamente'}, status= status.HTTP_200_OK)
         
 
 #ViewSet del modelo grupos
