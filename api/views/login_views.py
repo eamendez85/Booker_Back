@@ -15,6 +15,13 @@ from api.serializers.usuarios_serializers import UsuariosListSerializer
 class Login(ObtainAuthToken):
     
     def post(self, request, *args, **kwargs):
+
+        """
+        Login - Inicar sesion
+
+        Recibe un form-data {'username':'', 'password':''}
+        """
+
         login_serializer = self.serializer_class(data = request.data, context = {'request':request})
         if login_serializer.is_valid():
             user = login_serializer.validated_data['user']
@@ -60,6 +67,12 @@ class Logout(APIView):
     
     def get(self, request, *args, **kwargs):
 
+        """
+        logout - Cerrar sesion
+
+        Recibe parametro 'token' por peticion HTTP GET
+        """
+
         token = Token.objects.filter(key = request.GET.get('token')).first()
             
         if token:
@@ -82,4 +95,10 @@ class Logout(APIView):
                 
                 
         
-        
+"""
+Autorizacion
+Recibe por Headers
+
+key = 'Authorization'
+value = 'Token sasd25255dasrdfsadasd'
+"""
