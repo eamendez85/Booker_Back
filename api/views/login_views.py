@@ -1,6 +1,7 @@
 #cerrar todas las sesiones al inicar sesion
 from django.contrib.sessions.models import Session
 from datetime import datetime
+from django.utils import timezone
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -58,27 +59,26 @@ class Login(ObtainAuthToken):
 class Logout(APIView):
     
     def get(self, request, *args, **kwargs):
-            token = request.GET.get('token')
-            token = Token.objects.filter(key = token).first()
+
+        token = Token.objects.filter(key = request.GET.get('token')).first()
             
-            if token:
-                user = token.user
-                print("USER: ",user)
+        if token:
+            user = token.user
                 
-                all_sessions = Session.objects.filter(expire_date__gte = datetime.now())
-                if all_sessions.exists():
-                    for session in all_sessions:
-                        session_data = session.get_decoded()
-                        if user.doc == int(session_data.get('_auth_user_id')):
-                            session.delete()
+            all_sessions = Session.objects.filter(expire_date__gte = timezone.now())
+            if all_sessions.exists():
+                for session in all_sessions:
+                    session_data = session.get_decoded()
+                    if int(user.doc) == int(session_data['_auth_user_id']):
+                        session.delete()
                 
-                token.delete()
+            token.delete()
                 
-                session_message = 'Sesiones de usuario eliminados.'
-                token_message = 'Token eliminado.'
-                return Response({'token_message':token_message, 'session_message':session_message}, status = status.HTTP_200_OK)
+            session_message = 'Sesiones de usuario eliminados.'
+            token_message = 'Token eliminado.'
+            return Response({'token_message':token_message, 'session_message':session_message}, status = status.HTTP_200_OK)
             
-            return Response({'error':'No se ha encontrado un usuario con estas credenciales.'}, status = status.HTTP_400_BAD_REQUEST)
+        return Response({'error':'No se ha encontrado un usuario con estas credenciales.'}, status = status.HTTP_400_BAD_REQUEST)
                 
                 
         
