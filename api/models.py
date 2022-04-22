@@ -193,7 +193,7 @@ class Ejemplares(models.Model):
 #Infracciones
 
 class TipoInfraccion(models.Model):
-    id_tipo_infraccion = models.IntegerField(primary_key=True)
+    id_tipo_infraccion = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=15, blank=True, null=True)
 
     class Meta:

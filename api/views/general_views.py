@@ -2,8 +2,8 @@ from telnetlib import STATUS
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
-from api.models import Autores, Categorias, Editoriales, Favoritos, Grados, Grupos, Idiomas
-from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, EditorialesSerializer, FavoritosSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer
+from api.models import Autores, Categorias, DePrestamos, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Idiomas, Infracciones, TipoInfraccion
+from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, DetallePrestamosSerializer, EditorialesSerializer, EjemplaresSerializer, FavoritosSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer, InfraccionesSerializer, PrestadosSerializer, TipoInfraccionesSerializer
 
 
 #Viewset del modelo grados
@@ -158,9 +158,9 @@ class IdiomasViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk):
-        idioma = Idiomas.objects.filter(id_editorial = pk).first()
+        idioma = Idiomas.objects.filter(id_idioma = pk).first()
         idioma.delete()
-        return Response({'message':'Idioma eliminada correctamente'}, status= status.HTTP_200_OK)
+        return Response({'message':'Idioma eliminado correctamente'}, status= status.HTTP_200_OK)
 
 #ViewSet del modelo Favoritos
 class FavoritosViewSet(viewsets.ModelViewSet):
@@ -168,4 +168,128 @@ class FavoritosViewSet(viewsets.ModelViewSet):
     def get_queryset(self, pk=None):
         if pk == None:
             return FavoritosSerializer.Meta.model.objects.all()
-        return Favoritos.objects.filter(id_idioma = pk).first()
+        return Favoritos.objects.filter(id_favorito = pk).first()
+
+    def create(self, request):
+            serializer = FavoritosSerializer(data = request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'data' : serializer.data, 'message':'Se ha agregado el libro favorito correctamente'}, status= status.HTTP_201_CREATED)
+        
+            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk):
+        favorito = Favoritos.objects.filter(id_favorito = pk).first()
+        serializer = EjemplaresSerializer(favorito, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'data' : serializer.data, 'message':'Libro favorito actualizado correctamente'}, status= status.HTTP_200_OK)
+        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, pk):
+        favorito = Favoritos.objects.filter(id_favorito = pk).first()
+        favorito.delete()
+        return Response({'message':'Libro favorito eliminado correctamente'}, status= status.HTTP_200_OK)
+
+#ViewSet del modelo ejemplares
+class EjemplaresViewSet(viewsets.ModelViewSet):
+    serializer_class = EjemplaresSerializer
+    def get_queryset(self, pk=None):
+        if pk == None:
+            return EjemplaresSerializer.Meta.model.objects.all()
+        return Ejemplares.objects.filter(id_ejemplar = pk).first()
+
+    def create(self, request):
+            serializer = EjemplaresSerializer(data = request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'data' : serializer.data, 'message':'Se ha agregado el ejemplar correctamente'}, status= status.HTTP_201_CREATED)
+        
+            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk):
+        ejemplar = Ejemplares.objects.filter(id_ejemplar = pk).first()
+        serializer = EjemplaresSerializer(ejemplar, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'data' : serializer.data, 'message':'Ejemplar actualizado correctamente'}, status= status.HTTP_200_OK)
+        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, pk):
+        ejemplar = Ejemplares.objects.filter(id_ejemplar = pk).first()
+        ejemplar.delete()
+        return Response({'message':'Ejemplar eliminado correctamente'}, status= status.HTTP_200_OK)
+
+#ViewSet del modelo tipoInfraccion
+class TipoInfraccionViewSet(viewsets.ModelViewSet):
+    serializer_class = TipoInfraccionesSerializer
+    def get_queryset(self, pk=None):
+        if pk == None:
+            return TipoInfraccionesSerializer.Meta.model.objects.all()
+        return TipoInfraccion.objects.filter(id_tipo_infraccion = pk).first()
+
+#ViewSet del modelo Infracciones
+class InfraccionesViewSet(viewsets.ModelViewSet):
+    serializer_class = InfraccionesSerializer
+    def get_queryset(self, pk=None):
+        if pk == None:
+            return InfraccionesSerializer.Meta.model.objects.all()
+        return Infracciones.objects.filter(id_infraccion = pk).first()
+
+    def create(self, request):
+            serializer = InfraccionesSerializer(data = request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'data' : serializer.data, 'message':'Se ha agregado la infracción al estudiante correctamente'}, status= status.HTTP_201_CREATED)
+        
+            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk):
+        infraccion = Infracciones.objects.filter(id_infraccion = pk).first()
+        serializer = InfraccionesSerializer(infraccion, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'data' : serializer.data, 'message':'Infracción actualizada correctamente'}, status= status.HTTP_200_OK)
+        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, pk):
+        infraccion = Infracciones.objects.filter(id_infraccion = pk).first()
+        infraccion.delete()
+        return Response({'message':'Infracción eliminada correctamente'}, status= status.HTTP_200_OK)
+
+#ViewSet del modelo Detalles prestamos
+class DetallePrestamoViewSet(viewsets.ModelViewSet):
+    serializer_class = DetallePrestamosSerializer
+    def get_queryset(self, pk=None):
+        if pk == None:
+            return DetallePrestamosSerializer.Meta.model.objects.all()
+        return DePrestamos.objects.filter(id_de_prestamo = pk).first()
+
+    def create(self, request):
+            serializer = DetallePrestamosSerializer(data = request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'data' : serializer.data, 'message':'Se ha agregado el prestamo al estudiante correctamente'}, status= status.HTTP_201_CREATED)
+            
+            serializerPrestados = PrestadosSerializer(data = request.data)
+            if serializerPrestados.is_valid():
+                serializerPrestados.save()
+                print("Prestado guardado")
+        
+            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk):
+        detallePrestamo = DePrestamos.objects.filter(id_de_prestamo = pk).first()
+        serializer = DetallePrestamosSerializer(detallePrestamo, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'data' : serializer.data, 'message':'Prestamo actualizado correctamente'}, status= status.HTTP_200_OK)
+        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, pk):
+        detallePrestamo = DePrestamos.objects.filter(id_de_prestamo = pk).first()
+        detallePrestamo.delete()
+        return Response({'message':'Registro de prestamo eliminado correctamente'}, status= status.HTTP_200_OK)
+
+
+

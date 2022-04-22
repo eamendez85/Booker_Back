@@ -1,6 +1,7 @@
+from dataclasses import fields
 from django.forms import ValidationError
 from rest_framework import serializers
-from api.models import Autores, Editoriales, Favoritos, Grados, Grupos, Categorias, Idiomas
+from api.models import Autores, DePrestamos, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Categorias, Idiomas, Infracciones, Prestados, TipoInfraccion
 
 #Serializer grados
 class GradosSerializer(serializers.ModelSerializer):
@@ -42,4 +43,34 @@ class IdiomasSerializer(serializers.ModelSerializer):
 class FavoritosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favoritos
+        fields = '__all__'
+
+#Serializer Ejemplares
+class EjemplaresSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ejemplares
+        fields = '__all__'   
+
+#Serializer Tipo infracciones
+class TipoInfraccionesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoInfraccion
+        fields = '__all__'   
+
+#Serializer infracciones
+class InfraccionesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Infracciones
+        fields = '__all__'   
+
+#Serializer DePrestamos
+class DetallePrestamosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DePrestamos
+        fields = '__all__'
+
+#Serializer prestados
+class PrestadosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Prestados
         fields = '__all__'
