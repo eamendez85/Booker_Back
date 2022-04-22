@@ -1,7 +1,7 @@
 from dataclasses import fields
 from django.forms import ValidationError
 from rest_framework import serializers
-from api.models import Autores, DePrestamos, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Categorias, Idiomas, Infracciones, Prestados, TipoInfraccion
+from api.models import Autores, DePrestamos, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Categorias, Idiomas, Infracciones, Libros, Prestados, TipoInfraccion
 
 #Serializer grados
 class GradosSerializer(serializers.ModelSerializer):
@@ -38,6 +38,30 @@ class IdiomasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Idiomas
         fields = '__all__'
+
+#Serializer libros
+class LibrosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Libros
+        fields = '__all__'
+
+    editorial = serializers.StringRelatedField()
+    idioma = serializers.StringRelatedField()
+
+    def to_representation(self, instance):
+        return{
+            'id libro': instance.id_libro,
+            'isbn': instance.isbn,
+            'Imagen de libro': instance.imagen_libro,
+            'Nombre del libro': instance.nombre,
+            'Editorial del libro': instance.editorial.nombre,
+            'Edición del libro': instance.edicion,
+            'Autores': instance.autores,
+            'Idioma': instance.idioma.nombre,
+            'categorias': instance.categorias,
+            
+
+        }
 
 #Serializer favoritos
 class FavoritosSerializer(serializers.ModelSerializer):

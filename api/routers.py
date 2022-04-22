@@ -18,6 +18,7 @@ router.register(r'tipoInfraccion', TipoInfraccionViewSet, basename= 'tipoInfracc
 router.register(r'infracciones', InfraccionesViewSet, basename= 'infracciones')
 router.register(r'prestamos', DetallePrestamoViewSet, basename= 'prestamos')
 
+
 #Hacer router de ejemplares, tipo infraccion, infraccion, prestamos, prestados 
 
 urlpatterns = router.urls
