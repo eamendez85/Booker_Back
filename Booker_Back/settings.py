@@ -70,6 +70,8 @@ TEMPLATES = [
     },
 ]
 
+TOKEN_EXPIRED_AFTER_SECONDS = 10
+
 WSGI_APPLICATION = 'Booker_Back.wsgi.application'
 
 
