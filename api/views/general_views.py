@@ -4,10 +4,11 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from api.models import Autores, Categorias, DePrestamos, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Idiomas, Infracciones, TipoInfraccion
 from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, DetallePrestamosSerializer, EditorialesSerializer, EjemplaresSerializer, FavoritosSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer, InfraccionesSerializer, PrestadosSerializer, TipoInfraccionesSerializer
+from api.authentication_mixins import Authentication
 
 
 #Viewset del modelo grados
-class GradoViewSet(viewsets.ModelViewSet):
+class GradoViewSet(Authentication, viewsets.ModelViewSet):
     serializer_class = GradosSerializer
 
     def get_queryset(self, pk=None):

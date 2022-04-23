@@ -9,8 +9,26 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from api.models import Administradores, Estudiantes
-from api.serializers.usuarios_serializers import AdministradoresListSerializer, EstudiantesListSerializer
+from api.serializers.usuarios_serializers import AdministradoresListSerializer, EstudiantesListSerializer, UsuariosSerializer
 from api.serializers.usuarios_serializers import UsuariosListSerializer
+
+#Obtener token refrescado
+class UserToken(APIView):
+    
+    def get(self, request, *args, **kwargs):
+        doc = request.GET.get('doc')
+        try:
+            #Traer token del usuario obtenido por GET
+            user_token = Token.objects.get(
+                user = UsuariosSerializer().Meta.model.objects.filter(doc = doc).first()
+            )
+            return Response({
+                'token':user_token.key
+            })
+        except:
+            return Response({
+                'error':'Credenciales enviadas incorrectas.'
+            }, status = status.HTTP_400_BAD_REQUEST)
 
 class Login(ObtainAuthToken):
     

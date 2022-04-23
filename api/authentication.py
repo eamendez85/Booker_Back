@@ -6,6 +6,7 @@ from rest_framework.exceptions import AuthenticationFailed
 
 
 class ExpiringTokenAuthentication(TokenAuthentication):
+    expired = False
     
     #Calculo del dia de expiracion
     def expires_in(self, token):
@@ -22,25 +23,37 @@ class ExpiringTokenAuthentication(TokenAuthentication):
     def token_expire_handle(self, token):
         is_expire = self.is_token_expired(token)
         if is_expire:
-            print('TOKEN EXPIRADO')
+            self.expired = True
+            user= token.user
+            token.delete()
+            #Refresca el token
+            token = self.get_model().objects.create(user = user)
             
-        return is_expire
+        return is_expire, token
     
     
     #Sobreescribiendo metodo para agregar la expiracion
     def authenticate_credentials(self, key):
+        message, token,user = None, None,None
+        
         try:
-            token=self.get_model().objects.get(key=key)
+            token=self.get_model().objects.select_related('user').get(key=key)
+            user=token.user
             
         except self.get_model().DoesNotExist:
-            raise AuthenticationFailed('Token invalido.')
+            
+            message = 'Token invalido.'
+            self.expired = True
         
-        if not token.is_active:
-            raise AuthenticationFailed('Usuario no activo o eliminado.')
+        if token is not None:
+            print("USUARIO ACTIVO: ", token.user.usuario_activo)
+            if not token.user.usuario_activo:
+                message = 'Usuario no activo o eliminado.'
         
-        is_expired = self.token_expire_handle(token)
-        
-        if is_expired:
-            raise AuthenticationFailed('Su Token ha expirado.')
-        
-        return (token.user, token)
+            is_expired,token = self.token_expire_handle(token)
+            if is_expired:
+                message = 'Su Token ha expirado.'
+                
+            print("MENSAJE: ",message)
+                
+        return (user, token, message, self.expired)
