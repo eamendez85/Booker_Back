@@ -1,8 +1,10 @@
 #cerrar todas las sesiones al inicar sesion
-from datetime import datetime
 from django.contrib.sessions.models import Session
+from datetime import datetime
+from django.utils import timezone
 
 from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -13,6 +15,13 @@ from api.serializers.usuarios_serializers import UsuariosListSerializer
 class Login(ObtainAuthToken):
     
     def post(self, request, *args, **kwargs):
+
+        """
+        Login - Inicar sesion
+
+        Recibe un form-data {'username':'', 'password':''}
+        """
+
         login_serializer = self.serializer_class(data = request.data, context = {'request':request})
         if login_serializer.is_valid():
             user = login_serializer.validated_data['user']
@@ -31,7 +40,7 @@ class Login(ObtainAuthToken):
                         'message': 'Inicio de Sesión Exitoso.'
                     }, status = status.HTTP_201_CREATED)
                 else:
-                    #cerrar todas las sesiones al inicar sesion 34:41
+                    #cerrar todas las sesiones al inicar sesion
                     """
                     all_sessions = Session.objects.filter(expire_date__gte = datetime.now())
                     if all_sessions.exists():
@@ -53,4 +62,43 @@ class Login(ObtainAuthToken):
         else:
             return Response({'error':'Nombre de usuario o contraseña incorrectos.'}, status = status.HTTP_400_BAD_REQUEST)
             
+
+class Logout(APIView):
+    
+    def get(self, request, *args, **kwargs):
+
+        """
+        logout - Cerrar sesion
+
+        Recibe parametro 'token' por peticion HTTP GET
+        """
+
+        token = Token.objects.filter(key = request.GET.get('token')).first()
+            
+        if token:
+            user = token.user
+                
+            all_sessions = Session.objects.filter(expire_date__gte = timezone.now())
+            if all_sessions.exists():
+                for session in all_sessions:
+                    session_data = session.get_decoded()
+                    if int(user.doc) == int(session_data['_auth_user_id']):
+                        session.delete()
+                
+            token.delete()
+                
+            session_message = 'Sesiones de usuario eliminados.'
+            token_message = 'Token eliminado.'
+            return Response({'token_message':token_message, 'session_message':session_message}, status = status.HTTP_200_OK)
+            
+        return Response({'error':'No se ha encontrado un usuario con estas credenciales.'}, status = status.HTTP_400_BAD_REQUEST)
+                
+                
         
+"""
+Autorizacion
+Recibe por Headers
+
+key = 'Authorization'
+value = 'Token sasd25255dasrdfsadasd'
+"""
