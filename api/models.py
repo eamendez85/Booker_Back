@@ -135,6 +135,8 @@ class Editoriales(models.Model):
     class Meta:
         db_table = 'editoriales'
 
+    
+
 
 class Idiomas(models.Model):
     id_idioma = models.AutoField(primary_key=True)

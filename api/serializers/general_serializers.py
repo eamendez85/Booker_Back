@@ -45,22 +45,24 @@ class LibrosSerializer(serializers.ModelSerializer):
         model = Libros
         fields = '__all__'
 
-    editorial = serializers.StringRelatedField()
-    idioma = serializers.StringRelatedField()
 
     def to_representation(self, instance):
         return{
             'id libro': instance.id_libro,
             'isbn': instance.isbn,
-            'Imagen de libro': instance.imagen_libro,
             'Nombre del libro': instance.nombre,
-            'Editorial del libro': instance.editorial.nombre,
+            'Editorial del libro': instance.id_editorial.nombre,
             'Edición del libro': instance.edicion,
-            'Autores': instance.autores,
-            'Idioma': instance.idioma.nombre,
-            'categorias': instance.categorias,
-            
-
+            'Idioma': instance.id_idioma.nombre,
+            'Descripción':instance.descripcion,
+            'Numero de paginas':instance.numero_paginas,
+            'Alto del libro':instance.alto,
+            'Ancho del libro':instance.ancho,
+            'Peso del libro':instance.peso,
+            'Presentación':instance.presentacion,
+            'Anexos del libro':instance.anexos,
+            'Palabras clave':instance.palabras_clave,
+            'Estado':instance.estado,
         }
 
 #Serializer favoritos
@@ -68,6 +70,12 @@ class FavoritosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favoritos
         fields = '__all__'
+
+    def to_representation(self, instance):
+        return {
+            'Estudiante':instance.id_estudiante.nombres,
+
+        }
 
 #Serializer Ejemplares
 class EjemplaresSerializer(serializers.ModelSerializer):
