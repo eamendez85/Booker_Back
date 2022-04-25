@@ -2,8 +2,9 @@ from telnetlib import STATUS
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
+from api.serializers.infracciones_serializers import InfraccionesListSerializer, InfraccionesSerializer
 from api.models import Autores, Categorias, DePrestamos, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Idiomas, Infracciones, TipoInfraccion
-from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, DetallePrestamosSerializer, EditorialesSerializer, EjemplaresSerializer, FavoritosSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer, InfraccionesListSerializer, InfraccionesSerializer, PrestadosSerializer, TipoInfraccionesSerializer
+from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, DetallePrestamosSerializer, EditorialesSerializer, EjemplaresSerializer, FavoritosSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer,  PrestadosSerializer, TipoInfraccionesSerializer
 from api.authentication_mixins import Authentication
 
 
@@ -274,24 +275,24 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
                 serializer.save()
                 return Response({'data' : serializer.data, 'message':'Se ha agregado el prestamo al estudiante correctamente'}, status= status.HTTP_201_CREATED)
             
-            serializerPrestados = PrestadosSerializer(data = request.data)
-            if serializerPrestados.is_valid():
-                serializerPrestados.save()
+            serializer_prestados = PrestadosSerializer(data = request.data)
+            if serializer_prestados.is_valid():
+                serializer_prestados.save()
                 print("Prestado guardado")
         
             return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        detallePrestamo = DePrestamos.objects.filter(id_de_prestamo = pk).first()
-        serializer = DetallePrestamosSerializer(detallePrestamo, data = request.data)
+        detalle_prestamo = DePrestamos.objects.filter(id_de_prestamo = pk).first()
+        serializer = DetallePrestamosSerializer(detalle_prestamo, data = request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({'data' : serializer.data, 'message':'Prestamo actualizado correctamente'}, status= status.HTTP_200_OK)
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk):
-        detallePrestamo = DePrestamos.objects.filter(id_de_prestamo = pk).first()
-        detallePrestamo.delete()
+        detalle_prestamo = DePrestamos.objects.filter(id_de_prestamo = pk).first()
+        detalle_prestamo.delete()
         return Response({'message':'Registro de prestamo eliminado correctamente'}, status= status.HTTP_200_OK)
 
 

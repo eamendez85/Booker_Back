@@ -1,6 +1,6 @@
 from dataclasses import field, fields
 from rest_framework import serializers
-from api.models import *
+from api.models import Usuario, Estudiantes, Administradores
 
 class UsuariosSerializer(serializers.ModelSerializer):
     class Meta:

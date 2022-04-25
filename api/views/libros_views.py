@@ -1,22 +1,22 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from api.serializers.general_serializers import LibrosSerializer
-from api.serializers.usuarios_serializers import *
+from api.models import Libros
 from rest_framework import status
 
 @api_view(['GET', 'POST'])
 def libros_view(request):
     if request.method == 'GET':
         libros = Libros.objects.all()
-        librosSerializer = LibrosSerializer(libros, many=True)
-        return Response(librosSerializer.data, status = status.HTTP_200_OK)
+        libros_serializer = LibrosSerializer(libros, many=True)
+        return Response(libros_serializer.data, status = status.HTTP_200_OK)
     elif request.method == 'POST':
-        librosSerializer = LibrosSerializer(data = request.data)
+        libros_serializer = LibrosSerializer(data = request.data)
         #validacion
-        if librosSerializer.is_valid():
-            librosSerializer.save()
+        if libros_serializer.is_valid():
+            libros_serializer.save()
             return Response({"mensaje": "Libro agregado correctamente"}, status = status.HTTP_201_CREATED)
-        return Response(librosSerializer.errors, status = status.HTTP_400_BAD_REQUEST)
+        return Response(libros_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
     
 
 @api_view(['GET', 'PUT', 'DELETE', 'PATCH'])
@@ -29,25 +29,25 @@ def libro_detalle_view(request, pk):
     
         #get
         if request.method=='GET':
-            libroSerializer= LibrosSerializer(libro)
-            return Response(libroSerializer.data, status = status.HTTP_200_OK)
+            libro_serializer= LibrosSerializer(libro)
+            return Response(libro_serializer.data, status = status.HTTP_200_OK)
         
         #Actualizar
         elif request.method =='PUT':
                 
-            libroSerializer = LibrosSerializer(libro, data = request.data)
-            if libroSerializer.is_valid():
-                libroSerializer.save()
-                return Response(libroSerializer.data, status = status.HTTP_200_OK)
-            return Response(libroSerializer.errors, status = status.HTTP_400_BAD_REQUEST)
+            libro_serializer = LibrosSerializer(libro, data = request.data)
+            if libro_serializer.is_valid():
+                libro_serializer.save()
+                return Response(libro_serializer.data, status = status.HTTP_200_OK)
+            return Response(libro_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
         
         elif request.method =='PATCH':
                 
-            libroSerializer = LibrosSerializer(libro, data = request.data, partial=True)
-            if libroSerializer.is_valid():
-                libroSerializer.save()
-                return Response(libroSerializer.data, status = status.HTTP_200_OK)
-            return Response(libroSerializer.errors, status = status.HTTP_400_BAD_REQUEST)
+            libro_serializer = LibrosSerializer(libro, data = request.data, partial=True)
+            if libro_serializer.is_valid():
+                libro_serializer.save()
+                return Response(libro_serializer.data, status = status.HTTP_200_OK)
+            return Response(libro_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
         
         #eliminar
         elif request.method == 'DELETE':

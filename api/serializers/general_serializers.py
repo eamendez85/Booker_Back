@@ -53,17 +53,6 @@ class LibrosSerializer(serializers.ModelSerializer):
 
 
 
-class LibrosInfraccionesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Libros
-        fields=['nombre','imagen_libro']
-
-class EstudianteInfraccionesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Estudiantes
-        fields = ['doc_estudiante','nombres','apellidos']
-
-
 #Serializer favoritos
 class FavoritosSerializer(serializers.ModelSerializer):
     class Meta:
@@ -78,12 +67,7 @@ class EjemplaresSerializer(serializers.ModelSerializer):
         model = Ejemplares
         fields = '__all__'   
 
-class EjemplaresInfraccionesSerializer(serializers.ModelSerializer):
-    id_libro = LibrosInfraccionesSerializer(many=False, read_only=True)
 
-    class Meta:
-        model = Ejemplares
-        fields = ['id_ejemplar','id_libro','estado']
 
 #Serializer Tipo infracciones
 class TipoInfraccionesSerializer(serializers.ModelSerializer):
@@ -91,26 +75,7 @@ class TipoInfraccionesSerializer(serializers.ModelSerializer):
         model = TipoInfraccion
         fields = '__all__'   
 
-class TipoInfraccionInfraccionesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model= TipoInfraccion
-        fields = ['nombre']
 
-#Serializer infracciones
-class InfraccionesListSerializer(serializers.ModelSerializer):
-
-    id_estudiante = EstudianteInfraccionesSerializer(many=False, read_only=True)
-    ejemplares = EjemplaresInfraccionesSerializer(many = True, read_only=True )
-    id_tipo_infraccion = TipoInfraccionInfraccionesSerializer(many= False, read_only = True)
-
-    class Meta:
-        model = Infracciones
-        fields = ['id_infraccion','id_estudiante','ejemplares','id_tipo_infraccion','descripcion']  
-
-class InfraccionesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Infracciones
-        fields = '__all__'
 
 #Serializer DePrestamos
 class DetallePrestamosSerializer(serializers.ModelSerializer):
