@@ -117,6 +117,7 @@ class Categorias(models.Model):
 
     class Meta:
         db_table = 'categorias'
+        
 
 
 class Autores(models.Model):
@@ -135,6 +136,9 @@ class Editoriales(models.Model):
     class Meta:
         db_table = 'editoriales'
 
+    def __str__(self):
+        return self.nombre
+
     
 
 
@@ -144,6 +148,9 @@ class Idiomas(models.Model):
 
     class Meta:
         db_table = 'idiomas'
+
+    def __str__(self):
+        return self.nombre
 
 
 

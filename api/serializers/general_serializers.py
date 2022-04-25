@@ -1,7 +1,7 @@
 from dataclasses import fields
 from django.forms import ValidationError
 from rest_framework import serializers
-from api.models import Autores, DePrestamos, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Categorias, Idiomas, Infracciones, Libros, Prestados, TipoInfraccion
+from api.models import Autores, DePrestamos, Editoriales, Ejemplares, Estudiantes, Favoritos, Grados, Grupos, Categorias, Idiomas, Infracciones, Libros, Prestados, TipoInfraccion
 
 #Serializer grados
 class GradosSerializer(serializers.ModelSerializer):
@@ -41,29 +41,28 @@ class IdiomasSerializer(serializers.ModelSerializer):
 
 #Serializer libros
 class LibrosSerializer(serializers.ModelSerializer):
+
+    categorias = CategoriasSerializer(many=True, read_only=True)
+    autores = AutoresSerializer(many=True, read_only=True)
+    id_editorial = serializers.StringRelatedField()
+    id_idioma = serializers.StringRelatedField()
+
     class Meta:
         model = Libros
-        fields = '__all__'
+        fields = ['id_libro', 'isbn', 'imagen_libro', 'nombre', 'id_editorial', 'edicion','autores','id_idioma','categorias','descripcion', 'numero_paginas','alto','ancho','peso','presentacion','anexos','palabras_clave','estado']
 
 
-    def to_representation(self, instance):
-        return{
-            'id libro': instance.id_libro,
-            'isbn': instance.isbn,
-            'Nombre del libro': instance.nombre,
-            'Editorial del libro': instance.id_editorial.nombre,
-            'Edición del libro': instance.edicion,
-            'Idioma': instance.id_idioma.nombre,
-            'Descripción':instance.descripcion,
-            'Numero de paginas':instance.numero_paginas,
-            'Alto del libro':instance.alto,
-            'Ancho del libro':instance.ancho,
-            'Peso del libro':instance.peso,
-            'Presentación':instance.presentacion,
-            'Anexos del libro':instance.anexos,
-            'Palabras clave':instance.palabras_clave,
-            'Estado':instance.estado,
-        }
+
+class LibrosInfraccionesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Libros
+        fields=['nombre','imagen_libro']
+
+class EstudianteInfraccionesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Estudiantes
+        fields = ['doc_estudiante','nombres','apellidos']
+
 
 #Serializer favoritos
 class FavoritosSerializer(serializers.ModelSerializer):
@@ -71,17 +70,20 @@ class FavoritosSerializer(serializers.ModelSerializer):
         model = Favoritos
         fields = '__all__'
 
-    def to_representation(self, instance):
-        return {
-            'Estudiante':instance.id_estudiante.nombres,
-
-        }
 
 #Serializer Ejemplares
 class EjemplaresSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Ejemplares
         fields = '__all__'   
+
+class EjemplaresInfraccionesSerializer(serializers.ModelSerializer):
+    id_libro = LibrosInfraccionesSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Ejemplares
+        fields = ['id_ejemplar','id_libro','estado']
 
 #Serializer Tipo infracciones
 class TipoInfraccionesSerializer(serializers.ModelSerializer):
@@ -89,11 +91,26 @@ class TipoInfraccionesSerializer(serializers.ModelSerializer):
         model = TipoInfraccion
         fields = '__all__'   
 
+class TipoInfraccionInfraccionesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= TipoInfraccion
+        fields = ['nombre']
+
 #Serializer infracciones
+class InfraccionesListSerializer(serializers.ModelSerializer):
+
+    id_estudiante = EstudianteInfraccionesSerializer(many=False, read_only=True)
+    ejemplares = EjemplaresInfraccionesSerializer(many = True, read_only=True )
+    id_tipo_infraccion = TipoInfraccionInfraccionesSerializer(many= False, read_only = True)
+
+    class Meta:
+        model = Infracciones
+        fields = ['id_infraccion','id_estudiante','ejemplares','id_tipo_infraccion','descripcion']  
+
 class InfraccionesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Infracciones
-        fields = '__all__'   
+        fields = '__all__'
 
 #Serializer DePrestamos
 class DetallePrestamosSerializer(serializers.ModelSerializer):

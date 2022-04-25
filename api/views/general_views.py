@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
 from api.models import Autores, Categorias, DePrestamos, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Idiomas, Infracciones, TipoInfraccion
-from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, DetallePrestamosSerializer, EditorialesSerializer, EjemplaresSerializer, FavoritosSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer, InfraccionesSerializer, PrestadosSerializer, TipoInfraccionesSerializer
+from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, DetallePrestamosSerializer, EditorialesSerializer, EjemplaresSerializer, FavoritosSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer, InfraccionesListSerializer, InfraccionesSerializer, PrestadosSerializer, TipoInfraccionesSerializer
 from api.authentication_mixins import Authentication
 
 
@@ -231,10 +231,12 @@ class TipoInfraccionViewSet(viewsets.ModelViewSet):
 
 #ViewSet del modelo Infracciones
 class InfraccionesViewSet(viewsets.ModelViewSet):
-    serializer_class = InfraccionesSerializer
+
+    serializer_class = InfraccionesListSerializer
+
     def get_queryset(self, pk=None):
         if pk == None:
-            return InfraccionesSerializer.Meta.model.objects.all()
+            return InfraccionesListSerializer.Meta.model.objects.all()
         return Infracciones.objects.filter(id_infraccion = pk).first()
 
     def create(self, request):
