@@ -77,6 +77,12 @@ class EstudiantesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Estudiantes
         fields="__all__"
+
+
+class EstudianteInformacionGeneralSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Estudiantes
+        fields = ['doc_estudiante','nombres','apellidos']
         
 
 class AdministradoresListSerializer(serializers.ModelSerializer):
@@ -94,3 +100,8 @@ class AdministradoresSerializer(serializers.ModelSerializer):
     class Meta:
         model = Administradores
         fields="__all__"
+
+class AdministradoresInformacionGeneralSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Administradores
+        fields = ['doc_administrador','nombres','apellidos']
