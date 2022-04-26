@@ -39,27 +39,6 @@ class UsuariosListSerializer(serializers.ModelSerializer):
         model = Usuario
         exclude = ('password',)
 
-        """"
-    def to_representation(self, instance):
-        return {
-            'id_libro': instance.id_libro,
-            'isbn': instance.isbn,
-            'nombre':instance.nombre,
-            'edicion':instance.edicion,
-            'descripcion':instance.descripcion,
-            'numero de paginas':instance.numero_paginas,
-            'numero de capitulos':instance.numero_capitulos,
-            'alto':instance.alto,
-            'ancho':instance.ancho,
-            'peso':instance.peso,
-            'presentacion':instance.presentacion,
-            'anexos':instance.anexos,
-            'palabras clave':instance.palabras_clave,
-            'estado':instance.estado,
-        }
-        
-    """
-
 
 
 class EstudiantesListSerializer(serializers.ModelSerializer):

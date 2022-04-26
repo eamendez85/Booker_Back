@@ -1,0 +1,57 @@
+Grados
+{
+    "nombre": ""
+}
+
+Grupos
+{
+    "letra_grupo": ""
+}
+
+Categorias
+{
+    "nombre": ""
+}
+
+Autores
+{
+    "nombres": "",
+    "apellidos": ""
+}
+
+Editoriales
+{
+    "nombre": ""
+}
+
+Idiomas
+{
+    "nombre": ""
+}
+
+tipoinfraccion
+{
+    "nombre": ""
+}
+
+
+libros
+{
+    "isbn": "",
+    "imagen_libro": null,
+    "nombre": "",
+    "edicion": "",
+    "descripcion": "",
+    "numero_paginas": null,
+    "alto": "",
+    "ancho": "",
+    "peso": "",
+    "presentacion": "",
+    "anexos": "",
+    "palabras_clave": "",
+    "estado": "",
+    "id_editorial": null,
+    "id_idioma": null,
+    "autores": [],
+    "categorias": []
+}
