@@ -2,10 +2,12 @@ from telnetlib import STATUS
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
+from api.serializers.ejemplares_serializers import EjemplaresSerializer, EjemplaresListSerializer
 from api.serializers.infracciones_serializers import InfraccionesListSerializer, InfraccionesSerializer
 from api.models import Autores, Categorias, DePrestamos, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Idiomas, Infracciones, TipoInfraccion
-from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, DetallePrestamosSerializer, EditorialesSerializer, EjemplaresSerializer, FavoritosSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer,  PrestadosSerializer, TipoInfraccionesSerializer
+from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, DetallePrestamosSerializer, EditorialesSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer,  PrestadosSerializer, TipoInfraccionesSerializer
 from api.authentication_mixins import Authentication
+from api.serializers.favoritos_serializers import FavoritosListSerializer, FavoritosSerializer
 
 
 #Viewset del modelo grados
@@ -166,10 +168,10 @@ class IdiomasViewSet(viewsets.ModelViewSet):
 
 #ViewSet del modelo Favoritos
 class FavoritosViewSet(viewsets.ModelViewSet):
-    serializer_class = FavoritosSerializer
+    serializer_class = FavoritosListSerializer
     def get_queryset(self, pk=None):
         if pk == None:
-            return FavoritosSerializer.Meta.model.objects.all()
+            return FavoritosListSerializer.Meta.model.objects.all()
         return Favoritos.objects.filter(id_favorito = pk).first()
 
     def create(self, request):
@@ -195,10 +197,10 @@ class FavoritosViewSet(viewsets.ModelViewSet):
 
 #ViewSet del modelo ejemplares
 class EjemplaresViewSet(viewsets.ModelViewSet):
-    serializer_class = EjemplaresSerializer
+    serializer_class = EjemplaresListSerializer
     def get_queryset(self, pk=None):
         if pk == None:
-            return EjemplaresSerializer.Meta.model.objects.all()
+            return EjemplaresListSerializer.Meta.model.objects.all()
         return Ejemplares.objects.filter(id_ejemplar = pk).first()
 
     def create(self, request):

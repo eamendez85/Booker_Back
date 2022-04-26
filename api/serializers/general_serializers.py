@@ -38,22 +38,6 @@ class IdiomasSerializer(serializers.ModelSerializer):
         model = Idiomas
         fields = '__all__'
 
-#Serializer favoritos
-class FavoritosSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Favoritos
-        fields = '__all__'
-
-
-#Serializer Ejemplares
-class EjemplaresSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Ejemplares
-        fields = '__all__'   
-
-
-
 #Serializer Tipo infracciones
 class TipoInfraccionesSerializer(serializers.ModelSerializer):
     class Meta:
