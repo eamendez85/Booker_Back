@@ -2,7 +2,7 @@ from email.mime import base
 from django import urls
 from django.urls import URLPattern
 from rest_framework.routers import DefaultRouter
-from api.views.general_views import AutoresViewset, CategoriasViewSet, DetallePrestamoViewSet, EditorialesViewSet, EjemplaresViewSet, FavoritosViewSet, GradoViewSet, GruposViewSet, IdiomasViewSet, InfraccionesViewSet, TipoInfraccionViewSet
+from api.views.general_views import AutoresViewset, CategoriasViewSet, DetallePrestamoViewSet, EditorialesViewSet, EjemplaresViewSet, FavoritosViewSet, GradoViewSet, GruposViewSet, IdiomasViewSet, InfraccionesViewSet, ReservasViewSet, TipoInfraccionViewSet
 from api.views.libros_views import LibrosViewSet
 
 router = DefaultRouter()
@@ -19,8 +19,7 @@ router.register(r'tipoInfraccion', TipoInfraccionViewSet, basename= 'tipoInfracc
 router.register(r'infracciones', InfraccionesViewSet, basename= 'infracciones')
 router.register(r'prestamos', DetallePrestamoViewSet, basename= 'prestamos')
 router.register(r'libros', LibrosViewSet, basename= 'libros')
+router.register(r'reservas', ReservasViewSet, basename= 'reservas')
 
-
-#Hacer router de ejemplares, tipo infraccion, infraccion, prestamos, prestados 
 
 urlpatterns = router.urls

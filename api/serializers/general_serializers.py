@@ -46,12 +46,6 @@ class TipoInfraccionesSerializer(serializers.ModelSerializer):
 
 
 
-#Serializer DePrestamos
-class DetallePrestamosSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DePrestamos
-        fields = '__all__'
-
 #Serializer prestados
 class PrestadosSerializer(serializers.ModelSerializer):
     class Meta:

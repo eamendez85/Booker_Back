@@ -1,13 +1,15 @@
-from telnetlib import STATUS
+from django import views
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
 from api.serializers.ejemplares_serializers import EjemplaresSerializer, EjemplaresListSerializer
 from api.serializers.infracciones_serializers import InfraccionesListSerializer, InfraccionesSerializer
-from api.models import Autores, Categorias, DePrestamos, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Idiomas, Infracciones, TipoInfraccion
-from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, DetallePrestamosSerializer, EditorialesSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer,  PrestadosSerializer, TipoInfraccionesSerializer
+from api.models import Autores, Categorias, DePrestamos, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Idiomas, Infracciones, Reservas, TipoInfraccion
+from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, EditorialesSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer,  PrestadosSerializer, TipoInfraccionesSerializer
 from api.authentication_mixins import Authentication
+from api.serializers.detalles_prestamo_serializer import DetallePrestamosSerializer, DetallePrestamosListSerializer
 from api.serializers.favoritos_serializers import FavoritosListSerializer, FavoritosSerializer
+from api.serializers.reservas_serializer import ReservasListSerializer, ReservasSerializer
 
 
 #Viewset del modelo grados
@@ -265,10 +267,10 @@ class InfraccionesViewSet(viewsets.ModelViewSet):
 
 #ViewSet del modelo Detalles prestamos
 class DetallePrestamoViewSet(viewsets.ModelViewSet):
-    serializer_class = DetallePrestamosSerializer
+    serializer_class = DetallePrestamosListSerializer
     def get_queryset(self, pk=None):
         if pk == None:
-            return DetallePrestamosSerializer.Meta.model.objects.all()
+            return DetallePrestamosListSerializer.Meta.model.objects.all()
         return DePrestamos.objects.filter(id_de_prestamo = pk).first()
 
     def create(self, request):
@@ -298,4 +300,50 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
         return Response({'message':'Registro de prestamo eliminado correctamente'}, status= status.HTTP_200_OK)
 
 
+#ViewSet del modelo reservas
+class ReservasViewSet(viewsets.ModelViewSet):
+    serializer_class = ReservasListSerializer
+    def get_queryset(self, pk=None):
+        if pk == None:
+            return ReservasListSerializer.Meta.model.objects.all()
+        return Reservas.objects.filter(id_reserva = pk).first()
+
+
+    def create(self, request):
+            serializer = ReservasSerializer(data = request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'data' : serializer.data, 'message':'Se ha agregado la reserva correctamente'}, status= status.HTTP_201_CREATED)
+        
+            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk):
+        reserva = Reservas.objects.filter(id_reserva = pk).first()
+        serializer = ReservasSerializer(reserva, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'data' : serializer.data, 'message':'Reserva actualizada correctamente'}, status= status.HTTP_200_OK)
+        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+    def destroy(self, request, pk):
+        reserva = Reservas.objects.filter(id_reserva = pk).first()
+        reserva.delete()
+        return Response({'message':'Reserva eliminada correctamente'}, status= status.HTTP_200_OK)
+
+
+#Intento de update borrando registro de reserva y creando uno de prestamo
+'''     def update(self, request, pk):
+        reserva = Reservas.objects.filter(id_reserva = pk).first()
+        serializer = ReservasSerializer(reserva, data = request.data)
+        if Reservas.estado == "a":
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'data' : serializer.data, 'message':'Reserva actualizada correctamente'}, status= status.HTTP_200_OK)
+            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+        elif Reservas.estado == "i":
+            serializer_prestamo = DetallePrestamosSerializer(data = request.data)
+            if serializer_prestamo.is_valid():
+                serializer_prestamo.save()
+                return Response({'data' : serializer_prestamo.data, 'message':'Su reserva ha pasado a prestamo satisfactoriamente'}, status= status.HTTP_200_OK)
+            reserva = Reservas.objects.filter(id_reserva = pk).first()
+            return reserva.delete() '''
 
