@@ -344,6 +344,5 @@ class ReservasViewSet(viewsets.ModelViewSet):
             if serializer_prestamo.is_valid():
                 serializer_prestamo.save()
                 return Response({'data' : serializer_prestamo.data, 'message':'Su reserva ha pasado a prestamo satisfactoriamente'}, status= status.HTTP_200_OK)
-            reserva = Reservas.objects.filter(id_reserva = pk).first()
-            return reserva.delete() '''
+ '''
 

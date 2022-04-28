@@ -61,7 +61,7 @@ class EstudiantesSerializer(serializers.ModelSerializer):
 class EstudianteInformacionGeneralSerializer(serializers.ModelSerializer):
     class Meta:
         model = Estudiantes
-        fields = ['doc_estudiante','nombres','apellidos']
+        fields = ['id_estudiante','doc_estudiante','nombres','apellidos']
         
 
 class AdministradoresListSerializer(serializers.ModelSerializer):
