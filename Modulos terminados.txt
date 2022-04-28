@@ -55,3 +55,46 @@ libros
     "autores": [],
     "categorias": []
 }
+
+Favoritos
+{
+    "id_estudiante": ,
+    "libros": []
+}
+
+Ejemplares
+{
+    "num_ejemplar": "",
+    "estado": "",
+    "id_libro":
+}
+
+
+Infracciones
+{
+    "descripcion": "",
+    "estado": "",
+    "id_estudiante": null,
+    "id_tipo_infraccion": null,
+    "id_administrador": null,
+    "ejemplares": []
+}
+
+
+Prestamos
+{
+    "fec_prestamo": null,
+    "fec_devolucion": null,
+    "estado": "",
+    "id_estudiante": null,
+    "id_administrador": null,
+    "ejemplares": []
+}
+
+
+Reservas
+{
+    "estado": "",
+    "id_estudiante": null,
+    "ejemplares": []
+}

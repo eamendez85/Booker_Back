@@ -83,4 +83,4 @@ class AdministradoresSerializer(serializers.ModelSerializer):
 class AdministradoresInformacionGeneralSerializer(serializers.ModelSerializer):
     class Meta:
         model = Administradores
-        fields = ['doc_administrador','nombres','apellidos']
+        fields = ['id_administrador','doc_administrador','nombres','apellidos']

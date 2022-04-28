@@ -259,3 +259,7 @@ class Reservas(models.Model):
 
     class Meta:
         db_table = 'reservas'
+
+"""class Eventos(models.Model):
+    id_evento = models.AutoField(primary_key=True)
+    descripcion = models.TextField(blank=True, null=True)"""
