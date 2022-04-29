@@ -157,7 +157,7 @@ class Idiomas(models.Model):
 class Libros(models.Model):
     id_libro = models.AutoField(primary_key=True)
     isbn = models.CharField(max_length=20)
-    imagen_libro = models.ImageField('Imagen del libro', upload_to='libros/', max_length=200, blank=True, null=True)
+    imagen_libro = models.ImageField('Imagen del libro', upload_to='images/libros/', max_length=200, blank=True, null=True)
     nombre = models.CharField(max_length=150)
     id_editorial = models.ForeignKey(Editoriales, models.DO_NOTHING, db_column='id_editorial', blank=True, null=True)
     edicion = models.CharField(max_length=50, blank=True, null=True)
