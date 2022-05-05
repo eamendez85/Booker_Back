@@ -3,3 +3,6 @@ mysqlclient
 django-rest-framework
 pillow
 django-cors-headers
+django_filter
+
+consola: pyparsing pydot
