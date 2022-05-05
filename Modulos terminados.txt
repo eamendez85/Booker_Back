@@ -1,3 +1,5 @@
+instalar desde consola: pyparsing pydot
+
 Grados
 {
     "nombre": ""
