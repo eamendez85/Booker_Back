@@ -3,10 +3,34 @@ from rest_framework.response import Response
 from api.serializers.libros_serializers import LibrosListSerializer, LibrosSerializer
 from rest_framework import viewsets
 from api.models import Libros
-from rest_framework import status
+from rest_framework import status, filters
+from django_filters.rest_framework import DjangoFilterBackend
 
 class LibrosViewSet(viewsets.ModelViewSet):
     serializer_class = LibrosListSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+
+
+    #Para poder filtrar, se ingresa en la url ?(nombre del campo)=(valor que se quiere filtrar)
+    #por ejemplo: ?nombre=el principito
+    filterset_fields= ['id_libro', 'isbn','nombre','descripcion',
+    'palabras_clave','estado','autores','categorias','id_idioma','id_editorial']
+
+
+    #Para poder buscar, se ingresa en la url ?search=(valor que se quiere buscar)
+    #por ejemplo: ?search=novela, aqui se puede poner cualquier caracter, letra o palabra para poder buscarse
+    search_fields = ['id_libro', 'isbn','nombre','descripcion',
+    'palabras_clave','estado','id_editorial__nombre','id_idioma__nombre','categorias__nombre'
+    ,'autores__nombres','autores__apellidos']
+
+    #Para poder ordenar la información de manera ascendente es ?ordering=(campo que quiere ordenar en especifico) el campo tiene que estar 
+    #igual de escrito que los campos de ordering_fields
+    # ejemplo ?ordering=id_idioma__nombre
+    ordering_fields = ['id_libro', 'isbn','nombre','descripcion',
+    'palabras_clave','estado','id_editorial','id_editorial__nombre','id_idioma__nombre','categorias__nombre'
+    ,'autores__nombres','autores__apellidos']
+
+
 
     def get_queryset(self, pk=None):
         if pk == None:
