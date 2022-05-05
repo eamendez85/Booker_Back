@@ -90,7 +90,7 @@ DATABASES = {
         'USER':'root',
         'PASSWORD': '',
         'HOST':'localhost',
-        'PORT': ''
+        'PORT': '3310'
     }
 }
 
@@ -115,11 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'api.Usuario'
 
-
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+CORS_ORIGIN_ALLOW_ALL=True
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
