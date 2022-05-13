@@ -8,8 +8,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
-from api.models import Administradores, Estudiantes
-from api.serializers.usuarios_serializers import AdministradoresListSerializer, EstudiantesListSerializer, UsuariosSerializer
+from api.models import Bibliotecarios, Estudiantes
+from api.serializers.usuarios_serializers import BibliotecariosListSerializer, EstudiantesListSerializer, UsuariosSerializer
 from api.serializers.usuarios_serializers import UsuariosListSerializer
 
 #Obtener token refrescado
@@ -45,10 +45,10 @@ class Login(ObtainAuthToken):
             user = login_serializer.validated_data['user']
             if user.usuario_activo:
                 token,created = Token.objects.get_or_create(user = user)
-                if user.usuario_administrador:
-                    administrador = Administradores.objects.filter(doc_administrador=user.doc).first()
-                    user_serializer = AdministradoresListSerializer(administrador)
-                elif user.usuario_administrador==False:
+                if user.usuario_bibliotecario:
+                    bibliotecario = Bibliotecarios.objects.filter(doc_bibliotecario=user.doc).first()
+                    user_serializer = BibliotecariosListSerializer(bibliotecario)
+                elif user.usuario_bibliotecario==False:
                     estudiante = Estudiantes.objects.filter(doc_estudiante = user.doc).first()
                     user_serializer = EstudiantesListSerializer(estudiante)
                 if created:

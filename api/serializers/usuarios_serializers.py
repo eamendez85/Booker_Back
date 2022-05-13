@@ -1,6 +1,6 @@
 from dataclasses import field, fields
 from rest_framework import serializers
-from api.models import Usuario, Estudiantes, Administradores
+from api.models import Usuario, Estudiantes, Bibliotecarios
 
 class UsuariosSerializer(serializers.ModelSerializer):
     class Meta:
@@ -64,23 +64,23 @@ class EstudianteInformacionGeneralSerializer(serializers.ModelSerializer):
         fields = ['id_estudiante','doc_estudiante','nombres','apellidos']
         
 
-class AdministradoresListSerializer(serializers.ModelSerializer):
+class BibliotecariosListSerializer(serializers.ModelSerializer):
     
-    doc_administrador = UsuariosListSerializer(many=False,  read_only=True)
+    doc_bibliotecario = UsuariosListSerializer(many=False,  read_only=True)
 
 
     class Meta:
-        model = Administradores
-        fields  =['id_administrador', 'tipodoc', 'nombres', 'apellidos', 'telefono',  'direccion', 'doc_administrador']
+        model = Bibliotecarios
+        fields  =['id_bibliotecario', 'tipodoc', 'nombres', 'apellidos', 'telefono',  'direccion', 'doc_bibliotecario']
 
 
 
-class AdministradoresSerializer(serializers.ModelSerializer):
+class BibliotecariosSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Administradores
+        model = Bibliotecarios
         fields="__all__"
 
-class AdministradoresInformacionGeneralSerializer(serializers.ModelSerializer):
+class BibliotecariosInformacionGeneralSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Administradores
-        fields = ['id_administrador','doc_administrador','nombres','apellidos']
+        model = Bibliotecarios
+        fields = ['id_bibliotecario','doc_bibliotecario','nombres','apellidos']

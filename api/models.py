@@ -40,9 +40,9 @@ class Estudiantes(models.Model):
     class Meta:
         db_table = 'estudiantes'
 
-class Administradores(models.Model):
-    id_administrador = models.AutoField(primary_key=True, unique=True)
-    doc_administrador = models.ForeignKey('Usuario', models.CASCADE, db_column='doc')
+class Bibliotecarios(models.Model):
+    id_bibliotecario = models.AutoField(primary_key=True, unique=True)
+    doc_bibliotecario = models.ForeignKey('Usuario', models.CASCADE, db_column='doc')
     tipodoc = models.CharField(max_length=5, blank=True, null=True)
     nombres = models.CharField(max_length=50)
     apellidos = models.CharField(max_length=50)
@@ -50,7 +50,7 @@ class Administradores(models.Model):
     direccion = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
-        db_table = 'administradores'
+        db_table = 'bibliotecarios'
 
 
 class UsuarioManager(BaseUserManager):
@@ -87,9 +87,9 @@ class Usuario(AbstractBaseUser):
     email = models.CharField('Email',max_length=60, blank=True, null=True)
     imagen = models.ImageField('Imagen del perfil', upload_to='perfil/', max_length=200, blank=True, null=True)
     usuario_activo = models.BooleanField(default = True)
-    usuario_administrador = models.BooleanField(default = False)
+    tipo_usuario = models.CharField('Tipo usuario', max_length=1)
+    #[A, B, E]
     objects = UsuarioManager()
-
     USERNAME_FIELD = 'doc'
     REQUIRED_FIELDS = ['email', 'name']
 
@@ -104,7 +104,7 @@ class Usuario(AbstractBaseUser):
 
     @property
     def is_staff(self):
-        return self.usuario_administrador
+        return self.tipo_usuario == 'A'
 
 
 
@@ -166,6 +166,7 @@ class Libros(models.Model):
     categorias = models.ManyToManyField(Categorias)
     descripcion = models.TextField(blank=True, null=True)
     numero_paginas = models.IntegerField(blank=True, null=True)
+    numero_capitulos = models.IntegerField(blank=True, null=True)
     alto = models.CharField(max_length=5, blank=True, null=True)
     ancho = models.CharField(max_length=5, blank=True, null=True)
     peso = models.CharField(max_length=7, blank=True, null=True)
@@ -216,7 +217,7 @@ class Infracciones(models.Model):
     id_tipo_infraccion = models.ForeignKey('TipoInfraccion', models.DO_NOTHING, db_column='id_tipo_infraccion', blank=True, null=True)
     descripcion = models.TextField(blank=True, null=True)
     estado = models.CharField(max_length=3, blank=True, null=True)
-    id_administrador = models.ForeignKey(Administradores, models.DO_NOTHING, db_column='id_administrador', blank=True, null=True)
+    id_administrador = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_administrador', blank=True, null=True)
 
     class Meta:
         db_table = 'infracciones'
@@ -232,7 +233,7 @@ class DePrestamos(models.Model):
     fec_prestamo = models.DateTimeField()
     fec_devolucion = models.DateTimeField()
     estado = models.CharField(max_length=3)
-    id_administrador = models.ForeignKey(Administradores, models.DO_NOTHING, db_column='id_administrador')
+    id_administrador = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_administrador')
 
     class Meta:
         db_table = 'de_prestamos'

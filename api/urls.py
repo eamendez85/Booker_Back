@@ -8,6 +8,6 @@ urlpatterns = [
     path("usuarios/<int:pk>/", usuario_detalle_api_view, name='usuario_detalle_api_view'),
     path("estudiantes/", estudiantes_api_view, name='estudiantes_api'),
     path("estudiantes/<int:pk>/", estudiante_detalle_api_view, name='estudiante_detalle_api_view'),
-    path("administradores/", administradores_api_view, name='administradores_api'),
-    path("administradores/<int:pk>/", administrador_detalle_api_view, name='administrador_detalle_api_view'),
+    path("bibliotecarios/", bibliotecarios_api_view, name='bibliotecarios_api'),
+    path("bibliotecarios/<int:pk>/", bibliotecario_detalle_api_view, name='bibliotecario_detalle_api_view'),
 ]

@@ -100,3 +100,23 @@ Reservas
     "id_estudiante": null,
     "ejemplares": []
 }
+
+
+Estudiantes
+{
+    "tipodoc": "",
+    "nombres": "",
+    "apellidos": "",
+    "telefono": "",
+    "direccion": "",
+    "doc_estudiante": {
+        "doc": "",
+        "name": "",
+        "email": "",
+        "password": "",
+        "imagen": "",
+        "usuario_activo": true,
+    },
+    "id_grado": ,
+    "id_grupo": 
+}

@@ -82,6 +82,7 @@ def estudiantes_api_view(request):
         usuario_serializer = UsuariosSerializer(data = request.data['doc_estudiante'])
         data_estudiante = request.data
         data_usuario = request.data['doc_estudiante']
+        data_usuario['tipo_usuario'] = 'E'
         data_estudiante['doc_estudiante']=data_usuario['doc']
         estudiante_serializer = EstudiantesSerializer(data = data_estudiante)
         
@@ -140,24 +141,24 @@ def estudiante_detalle_api_view(request, pk):
     
     
 @api_view(['GET', 'POST'])
-def administradores_api_view(request):
+def bibliotecarios_api_view(request):
     
     #listado
     if request.method == 'GET':
         #consulta
 
-        administradores= Administradores.objects.all()
-        administradores_serializer = AdministradoresListSerializer(administradores, many=True)
-        return Response(administradores_serializer.data, status = status.HTTP_200_OK)
+        bibliotecarios= Bibliotecarios.objects.all()
+        bibliotecarios_serializer = BibliotecariosListSerializer(bibliotecarios, many=True)
+        return Response(bibliotecarios_serializer.data, status = status.HTTP_200_OK)
 
     elif request.method == 'POST':
-        data_administrador = request.data
-        data_usuario = request.data['doc_administrador']
-        data_usuario['usuario_administrador'] = True
-        data_administrador['doc_administrador']=data_usuario['doc']
+        data_bibliotecario = request.data
+        data_usuario = request.data['doc_bibliotecario']
+        data_usuario['tipo_usuario'] = 'B'
+        data_bibliotecario['doc_bibliotecario']=data_usuario['doc']
         
         usuario_serializer = UsuariosSerializer(data = data_usuario)
-        administrador_serializer = AdministradoresSerializer(data = data_administrador)
+        bibliotecario_serializer = BibliotecariosSerializer(data = data_bibliotecario)
         
 
         #validacion
@@ -165,49 +166,49 @@ def administradores_api_view(request):
             usuario_serializer.save()
 
         #validacion
-        if administrador_serializer.is_valid():
-            administrador_serializer.save()
-            return Response({"mensaje": "Administrador creado correctamente"}, status = status.HTTP_201_CREATED)
-        return Response(administrador_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+        if bibliotecario_serializer.is_valid():
+            bibliotecario_serializer.save()
+            return Response({"mensaje": "bibliotecario creado correctamente"}, status = status.HTTP_201_CREATED)
+        return Response(bibliotecario_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def administrador_detalle_api_view(request, pk):
+def bibliotecario_detalle_api_view(request, pk):
     #consulta
-    administrador = Administradores.objects.filter(doc_administrador=pk).first()
+    bibliotecario = Bibliotecarios.objects.filter(doc_bibliotecario=pk).first()
     usuario = Usuario.objects.filter(doc=pk).first()
     
     #validacion
-    if administrador:
+    if bibliotecario:
     
         #get
         if request.method=='GET':
-            administrador_serializer= AdministradoresListSerializer(administrador)
-            return Response(administrador_serializer.data, status = status.HTTP_200_OK)
+            bibliotecario_serializer= BibliotecariosListSerializer(bibliotecario)
+            return Response(bibliotecario_serializer.data, status = status.HTTP_200_OK)
 
 
         #Actualizar
         elif request.method =='PUT':
-            data_administrador = request.data
-            data_usuario = request.data['doc_administrador']
-            data_administrador['doc_administrador'] = data_usuario['doc']
+            data_bibliotecario = request.data
+            data_usuario = request.data['doc_bibliotecario']
+            data_bibliotecario['doc_bibliotecario'] = data_usuario['doc']
             usuario_serializer = UsuariosSerializer(usuario, data = data_usuario, partial=True)
-            administrador_serializer = AdministradoresSerializer(administrador, data = data_administrador)
+            bibliotecario_serializer = BibliotecariosSerializer(bibliotecario, data = data_bibliotecario)
             
             if usuario_serializer.is_valid():
                 usuario_serializer.save()
             
-            if administrador_serializer.is_valid():
-                administrador_serializer.save()
-                return Response({"mensaje": "Administrador actualizado correctamente"}, status = status.HTTP_200_OK)
-            return Response(administrador_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+            if bibliotecario_serializer.is_valid():
+                bibliotecario_serializer.save()
+                return Response({"mensaje": "bibliotecario actualizado correctamente"}, status = status.HTTP_200_OK)
+            return Response(bibliotecario_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
         
 
         elif request.method == 'DELETE':
             usuario.delete()
-            administrador.delete()
-            return Response({"mensaje": "Administrador eliminado correctamente"}, status = status.HTTP_200_OK)
+            bibliotecario.delete()
+            return Response({"mensaje": "bibliotecario eliminado correctamente"}, status = status.HTTP_200_OK)
     
 
     
-    return Response({'mensaje': "Este administrador no existe"}, status = status.HTTP_400_BAD_REQUEST)
+    return Response({'mensaje': "Este bibliotecario no existe"}, status = status.HTTP_400_BAD_REQUEST)
     
