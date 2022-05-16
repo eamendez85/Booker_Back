@@ -104,7 +104,7 @@ class Usuario(AbstractBaseUser):
 
     @property
     def is_staff(self):
-        return self.tipo_usuario == 'A'
+        return self.tipo_usuario == 'A' or self.tipo_usuario == 'B'
 
 
 
@@ -167,9 +167,6 @@ class Libros(models.Model):
     descripcion = models.TextField(blank=True, null=True)
     numero_paginas = models.IntegerField(blank=True, null=True)
     numero_capitulos = models.IntegerField(blank=True, null=True)
-    alto = models.CharField(max_length=5, blank=True, null=True)
-    ancho = models.CharField(max_length=5, blank=True, null=True)
-    peso = models.CharField(max_length=7, blank=True, null=True)
     presentacion = models.CharField(max_length=30, blank=True, null=True)
     anexos = models.CharField(max_length=200, blank=True, null=True)
     palabras_clave = models.TextField(blank=True, null=True)
