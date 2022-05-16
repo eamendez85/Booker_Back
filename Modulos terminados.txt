@@ -1,5 +1,10 @@
 instalar desde consola: pyparsing pydot
 
+Admin
+doc: 48362373243
+password: bwenb2j32hb
+
+
 Grados
 {
     "nombre": ""
@@ -114,9 +119,26 @@ Estudiantes
         "name": "",
         "email": "",
         "password": "",
-        "imagen": "",
+        "imagen": null,
         "usuario_activo": true,
     },
     "id_grado": ,
     "id_grupo": 
+}
+
+Bibliotecarios
+{
+    "tipodoc": "",
+    "nombres": "",
+    "apellidos": "",
+    "telefono": "",
+    "direccion": "",
+    "doc_bibliotecario": {
+        "doc": "",
+        "name": "",
+        "email": "",
+        "password": "",
+        "imagen": null,
+        "usuario_activo": true
+    }
 }

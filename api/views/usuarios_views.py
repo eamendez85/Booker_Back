@@ -162,6 +162,7 @@ def bibliotecarios_api_view(request):
         
 
         #validacion
+        print("USUARIOO", usuario_serializer)
         if usuario_serializer.is_valid():
             usuario_serializer.save()
 
