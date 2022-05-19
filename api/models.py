@@ -75,7 +75,7 @@ class UsuarioManager(BaseUserManager):
             name=name,
             password=password,
         )
-        user.usuario_administrador = True
+        user.tipo_usuario = 'A'
         user.save()
         return user
         
@@ -214,7 +214,7 @@ class Infracciones(models.Model):
     id_tipo_infraccion = models.ForeignKey('TipoInfraccion', models.DO_NOTHING, db_column='id_tipo_infraccion', blank=True, null=True)
     descripcion = models.TextField(blank=True, null=True)
     estado = models.CharField(max_length=3, blank=True, null=True)
-    id_administrador = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_administrador', blank=True, null=True)
+    id_bibliotecario = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_bibliotecario', blank=True, null=True)
 
     class Meta:
         db_table = 'infracciones'
@@ -230,7 +230,7 @@ class DePrestamos(models.Model):
     fec_prestamo = models.DateTimeField()
     fec_devolucion = models.DateTimeField()
     estado = models.CharField(max_length=3)
-    id_administrador = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_administrador')
+    id_bibliotecario = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_bibliotecario')
 
     class Meta:
         db_table = 'de_prestamos'
