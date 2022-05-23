@@ -1,10 +1,100 @@
 from functools import partial
+from pydoc import doc
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from api.models import Usuario
 from api.serializers.usuarios_serializers import *
 from rest_framework import status
+from rest_framework import viewsets
+
+class UsuariosViewSet(viewsets.ModelViewSet):
+    serializer_class = UsuariosListSerializer
+    
+    def get_queryset(self, pk=None):
+        if pk == None:
+            return UsuariosListSerializer.Meta.model.objects.all()
+        return UsuariosListSerializer.objects.filter(doc = pk).first()
+
+    def create(self, request):
+        serializer = UsuariosSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'data' : serializer.data, 'message':'Se ha agregado el usuario correctamente'}, status= status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk):
+        usuario = Usuario.objects.filter(doc = pk).first()
+        serializer = UsuariosSerializer(usuario, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'data' : serializer.data, 'message':'Usuario actualizado correctamente'}, status= status.HTTP_200_OK)
+        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+    def partial_update(self, request, pk):
+        usuario = Usuario.objects.filter(doc = pk).first()
+        serializer = UsuariosSerializer(usuario, data = request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'data' : serializer.data, 'message':'Usuario actualizado correctamente'}, status= status.HTTP_200_OK)
+        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, pk):
+        usuario = Usuario.objects.filter(doc = pk).first()
+        usuario.delete()
+        return Response({'message':'Usuario eliminado correctamente'}, status= status.HTTP_200_OK)
+
+class EstudiantesViewSet(viewsets.ModelViewSet):
+    serializer_class = EstudiantesListSerializer
+    
+    def get_queryset(self, pk=None):
+        if pk == None:
+            return EstudiantesListSerializer.Meta.model.objects.all()
+        return EstudiantesListSerializer.objects.filter(doc = pk).first()
+
+    def create(self, request):
+        usuario_serializer = UsuariosSerializer(data = request.data['doc_estudiante'])
+        data_estudiante = request.data
+        data_usuario = request.data['doc_estudiante']
+        data_usuario['tipo_usuario'] = 'E'
+        data_estudiante['doc_estudiante']=data_usuario['doc']
+        estudiante_serializer = EstudiantesSerializer(data = data_estudiante)
+        
+
+        #validacion usuario
+        if usuario_serializer.is_valid():
+            usuario_serializer.save()
+
+        #validacion estuidante
+        if estudiante_serializer.is_valid():
+            estudiante_serializer.save()
+            return Response({"mensaje": "Estudiante creado correctamente"}, status = status.HTTP_201_CREATED)
+        return Response(estudiante_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+
+    """
+    elif request.method == 'POST':
+        usuario_serializer = UsuariosSerializer(data = request.data['doc_estudiante'])
+        data_estudiante = request.data
+        data_usuario = request.data['doc_estudiante']
+        data_usuario['tipo_usuario'] = 'E'
+        data_estudiante['doc_estudiante']=data_usuario['doc']
+        estudiante_serializer = EstudiantesSerializer(data = data_estudiante)
+        
+
+        #validacion
+        if usuario_serializer.is_valid():
+            usuario_serializer.save()
+
+        #validacion
+        if estudiante_serializer.is_valid():
+            estudiante_serializer.save()
+            return Response({"mensaje": "Estudiante creado correctamente"}, status = status.HTTP_201_CREATED)
+        return Response(estudiante_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+    """
+
+        
 
 
 @api_view(['GET', 'POST'])

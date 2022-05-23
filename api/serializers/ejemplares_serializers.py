@@ -12,7 +12,7 @@ class LibrosEjemplaresSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Libros
-        fields = ['isbn', 'imagen_libro','nombre','autores','categorias','descripcion','id_idioma']
+        fields = ['id_libro','isbn', 'imagen_libro','nombre','autores','categorias','descripcion','id_idioma']
 
 #Serializer Ejemplares
 class EjemplaresSerializer(serializers.ModelSerializer):

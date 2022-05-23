@@ -270,9 +270,9 @@ class TipoInfraccionViewSet(viewsets.ModelViewSet):
 class InfraccionesViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     
-    filterset_fields= ['ejemplares','id_tipo_infraccion__nombre','estado']
-    search_fields = ['id_bibliotecario__nombres','id_bibliotecario__apellidos', 'id_bibliotecario__doc_bibliotecario', 'id_estudiante__doc_estudiante', 'id_estudiante__nombres', 'id_estudiante__apellidos', 'ejemplares__id_libro__nombre', 'ejemplares__id_libro__isbn']
-    ordering_fields = ['ejemplares','id_tipo_infraccion__nombre','estado']
+    filterset_fields= ['ejemplares__id_libro', 'ejemplares__id_libro__isbn','id_tipo_infraccion','estado']
+    search_fields = ['id_bibliotecario__nombres','id_bibliotecario__apellidos', 'id_bibliotecario__doc_bibliotecario__doc', 'id_estudiante__doc_estudiante__doc', 'id_estudiante__nombres', 'id_estudiante__apellidos', 'ejemplares__id_libro__nombre', 'ejemplares__id_libro__isbn', 'ejemplares__id_libro__autores__nombres', 'ejemplares__id_libro__autores__apellidos', 'ejemplares__id_libro__categorias__nombre', 'ejemplares__id_libro__id_idioma__nombre']
+    ordering_fields = ['ejemplares','id_tipo_infraccion','estado', 'id_bibliotecario', 'id_estudiante', 'ejemplares__id_libro']
 
     serializer_class = InfraccionesListSerializer
     def get_queryset(self, pk=None):
@@ -306,9 +306,9 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
     serializer_class = DetallePrestamosListSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     
-    filterset_fields= ['id_estudiante__doc_estudiante', 'ejemplares','fec_prestamo','fec_devolucion','estado','id_administrador__doc_bibliotecario']
-    search_fields = ['id_estudiante__doc_estudiante', 'ejemplares','fec_prestamo','fec_devolucion','estado','id_administrador__doc_bibliotecario']
-    ordering_fields = ['id_estudiante__doc_estudiante', 'ejemplares','fec_prestamo','fec_devolucion','estado','id_administrador__doc_bibliotecario']
+    filterset_fields= ['id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro','fec_prestamo','fec_devolucion','estado','id_bibliotecario__doc_bibliotecario__doc']
+    search_fields = ['id_estudiante__doc_estudiante__doc', 'id_estudiante__nombres', 'id_estudiante__apellidos', 'id_bibliotecario__doc_bibliotecario__doc', 'id_bibliotecario__nombres', 'id_bibliotecario__apellidos','ejemplares__id_libro__isbn', 'ejemplares__id_libro__nombre', 'ejemplares__id_libro__autores__nombres','ejemplares__id_libro__autores__apellidos', 'ejemplares__id_libro__categorias__nombre', 'fec_prestamo','fec_devolucion']
+    ordering_fields = ['id_estudiante__doc_estudiante__doc', 'id_bilbiotecario__doc_bibliotecario__doc', 'ejemplares__id_libro__isbn', 'ejemplares__id_libro__nombre', 'fec_prestamo', 'fec_devolucion', 'estado']
 
 
 
@@ -349,9 +349,9 @@ class ReservasViewSet(viewsets.ModelViewSet):
     serializer_class = ReservasListSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
 
-    filterset_fields= ['id_estudiante__doc_estudiante', 'ejemplares','estado']
-    search_fields = ['id_estudiante__doc_estudiante', 'ejemplares','estado']
-    ordering_fields = ['id_estudiante__doc_estudiante', 'ejemplares','estado']
+    filterset_fields= ['id_reserva', 'id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro', 'estado']
+    search_fields = ['id_estudiante__doc_estudiante__doc', 'id_estudiante__nombres', 'id_estudiante__apellidos', 'ejemplares__id_libro__nombre', 'ejemplares__id_libro__isbn', 'ejemplares__id_libro__autores__nombres', 'ejemplares__id_libro__autores__apellidos', 'ejemplares__id_libro__categorias__nombre']
+    ordering_fields = ['id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro__nombre','estado']
 
     def get_queryset(self, pk=None):
         if pk == None:
