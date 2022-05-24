@@ -14,7 +14,7 @@ class UsuariosViewSet(viewsets.ModelViewSet):
     def get_queryset(self, pk=None):
         if pk == None:
             return UsuariosListSerializer.Meta.model.objects.all()
-        return UsuariosListSerializer.objects.filter(doc = pk).first()
+        return Usuario.objects.filter(doc = pk).first()
 
     def create(self, request):
         serializer = UsuariosSerializer(data = request.data)
@@ -49,9 +49,11 @@ class EstudiantesViewSet(viewsets.ModelViewSet):
     serializer_class = EstudiantesListSerializer
     
     def get_queryset(self, pk=None):
+        print("ENTRASSSSSSSSSS")
         if pk == None:
-            return EstudiantesListSerializer.Meta.model.objects.all()
-        return EstudiantesListSerializer.objects.filter(doc = pk).first()
+            print("TODOS")
+            return EstudiantesSerializer.Meta.model.objects.all()
+        return Estudiantes.objects.filter(doc = pk).first()
 
     def create(self, request):
         usuario_serializer = UsuariosSerializer(data = request.data['doc_estudiante'])
@@ -71,28 +73,24 @@ class EstudiantesViewSet(viewsets.ModelViewSet):
             estudiante_serializer.save()
             return Response({"mensaje": "Estudiante creado correctamente"}, status = status.HTTP_201_CREATED)
         return Response(estudiante_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-
-
-    """
-    elif request.method == 'POST':
-        usuario_serializer = UsuariosSerializer(data = request.data['doc_estudiante'])
+    
+    def update(self, request, pk):
+        usuario = Usuario.objects.filter(doc = pk).first()
+        estudiante = Estudiantes.objects.filter(doc_estudiante = pk).first()
+        
         data_estudiante = request.data
         data_usuario = request.data['doc_estudiante']
-        data_usuario['tipo_usuario'] = 'E'
-        data_estudiante['doc_estudiante']=data_usuario['doc']
-        estudiante_serializer = EstudiantesSerializer(data = data_estudiante)
+        data_estudiante['doc_estudiante'] = data_usuario['doc']
+        usuario_serializer = UsuariosSerializer(usuario, data = data_usuario, partial=True)
+        estudiante_serializer = EstudiantesSerializer(estudiante, data = data_estudiante)
         
-
-        #validacion
         if usuario_serializer.is_valid():
             usuario_serializer.save()
-
-        #validacion
+        
         if estudiante_serializer.is_valid():
             estudiante_serializer.save()
-            return Response({"mensaje": "Estudiante creado correctamente"}, status = status.HTTP_201_CREATED)
+            return Response({"mensaje": "Estudiante actualizado correctamente"}, status = status.HTTP_200_OK)
         return Response(estudiante_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-    """
 
         
 
