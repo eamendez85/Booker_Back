@@ -120,10 +120,10 @@ Estudiantes
         "email": "",
         "password": "",
         "imagen": null,
-        "usuario_activo": true,
+        "usuario_activo": true
     },
-    "id_grado": ,
-    "id_grupo": 
+    "id_grado": null,
+    "id_grupo": null
 }
 
 Bibliotecarios
