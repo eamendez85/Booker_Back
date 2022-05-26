@@ -5,3 +5,6 @@ pillow
 django-cors-headers
 django_filter
 django-extensions
+whitenoise
+django-heroku
+gunicorn
