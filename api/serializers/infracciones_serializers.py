@@ -22,7 +22,7 @@ class InfraccionesListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Infracciones
-        fields = ['id_infraccion','id_bibliotecario','id_estudiante','ejemplares','id_tipo_infraccion','descripcion','estado' ]  
+        fields = ['id_infraccion','id_bibliotecario', 'id_estudiante','ejemplares','id_tipo_infraccion','descripcion','estado' ]  
 
 #Serializer infracciones para post
 class InfraccionesSerializer(serializers.ModelSerializer):

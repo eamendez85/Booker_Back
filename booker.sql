@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-05-2022 a las 17:32:09
+-- Tiempo de generación: 24-05-2022 a las 14:38:33
 -- Versión del servidor: 10.4.22-MariaDB
 -- Versión de PHP: 8.1.2
 
@@ -20,22 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `booker`
 --
-CREATE schema booker; 
-USE booker;
-
---
--- Estructura de tabla para la tabla `administradores`
---
-
-CREATE TABLE `administradores` (
-  `id_administrador` int(11) NOT NULL,
-  `tipodoc` varchar(5) DEFAULT NULL,
-  `nombres` varchar(50) NOT NULL,
-  `apellidos` varchar(50) NOT NULL,
-  `telefono` varchar(20) DEFAULT NULL,
-  `direccion` varchar(100) DEFAULT NULL,
-  `doc` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -51,16 +35,16 @@ CREATE TABLE `api_usuario` (
   `email` varchar(60) DEFAULT NULL,
   `imagen` varchar(200) DEFAULT NULL,
   `usuario_activo` tinyint(1) NOT NULL,
-  `usuario_administrador` tinyint(1) NOT NULL
+  `tipo_usuario` varchar(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `api_usuario`
 --
 
-INSERT INTO `api_usuario` (`password`, `last_login`, `doc`, `name`, `email`, `imagen`, `usuario_activo`, `usuario_administrador`) VALUES
-('pbkdf2_sha256$260000$aL7CiIOS2XYg6xAdD7XaUh$SbmXSy7Z9eycBUmlYW1LV5Dlki+aE+ZK24V1bq3tTG8=', '2022-04-04 01:28:36.859677', '1', 'Booker', 'eamendez85@misena.edu.co', '', 1, 1),
-('pbkdf2_sha256$260000$ozypWDJvZ8ETD88LMsPMdL$+omNUF6Nr1+s/BVY7dOi4WpCwpLxy3dl31gsDlKy9FE=', '2022-04-04 01:27:06.000000', '2', 'prueba2', NULL, '', 1, 1);
+INSERT INTO `api_usuario` (`password`, `last_login`, `doc`, `name`, `email`, `imagen`, `usuario_activo`, `tipo_usuario`) VALUES
+('pbkdf2_sha256$260000$aL7CiIOS2XYg6xAdD7XaUh$SbmXSy7Z9eycBUmlYW1LV5Dlki+aE+ZK24V1bq3tTG8=', '2022-04-04 01:28:36.859677', '1', 'Booker', 'eamendez85@misena.edu.co', '', 1, 'E'),
+('pbkdf2_sha256$260000$ozypWDJvZ8ETD88LMsPMdL$+omNUF6Nr1+s/BVY7dOi4WpCwpLxy3dl31gsDlKy9FE=', '2022-04-04 01:27:06.000000', '2', 'prueba2', NULL, '', 1, 'E');
 
 -- --------------------------------------------------------
 
@@ -210,7 +194,11 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (93, 'Can add token', 24, 'add_tokenproxy'),
 (94, 'Can change token', 24, 'change_tokenproxy'),
 (95, 'Can delete token', 24, 'delete_tokenproxy'),
-(96, 'Can view token', 24, 'view_tokenproxy');
+(96, 'Can view token', 24, 'view_tokenproxy'),
+(97, 'Can add bibliotecarios', 21, 'add_bibliotecarios'),
+(98, 'Can change bibliotecarios', 21, 'change_bibliotecarios'),
+(99, 'Can delete bibliotecarios', 21, 'delete_bibliotecarios'),
+(100, 'Can view bibliotecarios', 21, 'view_bibliotecarios');
 
 -- --------------------------------------------------------
 
@@ -239,6 +227,22 @@ INSERT INTO `autores` (`id_autor`, `nombres`, `apellidos`) VALUES
 (8, 'Anne', 'Frank'),
 (9, 'Michael', 'Ende'),
 (10, 'John', 'Boyne');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `bibliotecarios`
+--
+
+CREATE TABLE `bibliotecarios` (
+  `id_bibliotecario` int(11) NOT NULL,
+  `tipodoc` varchar(5) DEFAULT NULL,
+  `nombres` varchar(50) NOT NULL,
+  `apellidos` varchar(50) NOT NULL,
+  `telefono` varchar(20) DEFAULT NULL,
+  `direccion` varchar(100) DEFAULT NULL,
+  `doc` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -273,8 +277,8 @@ CREATE TABLE `de_prestamos` (
   `fec_prestamo` datetime(6) NOT NULL,
   `fec_devolucion` datetime(6) NOT NULL,
   `estado` varchar(3) NOT NULL,
-  `id_administrador` int(11) NOT NULL,
-  `id_estudiante` int(11) NOT NULL
+  `id_estudiante` int(11) NOT NULL,
+  `id_bibliotecario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -333,8 +337,8 @@ CREATE TABLE `django_content_type` (
 
 INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (1, 'admin', 'logentry'),
-(21, 'api', 'administradores'),
 (18, 'api', 'autores'),
+(21, 'api', 'bibliotecarios'),
 (14, 'api', 'categorias'),
 (9, 'api', 'deprestamos'),
 (15, 'api', 'editoriales'),
@@ -404,7 +408,13 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (27, 'api', '0008_alter_libros_imagen_libro', '2022-05-05 12:15:24.407071'),
 (28, 'authtoken', '0001_initial', '2022-05-05 12:15:24.459020'),
 (29, 'authtoken', '0002_auto_20160226_1747', '2022-05-05 12:15:24.483616'),
-(30, 'authtoken', '0003_tokenproxy', '2022-05-05 12:15:24.486546');
+(30, 'authtoken', '0003_tokenproxy', '2022-05-05 12:15:24.486546'),
+(31, 'api', '0009_remove_usuario_usuario_administrador_and_more', '2022-05-24 12:06:29.247188'),
+(32, 'api', '0010_rename_administradores_bibliotecarios_and_more', '2022-05-24 12:06:29.694534'),
+(33, 'api', '0011_libros_numero_capitulos', '2022-05-24 12:06:29.707533'),
+(34, 'api', '0012_remove_libros_alto_remove_libros_ancho_and_more', '2022-05-24 12:06:29.741533'),
+(35, 'api', '0013_remove_deprestamos_id_administrador_and_more', '2022-05-24 12:06:29.929534'),
+(36, 'api', '0014_rename_id_bilbiotecario_infracciones_id_bibliotecario', '2022-05-24 12:06:29.941533');
 
 -- --------------------------------------------------------
 
@@ -555,9 +565,9 @@ CREATE TABLE `infracciones` (
   `id_infraccion` int(11) NOT NULL,
   `descripcion` longtext DEFAULT NULL,
   `estado` varchar(3) DEFAULT NULL,
-  `id_administrador` int(11) DEFAULT NULL,
   `id_estudiante` int(11) DEFAULT NULL,
-  `id_tipo_infraccion` int(11) DEFAULT NULL
+  `id_tipo_infraccion` int(11) DEFAULT NULL,
+  `id_bibliotecario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -585,33 +595,31 @@ CREATE TABLE `libros` (
   `edicion` varchar(50) DEFAULT NULL,
   `descripcion` longtext DEFAULT NULL,
   `numero_paginas` int(11) DEFAULT NULL,
-  `alto` varchar(5) DEFAULT NULL,
-  `ancho` varchar(5) DEFAULT NULL,
-  `peso` varchar(7) DEFAULT NULL,
   `presentacion` varchar(30) DEFAULT NULL,
   `anexos` varchar(200) DEFAULT NULL,
   `palabras_clave` longtext DEFAULT NULL,
   `estado` varchar(3) DEFAULT NULL,
   `id_editorial` int(11) DEFAULT NULL,
   `id_idioma` int(11) DEFAULT NULL,
-  `imagen_libro` varchar(200) DEFAULT NULL
+  `imagen_libro` varchar(200) DEFAULT NULL,
+  `numero_capitulos` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `libros`
 --
 
-INSERT INTO `libros` (`id_libro`, `isbn`, `nombre`, `edicion`, `descripcion`, `numero_paginas`, `alto`, `ancho`, `peso`, `presentacion`, `anexos`, `palabras_clave`, `estado`, `id_editorial`, `id_idioma`, `imagen_libro`) VALUES
-(1, '8498005671', 'Cabal : Razas de noche', '', 'Aaron Boone lleva un tiempo sufriendo espantosas pesadillas, en las que se ve cometiendo los crímenes más atroces. Su psicólogo, el doctor Decker, termina de convencerlo de que esos asesinatos han ocurrido realmente. Ahora Boone sabe que en el mundo no hay lugar para él, y deja que el infierno lo llame, quiere que la Muerte lo lleve hasta allí. Pero hasta la mismísima Muerte parece retroceder ante él. Parece que el único refugio para Boone es Midian, aquel terrible y legendario lugar que estrecha entre sus monstruosos brazos a los medio muertos, las razas de noche?', 249, '20 cm', '12 cm', '', 'Tapa blanda', '', '', 'A', 1, 1, 'images/libros/cabal-razas-de-noche_AYBnxxk.jpg'),
-(2, '8497595696', 'Carrie (Best Seller)', '', 'El escalofriante caso de una joven de apariencia insignificante que se transformó en un ser de poderes anormales, sembrando el terror en toda la ciudad.\r\n\r\nCon pulso mágico para mantener la tensión a lo largo de todo el libro, Stephen King narra la atormentada adolescencia de Carrie, y nos envuelve en una atmósfera sobrecogedora cuando la muchacha realiza una serie de descubrimientos hasta llegar al terrible momento de la venganza.', 256, '19 cm', '12 cm', '', 'Libro de bolsillo', '', '', 'A', 2, 1, 'images/libros/carrie-best-seller_jHhUwu2.jpg'),
-(3, '9789584299413', 'Crónicas del paraíso', '', 'Este libro reúne buena parte del trabajo de una de las grandes cronistas de la  Colombia contemporánea. Desde los años 90, Patricia Nieto ha observado con compasión y cuidado la guerra y sus efectos sobre personajes anónimos que no aparecen en las primeras planas de los diarios o revistas. Se ha ocupado de las víctimas, de los sobrevivientes, de personas que merecen ser reconocidas por su tozudez y la valentía de asumir que, a pesar de la tragedia, es importante seguir insistiendo en que se oiga la voz de ese país que no figura en el imaginario de muchos. La escritura de Patricia Nieto está atada a la vida así se ocupe de terribles hechos como el desplazamiento o el asesinato de seres humanos que, como todos, merecen ser recordados. Este es un libro definitivo para entender un país que necesita reconciliarse consigo mismo.', 457, '23 cm', '14 cm', '', 'Tapa rústica', '', '', 'A', 3, 1, 'images/libros/cronicas-del-paraiso_l4hhSwV.jpg'),
-(4, '9789580009658', 'Cuando despierte el viento', '', 'Novela escrita en tercera persona. Los protagonistas son Josefina y Leo, dos adolescentes que se conocen en la escuela y se convierten en amigos, a pesar de los problemas que enfrenta cada uno. Desde que su hermana Analuisa se suicidó porque no logró que se castigara a su agresor y fue acusada de difamar al hijo de un político famoso, Josefina y su familia no son felices: cargan con una gran pena. Debido a que un compañero insulta la memoria de su hermana, Josefina lo golpea y es expulsada de su primera escuela. Leo vive con Norberto, su padre, un escritor fracasado que maltrata a su madre, Beatriz.', 256, '21 cm', '13 cm', '', 'Tapa blanda', '', '', 'A', 4, 1, 'images/libros/cuando-despierte-el-viento_KPhn3yM.jpg'),
-(5, '9789587434750', 'Dioses y héroes de la mitologia griega', '', 'En esta obra, Shua narra con un estilo magistral los relatos míticos más bellos. En sus páginas se encuentran el mito de la creación del Universo, el origen de los dioses del Olimpo, y las aventuras de los héroes más valientes como Heracles, Teseo y Odiseo, quienes deberán luchar contra terribles monstruos y, sobre todo, contra su propio destino.\r\n\r\nLos mitos griegos continúan cautivando a Los lectores de todas las edades porque tienen el poder de la fantasía y de las pasiones humanas.', 250, '20 cm', '13 cm', '', 'Tapa rústica', '', '', 'A', 5, 1, 'images/libros/dioses-y-heroes-de-la-mitologia-griega_aMxe4Ah.jpg'),
-(6, '9788417041571', 'El bucanero de bombay', '', 'Un recorrido animado y colorista por las costumbres de la India, lleno de imaginación y humor, de la mano de un detective tan original como excéntrico. Siruela recupera en este volumen una colección de cuatro historias del afamado cineasta y narrador', 290, '23 cm', '15 cm', '', 'Tapa blanda', '', '', 'A', 6, 1, 'images/libros/el-bucanero-de-bombay_NTysjuA.jpg'),
-(7, '8445009672', 'El demonio de arbennios', '', 'Kai es un antiguo soldado de élite que reside en Arbennios, capital del reino de Lénoda, cuya monótona vida se sustenta en tres pilares: un trabajo en la guardia del noble señor Nárenwal, la compañía de su leal grupo de amigos y las furtivas visitas de su amante secreta.\r\n\r\nPor desgracia, durante un caluroso día de verano tendrá lugar un ataque inesperado que dará un giro a su vida. Condenado por la misma sociedad a la que había defendido durante años, Kai se verá arrastrado por un torbellino de emociones y violencia que lo llevarán por el oscuro camino de la venganza.', 304, '23 cm', '15 cm', '', 'Tapa blanda', '', '', 'A', 7, 1, 'images/libros/el-demonio-de-arbennios_wmtK5tM.jpg'),
-(8, '9788497593069', 'El diario de Ana Frank', '', 'Oculta con su familia y otra familia judía (los Van Daan), en una buhardilla de unos almacenes de Ámsterdam durante la ocupación nazi de Holanda. Ana Frankcon trece años, cuenta en su diario, al que llamó «Kitty», la vida del grupo. Ayudados por varios empleados de la oficina, permanecieron durante más de dos años en el achterhuis (conocido como «el anexo secreto») hasta que, finalmente, fueron delatados y detenidos. Ana escribió un diario entre el 12 de junio de 1942 y el 1 de agosto de 1944.', 384, '19 cm', '12 cm', '', 'Tapa blanda', '', '', 'A', 2, 1, 'images/libros/el-diario-de-ana-frank_DMmZlAn.jpg'),
-(9, '9789585939301', 'La historia interminable', '', 'La Emperatriz Infantil está mortalmente enferma y su reino corre un grave peligro. La salvación depende de Atreyu, un valiente guerrero de la tribu de los pieles verdes, y Bastián, un niño tímido que lee con pasión un libro mágico. Mil aventuras les llevarán a reunirse y a conocer una fabulosa galería de personajes, y juntos dar forma a una de las grandes creaciones de la literatura de todos los tiempos.', 540, '23 cm', '14 cm', '', 'Tapa rústica', '', '', 'A', 5, 1, 'images/libros/la-historia-interminable.jpg'),
-(10, '1909531197', 'The boy in the striped pyjamas', '', 'La historia de El niño con el pijama de rayas es muy difícil de describir. Normalmente damos algunas pistas sobre el libro en la portada, pero en este caso pensamos que estropearía la lectura del libro. Creemos que es importante que empieces a leer sin saber de qué se trata.', 256, '19 cm', '12 cm', '', 'Tapa blanda', '', '', 'A', 8, 2, 'images/libros/the-boy-in-the-striped-pyjamas.jpg');
+INSERT INTO `libros` (`id_libro`, `isbn`, `nombre`, `edicion`, `descripcion`, `numero_paginas`, `presentacion`, `anexos`, `palabras_clave`, `estado`, `id_editorial`, `id_idioma`, `imagen_libro`, `numero_capitulos`) VALUES
+(1, '8498005671', 'Cabal : Razas de noche', '', 'Aaron Boone lleva un tiempo sufriendo espantosas pesadillas, en las que se ve cometiendo los crímenes más atroces. Su psicólogo, el doctor Decker, termina de convencerlo de que esos asesinatos han ocurrido realmente. Ahora Boone sabe que en el mundo no hay lugar para él, y deja que el infierno lo llame, quiere que la Muerte lo lleve hasta allí. Pero hasta la mismísima Muerte parece retroceder ante él. Parece que el único refugio para Boone es Midian, aquel terrible y legendario lugar que estrecha entre sus monstruosos brazos a los medio muertos, las razas de noche?', 249, 'Tapa blanda', '', '', 'A', 1, 1, 'images/libros/cabal-razas-de-noche.jpg', NULL),
+(2, '8497595696', 'Carrie (Best Seller)', '', 'El escalofriante caso de una joven de apariencia insignificante que se transformó en un ser de poderes anormales, sembrando el terror en toda la ciudad.\r\n\r\nCon pulso mágico para mantener la tensión a lo largo de todo el libro, Stephen King narra la atormentada adolescencia de Carrie, y nos envuelve en una atmósfera sobrecogedora cuando la muchacha realiza una serie de descubrimientos hasta llegar al terrible momento de la venganza.', 256, 'Libro de bolsillo', '', '', 'A', 2, 1, 'images/libros/carrie-best-seller.jpg', NULL),
+(3, '9789584299413', 'Crónicas del paraíso', '', 'Este libro reúne buena parte del trabajo de una de las grandes cronistas de la  Colombia contemporánea. Desde los años 90, Patricia Nieto ha observado con compasión y cuidado la guerra y sus efectos sobre personajes anónimos que no aparecen en las primeras planas de los diarios o revistas. Se ha ocupado de las víctimas, de los sobrevivientes, de personas que merecen ser reconocidas por su tozudez y la valentía de asumir que, a pesar de la tragedia, es importante seguir insistiendo en que se oiga la voz de ese país que no figura en el imaginario de muchos. La escritura de Patricia Nieto está atada a la vida así se ocupe de terribles hechos como el desplazamiento o el asesinato de seres humanos que, como todos, merecen ser recordados. Este es un libro definitivo para entender un país que necesita reconciliarse consigo mismo.', 457, 'Tapa rústica', '', '', 'A', 3, 1, 'images/libros/cronicas-del-paraiso.jpg', NULL),
+(4, '9789580009658', 'Cuando despierte el viento', '', 'Novela escrita en tercera persona. Los protagonistas son Josefina y Leo, dos adolescentes que se conocen en la escuela y se convierten en amigos, a pesar de los problemas que enfrenta cada uno. Desde que su hermana Analuisa se suicidó porque no logró que se castigara a su agresor y fue acusada de difamar al hijo de un político famoso, Josefina y su familia no son felices: cargan con una gran pena. Debido a que un compañero insulta la memoria de su hermana, Josefina lo golpea y es expulsada de su primera escuela. Leo vive con Norberto, su padre, un escritor fracasado que maltrata a su madre, Beatriz.', 256, 'Tapa blanda', '', '', 'A', 4, 1, 'images/libros/cuando-despierte-el-viento.jpg', NULL),
+(5, '9789587434750', 'Dioses y héroes de la mitologia griega', '', 'En esta obra, Shua narra con un estilo magistral los relatos míticos más bellos. En sus páginas se encuentran el mito de la creación del Universo, el origen de los dioses del Olimpo, y las aventuras de los héroes más valientes como Heracles, Teseo y Odiseo, quienes deberán luchar contra terribles monstruos y, sobre todo, contra su propio destino.\r\n\r\nLos mitos griegos continúan cautivando a Los lectores de todas las edades porque tienen el poder de la fantasía y de las pasiones humanas.', 250, 'Tapa rústica', '', '', 'A', 5, 1, 'images/libros/dioses-y-heroes-de-la-mitologia-griega.jpg', NULL),
+(6, '9788417041571', 'El bucanero de bombay', '', 'Un recorrido animado y colorista por las costumbres de la India, lleno de imaginación y humor, de la mano de un detective tan original como excéntrico. Siruela recupera en este volumen una colección de cuatro historias del afamado cineasta y narrador', 290, 'Tapa blanda', '', '', 'A', 6, 1, 'images/libros/el-bucanero-de-bombay.jpg', NULL),
+(7, '8445009672', 'El demonio de arbennios', '', 'Kai es un antiguo soldado de élite que reside en Arbennios, capital del reino de Lénoda, cuya monótona vida se sustenta en tres pilares: un trabajo en la guardia del noble señor Nárenwal, la compañía de su leal grupo de amigos y las furtivas visitas de su amante secreta.\r\n\r\nPor desgracia, durante un caluroso día de verano tendrá lugar un ataque inesperado que dará un giro a su vida. Condenado por la misma sociedad a la que había defendido durante años, Kai se verá arrastrado por un torbellino de emociones y violencia que lo llevarán por el oscuro camino de la venganza.', 304, 'Tapa blanda', '', '', 'A', 7, 1, 'images/libros/el-demonio-de-arbennios.jpg', NULL),
+(8, '9788497593069', 'El diario de Ana Frank', '', 'Oculta con su familia y otra familia judía (los Van Daan), en una buhardilla de unos almacenes de Ámsterdam durante la ocupación nazi de Holanda. Ana Frankcon trece años, cuenta en su diario, al que llamó «Kitty», la vida del grupo. Ayudados por varios empleados de la oficina, permanecieron durante más de dos años en el achterhuis (conocido como «el anexo secreto») hasta que, finalmente, fueron delatados y detenidos. Ana escribió un diario entre el 12 de junio de 1942 y el 1 de agosto de 1944.', 384, 'Tapa blanda', '', '', 'A', 2, 1, 'images/libros/el-diario-de-ana-frank.jpg', NULL),
+(9, '9789585939301', 'La historia interminable', '', 'La Emperatriz Infantil está mortalmente enferma y su reino corre un grave peligro. La salvación depende de Atreyu, un valiente guerrero de la tribu de los pieles verdes, y Bastián, un niño tímido que lee con pasión un libro mágico. Mil aventuras les llevarán a reunirse y a conocer una fabulosa galería de personajes, y juntos dar forma a una de las grandes creaciones de la literatura de todos los tiempos.', 540, 'Tapa rústica', '', '', 'A', 5, 1, 'images/libros/la-historia-interminable.jpg', NULL),
+(10, '1909531197', 'The boy in the striped pyjamas', '', 'La historia de El niño con el pijama de rayas es muy difícil de describir. Normalmente damos algunas pistas sobre el libro en la portada, pero en este caso pensamos que estropearía la lectura del libro. Creemos que es importante que empieces a leer sin saber de qué se trata.', 256, 'Tapa blanda', '', '', 'A', 8, 2, 'images/libros/the-boy-in-the-striped-pyjamas_copy.jpg', NULL);
 
 -- --------------------------------------------------------
 
@@ -722,13 +730,6 @@ CREATE TABLE `tipo_infraccion` (
 --
 
 --
--- Indices de la tabla `administradores`
---
-ALTER TABLE `administradores`
-  ADD PRIMARY KEY (`id_administrador`),
-  ADD KEY `administradores_doc_127e967f_fk_api_usuario_doc` (`doc`);
-
---
 -- Indices de la tabla `api_usuario`
 --
 ALTER TABLE `api_usuario`
@@ -770,6 +771,13 @@ ALTER TABLE `autores`
   ADD PRIMARY KEY (`id_autor`);
 
 --
+-- Indices de la tabla `bibliotecarios`
+--
+ALTER TABLE `bibliotecarios`
+  ADD PRIMARY KEY (`id_bibliotecario`),
+  ADD KEY `administradores_doc_127e967f_fk_api_usuario_doc` (`doc`);
+
+--
 -- Indices de la tabla `categorias`
 --
 ALTER TABLE `categorias`
@@ -780,8 +788,8 @@ ALTER TABLE `categorias`
 --
 ALTER TABLE `de_prestamos`
   ADD PRIMARY KEY (`id_de_prestamo`),
-  ADD KEY `de_prestamos_id_administrador_03aa9a0a_fk_administr` (`id_administrador`),
-  ADD KEY `de_prestamos_id_estudiante_97000d86_fk_estudiantes_id_estudiante` (`id_estudiante`);
+  ADD KEY `de_prestamos_id_estudiante_97000d86_fk_estudiantes_id_estudiante` (`id_estudiante`),
+  ADD KEY `de_prestamos_id_bibliotecario_7faa1882_fk_bibliotec` (`id_bibliotecario`);
 
 --
 -- Indices de la tabla `de_prestamos_ejemplares`
@@ -879,9 +887,9 @@ ALTER TABLE `idiomas`
 --
 ALTER TABLE `infracciones`
   ADD PRIMARY KEY (`id_infraccion`),
-  ADD KEY `infracciones_id_administrador_290921d7_fk_administr` (`id_administrador`),
   ADD KEY `infracciones_id_estudiante_c7a587ad_fk_estudiantes_id_estudiante` (`id_estudiante`),
-  ADD KEY `infracciones_id_tipo_infraccion_da040f2e_fk_tipo_infr` (`id_tipo_infraccion`);
+  ADD KEY `infracciones_id_tipo_infraccion_da040f2e_fk_tipo_infr` (`id_tipo_infraccion`),
+  ADD KEY `infracciones_id_bibliotecario_c542ce08_fk_bibliotec` (`id_bibliotecario`);
 
 --
 -- Indices de la tabla `infracciones_ejemplares`
@@ -949,12 +957,6 @@ ALTER TABLE `tipo_infraccion`
 --
 
 --
--- AUTO_INCREMENT de la tabla `administradores`
---
-ALTER TABLE `administradores`
-  MODIFY `id_administrador` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `auth_group`
 --
 ALTER TABLE `auth_group`
@@ -970,13 +972,19 @@ ALTER TABLE `auth_group_permissions`
 -- AUTO_INCREMENT de la tabla `auth_permission`
 --
 ALTER TABLE `auth_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
 -- AUTO_INCREMENT de la tabla `autores`
 --
 ALTER TABLE `autores`
   MODIFY `id_autor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT de la tabla `bibliotecarios`
+--
+ALTER TABLE `bibliotecarios`
+  MODIFY `id_bibliotecario` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
@@ -1012,7 +1020,7 @@ ALTER TABLE `django_content_type`
 -- AUTO_INCREMENT de la tabla `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT de la tabla `editoriales`
@@ -1121,12 +1129,6 @@ ALTER TABLE `tipo_infraccion`
 --
 
 --
--- Filtros para la tabla `administradores`
---
-ALTER TABLE `administradores`
-  ADD CONSTRAINT `administradores_doc_127e967f_fk_api_usuario_doc` FOREIGN KEY (`doc`) REFERENCES `api_usuario` (`doc`);
-
---
 -- Filtros para la tabla `authtoken_token`
 --
 ALTER TABLE `authtoken_token`
@@ -1146,10 +1148,16 @@ ALTER TABLE `auth_permission`
   ADD CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`);
 
 --
+-- Filtros para la tabla `bibliotecarios`
+--
+ALTER TABLE `bibliotecarios`
+  ADD CONSTRAINT `administradores_doc_127e967f_fk_api_usuario_doc` FOREIGN KEY (`doc`) REFERENCES `api_usuario` (`doc`);
+
+--
 -- Filtros para la tabla `de_prestamos`
 --
 ALTER TABLE `de_prestamos`
-  ADD CONSTRAINT `de_prestamos_id_administrador_03aa9a0a_fk_administr` FOREIGN KEY (`id_administrador`) REFERENCES `administradores` (`id_administrador`),
+  ADD CONSTRAINT `de_prestamos_id_bibliotecario_7faa1882_fk_bibliotec` FOREIGN KEY (`id_bibliotecario`) REFERENCES `bibliotecarios` (`id_bibliotecario`),
   ADD CONSTRAINT `de_prestamos_id_estudiante_97000d86_fk_estudiantes_id_estudiante` FOREIGN KEY (`id_estudiante`) REFERENCES `estudiantes` (`id_estudiante`);
 
 --
@@ -1197,7 +1205,7 @@ ALTER TABLE `favoritos_libros`
 -- Filtros para la tabla `infracciones`
 --
 ALTER TABLE `infracciones`
-  ADD CONSTRAINT `infracciones_id_administrador_290921d7_fk_administr` FOREIGN KEY (`id_administrador`) REFERENCES `administradores` (`id_administrador`),
+  ADD CONSTRAINT `infracciones_id_bibliotecario_c542ce08_fk_bibliotec` FOREIGN KEY (`id_bibliotecario`) REFERENCES `bibliotecarios` (`id_bibliotecario`),
   ADD CONSTRAINT `infracciones_id_estudiante_c7a587ad_fk_estudiantes_id_estudiante` FOREIGN KEY (`id_estudiante`) REFERENCES `estudiantes` (`id_estudiante`),
   ADD CONSTRAINT `infracciones_id_tipo_infraccion_da040f2e_fk` FOREIGN KEY (`id_tipo_infraccion`) REFERENCES `tipo_infraccion` (`id_tipo_infraccion`);
 
