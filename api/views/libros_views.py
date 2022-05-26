@@ -14,14 +14,12 @@ class LibrosViewSet(viewsets.ModelViewSet):
 
     #Para poder filtrar, se ingresa en la url ?(nombre del campo)=(valor que se quiere filtrar)
     #por ejemplo: ?nombre=el principito
-    filterset_fields= ['isbn','nombre','estado','autores__nombres', 'autores__apellidos', 'autores','categorias__nombre', 'categorias','id_idioma__nombre', 'id_idioma','id_editorial__nombre', 'id_editorial']
+    filterset_fields= ['estado','autores__nombres', 'autores__apellidos','categorias__nombre', 'id_idioma__nombre', 'id_idioma','id_editorial__nombre', 'id_editorial']
 
 
     #Para poder buscar, se ingresa en la url ?search=(valor que se quiere buscar)
     #por ejemplo: ?search=novela, aqui se puede poner cualquier caracter, letra o palabra para poder buscarse
-    search_fields = ['isbn','nombre',
-    'palabras_clave','id_editorial__nombre','id_idioma__nombre','categorias__nombre'
-    ,'autores__nombres','autores__apellidos']
+    search_fields = ['isbn','nombre','categorias__nombre','autores__nombres','autores__apellidos']
 
     #Para poder ordenar la información de manera ascendente es ?ordering=(campo que quiere ordenar en especifico) el campo tiene que estar 
     #igual de escrito que los campos de ordering_fields

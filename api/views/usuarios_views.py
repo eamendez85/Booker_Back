@@ -109,7 +109,8 @@ class EstudiantesViewSet(viewsets.ModelViewSet):
 
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     
-    filterset_fields= ['doc_estudiante__doc']
+    filterset_fields= ['doc_estudiante__usuario_activo, id_grado__nombre']
+    search_fields = ['doc_estudiante', 'nombres','apellidos']
 
     serializer_class = EstudiantesListSerializer
     
@@ -171,7 +172,8 @@ class BibliotecariosViewSet(viewsets.ModelViewSet):
 
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     
-    filterset_fields= ['doc_bibliotecario__doc']
+    filterset_fields= ['doc_bibliotecario__usuario_activo']
+    search_fields = ['doc_bibliotecario', 'nombres','apellidos']
 
     serializer_class = BibliotecariosListSerializer
     
