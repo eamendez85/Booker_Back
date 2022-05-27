@@ -8,6 +8,8 @@ class ReservasSerializer(serializers.ModelSerializer):
         model = Reservas
         fields = '__all__'
 
+        
+
 class ReservasListSerializer(serializers.ModelSerializer):
     id_estudiante = EstudianteInformacionGeneralSerializer(many = False, read_only=True)
     ejemplares = EjemplaresListSerializer(many = True, read_only = True)
