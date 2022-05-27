@@ -46,72 +46,16 @@ class UsuariosViewSet(viewsets.ModelViewSet):
         usuario.delete()
         return Response({'message':'Usuario eliminado correctamente'}, status= status.HTTP_200_OK)
 
+
 class EstudiantesViewSet(viewsets.ModelViewSet):
+    serializer_class = EstudiantesListSerializer
 
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     
-    filterset_fields= ['doc_estudiante__doc']
+    filterset_fields= ['doc_estudiante__usuario_activo', 'id_grado']
+    search_fields = ['doc_estudiante__doc', 'nombres','apellidos']
 
-    serializer_class = EstudiantesListSerializer
     
-    def get_queryset(self, pk=None):
-        if pk == None:
-            return EstudiantesSerializer.Meta.model.objects.all()
-        return Estudiantes.objects.filter(id_estudiante = pk).first()
-
-    def create(self, request):
-        usuario_serializer = UsuariosSerializer(data = request.data['doc_estudiante'])
-        data_estudiante = request.data
-        data_usuario = request.data['doc_estudiante']
-        data_usuario['tipo_usuario'] = 'E'
-        data_estudiante['doc_estudiante']=data_usuario['doc']
-        estudiante_serializer = EstudiantesSerializer(data = data_estudiante)
-        
-
-        #validacion usuario
-        if usuario_serializer.is_valid():
-            usuario_serializer.save()
-
-        #validacion estuidante
-        if estudiante_serializer.is_valid():
-            estudiante_serializer.save()
-            return Response({"mensaje": "Estudiante creado correctamente"}, status = status.HTTP_201_CREATED)
-        return Response(estudiante_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-    
-    def update(self, request, pk):
-        usuario = Usuario.objects.filter(doc = pk).first()
-        estudiante = Estudiantes.objects.filter(doc_estudiante = pk).first()
-        
-        data_estudiante = request.data
-        data_usuario = request.data['doc_estudiante']
-        data_estudiante['doc_estudiante'] = data_usuario['doc']
-        usuario_serializer = UsuariosSerializer(usuario, data = data_usuario, partial=True)
-        estudiante_serializer = EstudiantesSerializer(estudiante, data = data_estudiante)
-        
-        if usuario_serializer.is_valid():
-            usuario_serializer.save()
-        
-        if estudiante_serializer.is_valid():
-            estudiante_serializer.save()
-            return Response({"mensaje": "Estudiante actualizado correctamente"}, status = status.HTTP_200_OK)
-        return Response(estudiante_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-
-    def destroy(self, request, pk):
-        estudiante = Estudiantes.objects.filter(id_estudiante = pk).first()
-        doc_estudiante = estudiante.doc_estudiante.doc
-        usuario = Usuario.objects.filter(doc = doc_estudiante).first()
-
-        usuario.delete()
-        estudiante.delete()
-        return Response({'message':'Estudiante eliminado correctamente'}, status= status.HTTP_200_OK)
-
-class EstudiantesViewSet(viewsets.ModelViewSet):
-
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    
-    filterset_fields= ['doc_estudiante__doc']
-
-    serializer_class = EstudiantesListSerializer
     
     def get_queryset(self, pk=None):
         if pk == None:
@@ -171,7 +115,8 @@ class BibliotecariosViewSet(viewsets.ModelViewSet):
 
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     
-    filterset_fields= ['doc_bibliotecario__doc']
+    filterset_fields= ['doc_bibliotecario__usuario_activo']
+    search_fields = ['doc_bibliotecario__doc', 'nombres','apellidos']
 
     serializer_class = BibliotecariosListSerializer
     

@@ -1,5 +1,15 @@
 instalar desde consola: pyparsing pydot
 
+Funciones por terminar:
+
+Crear un registro de prestamo cuando el estado de una reserva pase a inactivo
+
+Si un ejemplar esta siendo prestado que no se pueda prestar el mismo ejemplar
+
+Si un estudiante tiene una infracción que no pueda reservar un libro en la plataforma
+
+
+
 Admin
 doc: 48362373243
 password: bwenb2j32hb
