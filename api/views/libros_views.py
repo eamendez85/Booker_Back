@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from api.serializers.libros_serializers import LibrosListSerializer, LibrosSerializer
+from api.serializers.libros_serializers import LibrosConEjemplaresSerializer, LibrosListSerializer, LibrosSerializer
 from rest_framework import viewsets
 from api.models import Libros
 from rest_framework import status, filters
@@ -56,3 +56,13 @@ class LibrosViewSet(viewsets.ModelViewSet):
         libro = Libros.objects.filter(id_libro = pk).first()
         libro.delete()
         return Response({'message':'Libro eliminado correctamente'}, status= status.HTTP_200_OK)
+
+
+
+class LibrosConEjemplaresViewSet(viewsets.ModelViewSet):
+    serializer_class = LibrosConEjemplaresSerializer
+
+    def get_queryset(self, pk=None):
+        if pk == None:
+            return LibrosConEjemplaresSerializer.Meta.model.objects.all()
+        return LibrosConEjemplaresSerializer.objects.filter(id_libro = pk).first()

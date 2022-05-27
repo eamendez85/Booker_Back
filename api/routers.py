@@ -4,7 +4,8 @@ from django.urls import URLPattern
 from rest_framework.routers import DefaultRouter
 from api.views.general_views import *
 from api.views.usuarios_views import UsuariosViewSet, EstudiantesViewSet, BibliotecariosViewSet
-from api.views.libros_views import LibrosViewSet
+from api.views.libros_views import LibrosViewSet, LibrosConEjemplaresViewSet
+from api.views.reservas_views import ReservasViewSet
 
 router = DefaultRouter()
 
@@ -24,6 +25,7 @@ router.register(r'reservas', ReservasViewSet, basename= 'reservas')
 router.register(r'usuarios', UsuariosViewSet, basename= 'usuarios')
 router.register(r'estudiantes', EstudiantesViewSet, basename= 'estudiantes')
 router.register(r'bibliotecarios', BibliotecariosViewSet, basename= 'bibliotecarios')
+router.register(r'libros_ejemplares', LibrosConEjemplaresViewSet, basename= 'libros_ejemplares')
 
 
 urlpatterns = router.urls
