@@ -2,12 +2,13 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from api.serializers.libros_serializers import LibrosConEjemplaresSerializer, LibrosListSerializer, LibrosSerializer
 from rest_framework import viewsets
-from api.models import Libros
+from api.models import Ejemplares, Libros
 from rest_framework import status, filters
 from django_filters.rest_framework import DjangoFilterBackend
-
+from django.db.models import Max
 
 class LibrosViewSet(viewsets.ModelViewSet):
+    
     serializer_class = LibrosListSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
 
@@ -27,19 +28,28 @@ class LibrosViewSet(viewsets.ModelViewSet):
     ''' ordering_fields = ['isbn','nombre',
     'estado','categorias__nombre'
     ,'autores__nombres','autores__apellidos'] '''
-
-
+    
+    serializer_class = LibrosListSerializer
 
     def get_queryset(self, pk=None):
         if pk == None:
             return LibrosListSerializer.Meta.model.objects.all()
-        return LibrosListSerializer.objects.filter(id_libro=pk).first()
-
+        return LibrosListSerializer.objects.filter(id_libro = pk).first()
+    
     def create (self, request):
-        serializer_libro = LibrosSerializer(data = request.data)
+        cant_ejemplares = request.data.get("cant_ejemplares")
+        request.data.pop("cant_ejemplares")
+        data_libro = request.data
+        
+        serializer_libro = LibrosSerializer(data = data_libro)
+        
         if serializer_libro.is_valid():
-            serializer_libro.save()
-            return Response({'data':serializer_libro.data, 'message':'Se ha creado el libro correctamente'}, status = status.HTTP_201_CREATED)
+            libro_guardado = serializer_libro.save()
+            
+            for item in range(cant_ejemplares):
+                ejemplar = Ejemplares(num_ejemplar=(item+1), estado="D", id_libro=libro_guardado)
+                ejemplar.save()
+            return Response({'data':serializer_libro.data, 'message':'Se ha creado el libro y los ejemplares correctamente'}, status = status.HTTP_201_CREATED)
         return Response(serializer_libro.errors, status= status.HTTP_400_BAD_REQUEST)
     
     def update(self, request, pk):
@@ -52,15 +62,8 @@ class LibrosViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk):
         libro = Libros.objects.filter(id_libro = pk).first()
+        ejemplares = Ejemplares.objects.filter(id_libro = pk)
+        for ejemplar in ejemplares:
+            ejemplar.delete()
         libro.delete()
-        return Response({'message':'Libro eliminado correctamente'}, status= status.HTTP_200_OK)
-
-
-
-class LibrosConEjemplaresViewSet(viewsets.ModelViewSet):
-    serializer_class = LibrosConEjemplaresSerializer
-
-    def get_queryset(self, pk=None):
-        if pk == None:
-            return LibrosConEjemplaresSerializer.Meta.model.objects.all()
-        return LibrosConEjemplaresSerializer.objects.filter(id_libro = pk).first()
+        return Response({'message':'Libro y ejemplares eliminados correctamente'}, status= status.HTTP_200_OK)

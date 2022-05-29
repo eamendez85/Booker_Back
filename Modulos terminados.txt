@@ -8,6 +8,8 @@ Si un ejemplar esta siendo prestado que no se pueda prestar el mismo ejemplar
 
 Si un estudiante tiene una infracción que no pueda reservar un libro en la plataforma
 
+Cuando se cambie el esatdo a inactivo de un libro tambien cambie el estado de los ejemplares existentes
+
 
 
 Admin
@@ -60,9 +62,7 @@ libros
     "edicion": "",
     "descripcion": "",
     "numero_paginas": null,
-    "alto": "",
-    "ancho": "",
-    "peso": "",
+    "numero_capitulos": null,
     "presentacion": "",
     "anexos": "",
     "palabras_clave": "",
@@ -70,7 +70,8 @@ libros
     "id_editorial": null,
     "id_idioma": null,
     "autores": [],
-    "categorias": []
+    "categorias": [],
+    "cant_ejemplares": 1
 }
 
 Favoritos
