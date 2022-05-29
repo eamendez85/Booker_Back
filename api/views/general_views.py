@@ -14,7 +14,7 @@ from api.serializers.reservas_serializer import ReservasListSerializer, Reservas
 
 
 #Viewset del modelo grados
-class GradoViewSet(Authentication, viewsets.ModelViewSet):
+class GradoViewSet(viewsets.ModelViewSet):
     serializer_class = GradosSerializer
 
     def get_queryset(self, pk=None):
