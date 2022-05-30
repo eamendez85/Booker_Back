@@ -5,10 +5,9 @@ from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from api.serializers.ejemplares_serializers import EjemplaresSerializer, EjemplaresListSerializer
 from api.serializers.infracciones_serializers import InfraccionesListSerializer, InfraccionesSerializer
-from api.models import Autores, Categorias, DePrestamos, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Idiomas, Infracciones, Reservas, TipoInfraccion
-from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, EditorialesSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer,  PrestadosSerializer, TipoInfraccionesSerializer
+from api.models import Autores, Categorias, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Idiomas, Infracciones, Reservas, TipoInfraccion
+from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, EditorialesSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer, TipoInfraccionesSerializer
 from api.authentication_mixins import Authentication
-from api.serializers.detalles_prestamo_serializer import DetallePrestamosSerializer, DetallePrestamosListSerializer
 from api.serializers.favoritos_serializers import FavoritosListSerializer, FavoritosSerializer
 from api.serializers.reservas_serializer import ReservasListSerializer, ReservasSerializer
 
@@ -301,49 +300,6 @@ class InfraccionesViewSet(viewsets.ModelViewSet):
         infraccion = Infracciones.objects.filter(id_infraccion = pk).first()
         infraccion.delete()
         return Response({'message':'Infracción eliminada correctamente'}, status= status.HTTP_200_OK)
-
-#ViewSet del modelo Detalles prestamos
-class DetallePrestamoViewSet(viewsets.ModelViewSet):
-    serializer_class = DetallePrestamosListSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    
-    filterset_fields= ['estado']
-    search_fields = ['id_estudiante__doc_estudiante__doc', 'id_bibliotecario__doc_bibliotecario__doc','ejemplares__id_libro__isbn', 'ejemplares__id_libro__nombre']
-    ordering_fields = ['fec_prestamo', 'fec_devolucion']
-
-
-
-    def get_queryset(self, pk=None):
-        if pk == None:
-            return DetallePrestamosListSerializer.Meta.model.objects.all()
-        return DePrestamos.objects.filter(id_de_prestamo = pk).first()
-
-    def create(self, request):
-            serializer = DetallePrestamosSerializer(data = request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response({'data' : serializer.data, 'message':'Se ha agregado el prestamo al estudiante correctamente'}, status= status.HTTP_201_CREATED)
-            
-            serializer_prestados = PrestadosSerializer(data = request.data)
-            if serializer_prestados.is_valid():
-                serializer_prestados.save()
-                print("Prestado guardado")
-        
-            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-
-    def update(self, request, pk):
-        detalle_prestamo = DePrestamos.objects.filter(id_de_prestamo = pk).first()
-        serializer = DetallePrestamosSerializer(detalle_prestamo, data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'data' : serializer.data, 'message':'Prestamo actualizado correctamente'}, status= status.HTTP_200_OK)
-        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-
-    def destroy(self, request, pk):
-        detalle_prestamo = DePrestamos.objects.filter(id_de_prestamo = pk).first()
-        detalle_prestamo.delete()
-        return Response({'message':'Registro de prestamo eliminado correctamente'}, status= status.HTTP_200_OK)
-
 
 #ViewSet del modelo reservas
 class ReservasViewSet(viewsets.ModelViewSet):

@@ -81,6 +81,7 @@ Favoritos
 }
 
 Ejemplares
+estados(I=inactivo, D=Disponible, P=Prestado, R=Reservado, INF=Infraccion)
 {
     "num_ejemplar": "",
     "estado": "",
@@ -99,14 +100,21 @@ Infracciones
 }
 
 
-Prestamos
+de_prestamos
+estados(AC=Actual, C=Completado, INF=Infraccion)
+ejemplo de formato de fechas = "2006-10-25 14:30:59" (aaaa-mm-dd hh-mm-ss)
 {
-    "fec_prestamo": null,
-    "fec_devolucion": null,
-    "estado": "",
-    "id_estudiante": null,
-    "id_administrador": null,
-    "ejemplares": []
+    "id_estudiante": ,
+    "prestamos": [
+        {
+            "fec_devolucion": "",
+            "estado": null,
+            "id_ejemplar": 
+        }
+    ],
+    "id_bibliotecario": ,
+    "fec_prestamo": "",
+    "estado": ""
 }
 
 

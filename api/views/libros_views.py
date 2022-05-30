@@ -1,11 +1,9 @@
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from api.serializers.libros_serializers import LibrosConEjemplaresSerializer, LibrosListSerializer, LibrosSerializer
+from api.serializers.libros_serializers import LibrosListSerializer, LibrosSerializer
 from rest_framework import viewsets
 from api.models import Ejemplares, Libros
 from rest_framework import status, filters
 from django_filters.rest_framework import DjangoFilterBackend
-from django.db.models import Max
 
 class LibrosViewSet(viewsets.ModelViewSet):
     

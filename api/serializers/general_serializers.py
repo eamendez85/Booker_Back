@@ -1,6 +1,6 @@
 from dataclasses import fields
 from rest_framework import serializers
-from api.models import Autores, DePrestamos, Editoriales, Ejemplares, Estudiantes, Favoritos, Grados, Grupos, Categorias, Idiomas, Infracciones, Libros, Prestados, TipoInfraccion
+from api.models import Autores, Editoriales, Ejemplares, Estudiantes, Favoritos, Grados, Grupos, Categorias, Idiomas, Infracciones, Libros, TipoInfraccion
 
 #Serializer grados
 class GradosSerializer(serializers.ModelSerializer):
@@ -46,8 +46,4 @@ class TipoInfraccionesSerializer(serializers.ModelSerializer):
 
 
 
-#Serializer prestados
-class PrestadosSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Prestados
-        fields = '__all__'
+#Serializer prestado
