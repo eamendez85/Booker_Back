@@ -1,6 +1,7 @@
 from dataclasses import field, fields
 from rest_framework import serializers
 from api.models import Usuario, Estudiantes, Bibliotecarios
+from api.serializers.general_serializers import GradosSerializer, GruposSerializer
 
 class UsuariosSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,25 +26,17 @@ class UsuariosSerializer(serializers.ModelSerializer):
             update_usuario.set_password(validated_data['password'])
             update_usuario.save()
             return update_usuario
-  
-"""       
-    Validacion
-    def validate_name(self, value):
-        if 'pepe' in value:
-            raise serializers.ValidationError('Error, no puede existir un usuario con este nombre') 
-        return value
-    """
 
 class UsuariosListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         exclude = ('password',)
 
-
-
 class EstudiantesListSerializer(serializers.ModelSerializer):
 
     doc_estudiante = UsuariosListSerializer(many=False,  read_only=True)
+    id_grado = GradosSerializer(many=False)
+    id_grupo = GruposSerializer(many=False)
 
 
     class Meta:
