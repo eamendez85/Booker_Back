@@ -12,8 +12,8 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     
     filterset_fields= ['estado']
-    search_fields = ['id_estudiante__doc_estudiante__doc', 'id_bibliotecario__doc_bibliotecario__doc','ejemplares__id_libro__isbn', 'ejemplares__id_libro__nombre']
-    ordering_fields = ['fec_prestamo', 'fec_devolucion']
+    search_fields = ['id_estudiante__doc_estudiante__doc', 'id_bibliotecario__doc_bibliotecario__doc','prestamos__id_ejemplar__id_libro__isbn', 'prestamos__id_ejemplar__id_libro__nombre']
+    ordering_fields = ['fec_prestamo', 'prestamos__fec_devolucion']
 
 
 
