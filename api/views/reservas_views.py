@@ -22,9 +22,6 @@ class ReservasViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
           serializer = ReservasSerializer(data = request.data)
-
-          
-
           if serializer.is_valid():
               serializer.save()
               return Response({'data' : serializer.data, 'message':'Se ha agregado la reserva correctamente'}, status= status.HTTP_201_CREATED)
@@ -34,6 +31,9 @@ class ReservasViewSet(viewsets.ModelViewSet):
     def update(self, request, pk):
         reserva = Reservas.objects.filter(id_reserva = pk).first()
         serializer = ReservasSerializer(reserva, data = request.data)
+
+        
+
         if serializer.is_valid():
             serializer.save()
             return Response({'data' : serializer.data, 'message':'Reserva actualizada correctamente'}, status= status.HTTP_200_OK)
