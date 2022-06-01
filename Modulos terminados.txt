@@ -2,13 +2,13 @@ instalar desde consola: pyparsing pydot
 
 Funciones por terminar:
 
-Crear un registro de prestamo cuando el estado de una reserva pase a inactivo
+Crear un registro de prestamo cuando el estado de una reserva pase a inactivo 
 
 Si un ejemplar esta siendo prestado que no se pueda prestar el mismo ejemplar
 
-Si un estudiante tiene una infracción que no pueda reservar un libro en la plataforma
+Si un estudiante tiene una infracción que no pueda reservar un libro en la plataforma  Terminado
 
-Cuando se cambie el esatdo a inactivo de un libro tambien cambie el estado de los ejemplares existentes
+Cuando se cambie el estado a inactivo de un libro tambien cambie el estado de los ejemplares existentes Terminado
 
 
 
@@ -55,6 +55,7 @@ tipoinfraccion
 
 
 libros
+estados(AV=Activo, IV=Inactivo)
 {
     "isbn": "",
     "imagen_libro": null,
@@ -81,7 +82,7 @@ Favoritos
 }
 
 Ejemplares
-estados(I=inactivo, D=Disponible, P=Prestado, R=Reservado, INF=Infraccion)
+estados(IV=inactivo, D=Disponible, P=Prestado, R=Reservado, INF=Infraccion)
 {
     "num_ejemplar": "",
     "estado": "",
@@ -90,6 +91,7 @@ estados(I=inactivo, D=Disponible, P=Prestado, R=Reservado, INF=Infraccion)
 
 
 Infracciones
+estados(AV=Activa, C = Completada)
 {
     "descripcion": "",
     "estado": "",
@@ -101,7 +103,8 @@ Infracciones
 
 
 de_prestamos
-estados(AC=Actual, C=Completado, INF=Infraccion)
+estados_de_prestamos(AC=Actual, C=Completado, INF=Infraccion)
+estados_prestamos(AC=Actual, C=Completado, INF=Infraccion)
 ejemplo de formato de fechas = "2006-10-25 14:30:59" (aaaa-mm-dd hh-mm-ss)
 {
     "id_estudiante": ,
@@ -119,6 +122,7 @@ ejemplo de formato de fechas = "2006-10-25 14:30:59" (aaaa-mm-dd hh-mm-ss)
 
 
 Reservas
+estados(AC=Actual, C=Completada, IV=inactiva)
 {
     "estado": "",
     "id_estudiante": null,

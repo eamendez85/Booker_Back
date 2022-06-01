@@ -7,7 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 class LibrosViewSet(viewsets.ModelViewSet):
     
-    serializer_class = LibrosListSerializer
+    serializer_class = LibrosSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
 
 
@@ -26,8 +26,7 @@ class LibrosViewSet(viewsets.ModelViewSet):
     ''' ordering_fields = ['isbn','nombre',
     'estado','categorias__nombre'
     ,'autores__nombres','autores__apellidos'] '''
-    
-    serializer_class = LibrosListSerializer
+
 
     def get_queryset(self, pk=None):
         if pk == None:
@@ -51,11 +50,25 @@ class LibrosViewSet(viewsets.ModelViewSet):
         return Response(serializer_libro.errors, status= status.HTTP_400_BAD_REQUEST)
     
     def update(self, request, pk):
+        #Cuando se cambie el estado a inactivo de un libro tambien cambie el estado de los ejemplares existentes
         libro = Libros.objects.filter(id_libro = pk).first()
         serializer_libro = LibrosSerializer(libro, data = request.data)
+        estado_libro = request.data.get("estado")
+        ejemplares_libro = Ejemplares.objects.filter(id_libro = pk)
+        print(estado_libro)
+        print(ejemplares_libro)
         if serializer_libro.is_valid():
-            serializer_libro.save()
-            return Response({'data' : serializer_libro.data, 'message':'Libro actualizado correctamente'}, status= status.HTTP_200_OK)
+            if estado_libro == "IV":
+                for ejemplar in ejemplares_libro: 
+                    print("entro")
+                    print(ejemplar)
+                    ejemplar.estado = "IV"
+                    ejemplar.save()
+                serializer_libro.save()
+                return Response({'data' : serializer_libro.data, 'message':'Libro actualizado correctamente'}, status= status.HTTP_200_OK)
+            else: 
+                serializer_libro.save()
+                return Response({'data' : serializer_libro.data, 'message':'Libro actualizado correctamente'}, status= status.HTTP_200_OK)
         return Response(serializer_libro.errors, status= status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk):
