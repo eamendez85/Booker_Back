@@ -21,7 +21,6 @@ class ReservasViewSet(viewsets.ModelViewSet):
             return ReservasListSerializer.Meta.model.objects.all()
         return Reservas.objects.filter(id_reserva = pk).first()
 
-
     def create(self, request):
         #Si un estudiante tiene una infracción que no pueda reservar un libro en la plataforma
         error_datos_reserva = {}

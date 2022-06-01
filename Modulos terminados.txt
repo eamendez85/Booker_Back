@@ -2,7 +2,7 @@ instalar desde consola: pyparsing pydot
 
 Funciones por terminar:
 
-Crear un registro de prestamo cuando el estado de una reserva pase a inactivo 
+Crear un registro de prestamo cuando el estado de una reserva pase a completada
 
 Si un ejemplar esta siendo prestado que no se pueda prestar el mismo ejemplar
 
@@ -55,7 +55,6 @@ tipoinfraccion
 
 
 libros
-estados(AV=Activo, IV=Inactivo)
 {
     "isbn": "",
     "imagen_libro": null,
