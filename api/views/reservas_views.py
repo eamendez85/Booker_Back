@@ -9,12 +9,12 @@ from api.serializers.reservas_serializer import ReservasListSerializer, Reservas
 
 #ViewSet del modelo reservas
 class ReservasViewSet(viewsets.ModelViewSet):
-    serializer_class = ReservasSerializer
+    serializer_class = ReservasListSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
 
     filterset_fields= ['id_reserva', 'id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro', 'estado']
     search_fields = ['id_estudiante__doc_estudiante__doc', 'id_estudiante__nombres', 'id_estudiante__apellidos', 'ejemplares__id_libro__nombre', 'ejemplares__id_libro__isbn', 'ejemplares__id_libro__autores__nombres', 'ejemplares__id_libro__autores__apellidos', 'ejemplares__id_libro__categorias__nombre']
-    ordering_fields = ['id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro__nombre','estado']
+    ordering_fields = ['id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro__nombre','estado', 'fecha_reserva', 'fecha_limite']
 
     def get_queryset(self, pk=None):
         if pk == None:
@@ -22,7 +22,6 @@ class ReservasViewSet(viewsets.ModelViewSet):
         return Reservas.objects.filter(id_reserva = pk).first()
 
     def create(self, request):
-        #Si un estudiante tiene una infracción que no pueda reservar un libro en la plataforma
         error_datos_reserva = {}
         estado_ejemplares={}
         validacion_estado_ejemplares=True
@@ -31,7 +30,8 @@ class ReservasViewSet(viewsets.ModelViewSet):
         ejemplares_reserva = request.data.get('ejemplares')
 
         reserva_serializer = ReservasSerializer(data = request.data)
-        
+
+        #Si un estudiante tiene una infracción que no pueda reservar un libro en la plataforma
         if estudiante_infraccion:
             return Response({'message':'El estudiante tiene una infracción vigente'}, status= status.HTTP_409_CONFLICT)
         else:

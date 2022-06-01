@@ -85,7 +85,7 @@ class Usuario(AbstractBaseUser):
     doc = models.CharField('Numero de documento', unique=True, max_length=20, primary_key=True)
     name = models.CharField('Nombre de usuario', max_length=50, blank=True, null=True)
     email = models.CharField('Email',max_length=60, blank=True, null=True)
-    imagen = models.ImageField('Imagen del perfil', upload_to='perfil/', max_length=200, blank=True, null=True)
+    imagen = models.TextField('Imagen del perfil', blank=True, null=True)
     usuario_activo = models.BooleanField(default = True)
     tipo_usuario = models.CharField('Tipo usuario', max_length=1)
     #[A, B, E]

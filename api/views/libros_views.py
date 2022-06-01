@@ -7,7 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 class LibrosViewSet(viewsets.ModelViewSet):
     
-    serializer_class = LibrosSerializer
+    serializer_class = LibrosListSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
 
 
