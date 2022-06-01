@@ -71,14 +71,14 @@ class ReservasViewSet(viewsets.ModelViewSet):
         
         if serializer.is_valid():
             estado = request.data.get('estado')
-            if estado == "a":
+            if estado == "AC":
                 print(estado)
-                print("aaaaaaaaaaa")
+                print("Actuaaaaal")
                 serializer.save()
                 return Response({'data' : serializer.data, 'message':'Reserva actualizada correctamente'}, status= status.HTTP_200_OK)
-            elif estado == "i":
+            elif estado == "C":
                 print(estado)
-                print("iiiiiiiiii")
+                print("Completadaaaa")
                 serializer.save()
                 return Response({'data' : serializer.data, 'message':'Reserva actualizada correctamente'}, status= status.HTTP_200_OK)
 
