@@ -6,15 +6,27 @@ from api.models import Reservas
 from django_filters.rest_framework import DjangoFilterBackend
 from api.serializers.infracciones_serializers import InfraccionesListSerializer, InfraccionesSerializer
 from api.serializers.reservas_serializer import ReservasListSerializer, ReservasSerializer
+from time import strftime, localtime
+from datetime import datetime, timedelta
 
 #ViewSet del modelo reservas
 class ReservasViewSet(viewsets.ModelViewSet):
-    serializer_class = ReservasListSerializer
+    serializer_class = ReservasSerializer
+    fecha_reserva = datetime.now()
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
 
     filterset_fields= ['id_reserva', 'id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro', 'estado']
     search_fields = ['id_estudiante__doc_estudiante__doc', 'id_estudiante__nombres', 'id_estudiante__apellidos', 'ejemplares__id_libro__nombre', 'ejemplares__id_libro__isbn', 'ejemplares__id_libro__autores__nombres', 'ejemplares__id_libro__autores__apellidos', 'ejemplares__id_libro__categorias__nombre']
     ordering_fields = ['id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro__nombre','estado', 'fecha_reserva', 'fecha_limite']
+
+    reservas = Reservas.objects.filter()
+
+    for reserva in reservas:
+        if reserva.reserva_cancelada_por_fecha_limite:
+            print("Se pasó de la fecha limite aaaaaaaa")
+            #serializer.estado = "IV"
+        else:
+            print("No se pasó de la fecha limite aaaaaaaaaaa")
 
     def get_queryset(self, pk=None):
         if pk == None:
@@ -22,12 +34,26 @@ class ReservasViewSet(viewsets.ModelViewSet):
         return Reservas.objects.filter(id_reserva = pk).first()
 
     def create(self, request):
+        #El mutable sirve para poder agregar datos al request.data
+        #Saco la fecha de reserva con el datetime.now que es la fecha cuando se cree la reserva
+        #Y la fecha limite es la fecha de reserva con 3 dias sumados
+        request.data._mutable = True
+        fecha_reserva = datetime.now()
+        fecha_limite = fecha_reserva + timedelta(minutes= 2)
+
         error_datos_reserva = {}
         estado_ejemplares={}
+
         validacion_estado_ejemplares=True
         id_estudiante = request.data.get('id_estudiante')
         estudiante_infraccion = Infracciones.objects.filter(id_estudiante = id_estudiante, estado="AV").first()
         ejemplares_reserva = request.data.get('ejemplares')
+
+        request.data['fecha_reserva'] = fecha_reserva
+        request.data['fecha_limite'] = fecha_limite
+
+        print(fecha_reserva)
+        print(fecha_limite)
 
         reserva_serializer = ReservasSerializer(data = request.data)
 
@@ -35,6 +61,7 @@ class ReservasViewSet(viewsets.ModelViewSet):
         if estudiante_infraccion:
             return Response({'message':'El estudiante tiene una infracción vigente'}, status= status.HTTP_409_CONFLICT)
         else:
+            #Validaciones de ejemplares y sus estados
             for ejemplar_reserva in ejemplares_reserva:
                 ejemplar = Ejemplares.objects.filter(id_ejemplar = ejemplar_reserva).first()
                 if ejemplar.estado == "R":
@@ -66,24 +93,13 @@ class ReservasViewSet(viewsets.ModelViewSet):
     def update(self, request, pk):
         #Crear un registro de prestamo cuando el estado de una reserva pase a inactivo 
         reserva = Reservas.objects.filter(id_reserva = pk).first()
-        serializer = ReservasSerializer(reserva, data = request.data)
-        
-        
-        if serializer.is_valid():
-            estado = request.data.get('estado')
-            if estado == "AC":
-                print(estado)
-                print("Actuaaaaal")
-                serializer.save()
-                return Response({'data' : serializer.data, 'message':'Reserva actualizada correctamente'}, status= status.HTTP_200_OK)
-            elif estado == "C":
-                print(estado)
-                print("Completadaaaa")
-                serializer.save()
-                return Response({'data' : serializer.data, 'message':'Reserva actualizada correctamente'}, status= status.HTTP_200_OK)
+        serializer = ReservasSerializer(reserva, data = request.data) 
 
-            
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'data' : serializer.data, 'message':'Reserva actualizada correctamente'}, status= status.HTTP_200_OK)
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
 
     def destroy(self, request, pk):
         reserva = Reservas.objects.filter(id_reserva = pk).first()

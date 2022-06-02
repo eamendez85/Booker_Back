@@ -12,6 +12,7 @@ from api.serializers.favoritos_serializers import FavoritosListSerializer, Favor
 from api.serializers.reservas_serializer import ReservasListSerializer, ReservasSerializer
 
 
+
 #Viewset del modelo grados
 class GradoViewSet(viewsets.ModelViewSet):
     serializer_class = GradosSerializer
@@ -300,56 +301,3 @@ class InfraccionesViewSet(viewsets.ModelViewSet):
         infraccion = Infracciones.objects.filter(id_infraccion = pk).first()
         infraccion.delete()
         return Response({'message':'Infracción eliminada correctamente'}, status= status.HTTP_200_OK)
-
-#ViewSet del modelo reservas
-class ReservasViewSet(viewsets.ModelViewSet):
-    serializer_class = ReservasListSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-
-    filterset_fields= ['estado']
-    search_fields = ['id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro__nombre', 'ejemplares__id_libro__isbn']
-    ''' ordering_fields = ['id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro__nombre','estado'] '''
-
-    def get_queryset(self, pk=None):
-        if pk == None:
-            return ReservasListSerializer.Meta.model.objects.all()
-        return Reservas.objects.filter(id_reserva = pk).first()
-
-
-    def create(self, request):
-            serializer = ReservasSerializer(data = request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response({'data' : serializer.data, 'message':'Se ha agregado la reserva correctamente'}, status= status.HTTP_201_CREATED)
-        
-            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-
-    def update(self, request, pk):
-        reserva = Reservas.objects.filter(id_reserva = pk).first()
-        serializer = ReservasSerializer(reserva, data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'data' : serializer.data, 'message':'Reserva actualizada correctamente'}, status= status.HTTP_200_OK)
-        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-    def destroy(self, request, pk):
-        reserva = Reservas.objects.filter(id_reserva = pk).first()
-        reserva.delete()
-        return Response({'message':'Reserva eliminada correctamente'}, status= status.HTTP_200_OK)
-
-
-#Intento de update borrando registro de reserva y creando uno de prestamo
-'''     def update(self, request, pk):
-        reserva = Reservas.objects.filter(id_reserva = pk).first()
-        serializer = ReservasSerializer(reserva, data = request.data)
-        if Reservas.estado == "a":
-            if serializer.is_valid():
-                serializer.save()
-                return Response({'data' : serializer.data, 'message':'Reserva actualizada correctamente'}, status= status.HTTP_200_OK)
-            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-        elif Reservas.estado == "i":
-            serializer_prestamo = DetallePrestamosSerializer(data = request.data)
-            if serializer_prestamo.is_valid():
-                serializer_prestamo.save()
-                return Response({'data' : serializer_prestamo.data, 'message':'Su reserva ha pasado a prestamo satisfactoriamente'}, status= status.HTTP_200_OK)
- '''
-

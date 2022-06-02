@@ -3,7 +3,9 @@ from email.policy import default
 from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-
+from datetime import date, datetime
+from time import strftime, localtime
+import pytz
 # Create your models here.
 
 
@@ -249,13 +251,25 @@ class Prestamos(models.Model):
 class Reservas(models.Model):
     id_reserva = models.AutoField(primary_key=True)
     id_estudiante = models.ForeignKey(Estudiantes, models.DO_NOTHING, db_column='id_estudiante')
-    fecha_reserva = models.DateTimeField()
-    fecha_limite = models.DateTimeField()
+    fecha_reserva = models.DateTimeField(null=True)
+    fecha_limite = models.DateTimeField(null=True)
     ejemplares = models.ManyToManyField(Ejemplares)
     estado = models.CharField(max_length=3, blank=True, null=True)
 
     class Meta:
         db_table = 'reservas'
+
+    @property
+    def reserva_cancelada_por_fecha_limite(self):
+        fecha_actual = strftime("%Y-%m-%d %H:%M:%S", localtime())
+        fecha_actual_nueva = datetime.strptime(fecha_actual, '%Y-%m-%d %H:%M:%S')
+        print(fecha_actual_nueva, "aaaaaaaaaa")
+
+        
+        if self.fecha_limite > fecha_actual_nueva:
+            return False
+        elif fecha_actual_nueva > self.fecha_limite:
+            return True
 
 """class Eventos(models.Model):
     id_evento = models.AutoField(primary_key=True)
