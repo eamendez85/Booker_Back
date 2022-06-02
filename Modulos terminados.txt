@@ -4,7 +4,7 @@ Funciones por terminar:
 
 Crear un registro de prestamo cuando el estado de una reserva pase a completada TERMINADO
 
-Si un ejemplar esta siendo prestado que no se pueda prestar el mismo ejemplar
+Si un ejemplar esta siendo prestado que no se pueda prestar el mismo ejemplar TERMINADO
 
 Si un estudiante tiene una infracción que no pueda reservar un libro en la plataforma  Terminado
 

@@ -249,8 +249,8 @@ class Prestamos(models.Model):
 class Reservas(models.Model):
     id_reserva = models.AutoField(primary_key=True)
     id_estudiante = models.ForeignKey(Estudiantes, models.DO_NOTHING, db_column='id_estudiante')
-    fecha_reserva = models.DateTimeField()
-    fecha_limite = models.DateTimeField()
+    fecha_reserva = models.DateTimeField(null=True)
+    fecha_limite = models.DateTimeField(null=True)
     ejemplares = models.ManyToManyField(Ejemplares)
     estado = models.CharField(max_length=3, blank=True, null=True)
 

@@ -1,14 +1,14 @@
 from warnings import catch_warnings
 from rest_framework.response import Response
 from rest_framework import viewsets
-from api.models import DePrestamos, Prestamos
+from api.models import DePrestamos, Ejemplares, Prestamos
 from rest_framework import status, filters
 from api.serializers.detalles_prestamo_serializer import DetallePrestamosListSerializer, DetallePrestamosSerializer, PrestamosSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
 #ViewSet del modelo Detalles prestamos
 class DetallePrestamoViewSet(viewsets.ModelViewSet):
-    serializer_class = DetallePrestamosListSerializer
+    serializer_class = DetallePrestamosSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     
     filterset_fields= ['estado']
@@ -56,9 +56,21 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
         errors={}
         error=False
         counter=0
+        prestamos_request=request.data.get('prestamos')
         de_prestamo = DePrestamos.objects.filter(id_de_prestamo = pk).first()
         prestamos = Prestamos.objects.filter(id_de_prestamo = pk)
         
+        for prestamo_request in prestamos_request:
+            if prestamo_request['estado'] == "C":
+                ejemplar = Ejemplares.objects.filter(id_ejemplar = prestamo_request['id_ejemplar']).first()
+                ejemplar.estado = "D"
+                ejemplar.save()
+
+            
+
+        return Response("BIEEEEEEEEEEEENNNNNNNNN")
+        
+        """
         for prestamo in prestamos:
             prestamo_serializer = PrestamosSerializer(prestamo, data = request.data.get('prestamos')[counter])
             counter+=1
@@ -80,6 +92,7 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
             errors['detalles_prestamo']=de_prestamo_serializer.errors
         
         return Response(errors, status= status.HTTP_400_BAD_REQUEST)
+        """
         
     def destroy(self, request, pk):
         de_prestamo = DePrestamos.objects.filter(id_de_prestamo = pk).first()
