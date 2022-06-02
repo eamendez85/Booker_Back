@@ -5,10 +5,11 @@ from api.serializers.usuarios_serializers import BibliotecariosInformacionGenera
 
 #Serializers Prestamos
 class PrestamosSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Prestamos
         fields = '__all__'
-        
+         
 class PrestamosListSerializer(serializers.ModelSerializer):
     
     id_ejemplar = EjemplaresListSerializer(read_only=True)

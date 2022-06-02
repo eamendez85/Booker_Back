@@ -1,11 +1,12 @@
 from rest_framework import viewsets, filters, status
 from rest_framework.response import Response
-from api.models import Ejemplares
+from api.models import DePrestamos, Ejemplares, Estudiantes, Prestamos
 from api.models import Infracciones
 from api.models import Reservas
 from django_filters.rest_framework import DjangoFilterBackend
 from api.serializers.infracciones_serializers import InfraccionesListSerializer, InfraccionesSerializer
 from api.serializers.reservas_serializer import ReservasListSerializer, ReservasSerializer
+from time import strftime, localtime
 
 #ViewSet del modelo reservas
 class ReservasViewSet(viewsets.ModelViewSet):
@@ -66,24 +67,49 @@ class ReservasViewSet(viewsets.ModelViewSet):
     def update(self, request, pk):
         #Crear un registro de prestamo cuando el estado de una reserva pase a inactivo 
         reserva = Reservas.objects.filter(id_reserva = pk).first()
-        serializer = ReservasSerializer(reserva, data = request.data)
+        reservas_serializer = ReservasSerializer(reserva, data = request.data)
         
         
-        if serializer.is_valid():
+        if reservas_serializer.is_valid():
             estado = request.data.get('estado')
             if estado == "AC":
-                print(estado)
-                print("Actuaaaaal")
-                serializer.save()
-                return Response({'data' : serializer.data, 'message':'Reserva actualizada correctamente'}, status= status.HTTP_200_OK)
+                reservas_serializer.save()
+                return Response({'data' : reservas_serializer.data, 'message':'Reserva actualizada correctamente'}, status= status.HTTP_200_OK)
             elif estado == "C":
-                print(estado)
-                print("Completadaaaa")
-                serializer.save()
-                return Response({'data' : serializer.data, 'message':'Reserva actualizada correctamente'}, status= status.HTTP_200_OK)
+                #Creacion de prestamo
+                errores_ejemplares = {}
+                ejemplares_prestamos = {}
+                validacion_err_ejemplares = False
+                ejemplares=request.data.get('ejemplares')
+
+                #Creacion detalles de prestamo
+                estudiante = Estudiantes.objects.filter(id_estudiante = request.data.get('id_estudiante')).first()
+                de_prestamo = DePrestamos(id_estudiante = estudiante, fec_prestamo = strftime("%Y-%m-%d %H:%M:%S", localtime()), estado="AC")
+                
+                #Creacion de prestamos
+                for id_ejemplar in ejemplares:
+                    ejemplar = Ejemplares.objects.filter(id_ejemplar = id_ejemplar).first()
+                    if ejemplar.estado == "R":
+                        ejemplar.estado = "P"
+                        ejemplares_prestamos['ejemplar '+ str(id_ejemplar)]=ejemplar
+                    else:
+                        validacion_err_ejemplares = True
+                        errores_ejemplares['ejemplar '+ str(id_ejemplar)]='No se encuentra reservado'
+                
+                if validacion_err_ejemplares:
+                    return Response(errores_ejemplares, status=status.HTTP_409_CONFLICT)
+                else:
+                    de_prestamo.save()
+                    for key in ejemplares_prestamos:
+                        value = ejemplares_prestamos[key]
+                        value.save()
+                        prestamo = Prestamos(id_de_prestamo = de_prestamo, id_ejemplar = value, estado = "AC")
+                        prestamo.save()
+                    reservas_serializer.save()
+                    return Response({'data' : reservas_serializer.data, 'message':'Se ha actualizado la reserva y se ha creado el prestamo'}, status= status.HTTP_200_OK)
 
             
-        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+        return Response(reservas_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk):
         reserva = Reservas.objects.filter(id_reserva = pk).first()

@@ -228,7 +228,7 @@ class DePrestamos(models.Model):
     id_estudiante = models.ForeignKey('Estudiantes', models.DO_NOTHING, db_column='id_estudiante')
     fec_prestamo = models.DateTimeField()
     estado = models.CharField(max_length=3)
-    id_bibliotecario = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_bibliotecario')
+    id_bibliotecario = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_bibliotecario', blank=True, null=True)
 
     class Meta:
         db_table = 'de_prestamos'
@@ -238,7 +238,7 @@ class Prestamos(models.Model):
     id_prestamo = models.AutoField(primary_key=True)
     id_de_prestamo = models.ForeignKey(DePrestamos, models.DO_NOTHING, related_name='prestamos',db_column='id_de_prestamos')
     id_ejemplar = models.ForeignKey(Ejemplares, models.DO_NOTHING, db_column='id_ejemplar')
-    fec_devolucion=models.DateTimeField()
+    fec_devolucion=models.DateTimeField(null=True, blank=True)
     estado = models.CharField(max_length=3, blank=True, null=True)
 
     class Meta:
