@@ -8,11 +8,15 @@ from api.serializers.infracciones_serializers import InfraccionesListSerializer,
 from api.serializers.reservas_serializer import ReservasListSerializer, ReservasSerializer
 from time import strftime, localtime
 from datetime import datetime, timedelta
+from apscheduler.schedulers.background import BackgroundScheduler
+
+
+scheduler = BackgroundScheduler()
+
 
 #ViewSet del modelo reservas
 class ReservasViewSet(viewsets.ModelViewSet):
     serializer_class = ReservasSerializer
-    fecha_reserva = datetime.now()
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
 
     filterset_fields= ['id_reserva', 'id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro', 'estado']
@@ -20,20 +24,6 @@ class ReservasViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro__nombre','estado', 'fecha_reserva', 'fecha_limite']
 
     #Cuando la fecha limite de una reserva termine que el estado de la reserva pase a inactivo y el ejemplar o ejemplares pasen a disponibles
-    reservas = Reservas.objects.filter()
-    for reserva in reservas:
-        if reserva.reserva_cancelada_por_fecha_limite:
-                ejemplares = reserva.ejemplares.filter()
-                for ejemplar in ejemplares:
-                    print(ejemplar)
-                    if reserva.estado == "AV":
-                        ejemplar.estado = "D"
-                        ejemplar.save()
-                print("Se pasó de la fecha limite la reserva "+str(reserva))
-                reserva.estado = "IV"
-                reserva.save()
-        else:
-            print("No se ha pasado de la fecha limite la reserva "+str(reserva))
 
 
     def get_queryset(self, pk=None):
@@ -47,7 +37,8 @@ class ReservasViewSet(viewsets.ModelViewSet):
         #Y la fecha limite es la fecha de reserva con 3 dias sumados
         request.data._mutable = True
         fecha_reserva = datetime.now()
-        fecha_limite = fecha_reserva + timedelta(minutes= 1)
+        tiempo_limite = 1
+        fecha_limite = fecha_reserva + timedelta(minutes= tiempo_limite)
 
         error_datos_reserva = {}
         estado_ejemplares={}
@@ -114,3 +105,21 @@ class ReservasViewSet(viewsets.ModelViewSet):
         reserva.delete()
         return Response({'message':'Reserva eliminada correctamente'}, status= status.HTTP_200_OK)
 
+
+    #Validación constante de si la fecha limite de reserva ya pasó o no, usando APScheduler, se le pone la validacion cada 1 segundo
+    @scheduler.scheduled_job('interval', seconds=1)
+    def validacion_fecha_reserva():
+        reservas = Reservas.objects.filter()
+        for reserva in reservas:
+            if reserva.reserva_cancelada_por_fecha_limite:
+                    ejemplares = reserva.ejemplares.filter()
+                    for ejemplar in ejemplares:
+                        if reserva.estado == "AV":
+                            ejemplar.estado = "D"
+                            ejemplar.save()
+                    reserva.estado = "IV"
+                    reserva.save()
+            else:
+                pass
+
+    scheduler.start()

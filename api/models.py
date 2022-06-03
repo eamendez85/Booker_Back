@@ -259,6 +259,7 @@ class Reservas(models.Model):
     class Meta:
         db_table = 'reservas'
 
+    
     @property
     def reserva_cancelada_por_fecha_limite(self):
         utc=pytz.UTC
