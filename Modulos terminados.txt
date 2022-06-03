@@ -19,6 +19,17 @@ Crear modelo de eventos y su serializer / views
 
 
 
+            """for reserva in reservas:
+        #Ejemplar tiene los ejemplares de cada reserva
+        ejemplares_libro = Ejemplares.objects.filter()
+        if reserva.reserva_cancelada_por_fecha_limite:
+            print("Se pasó de la fecha limite la reserva "+str(reserva))
+            if reserva.estado == "AV":
+                ejemplares_libro.estado = "D"
+                ejemplares_libro.update()
+            reserva.estado = "IV"
+            reserva.save()     """
+
 Admin
 doc: 48362373243
 password: bwenb2j32hb

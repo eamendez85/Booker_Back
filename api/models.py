@@ -261,9 +261,10 @@ class Reservas(models.Model):
 
     @property
     def reserva_cancelada_por_fecha_limite(self):
-        fecha_actual = strftime("%Y-%m-%d %H:%M:%S", localtime())
-        fecha_actual_nueva = datetime.strptime(fecha_actual, '%Y-%m-%d %H:%M:%S')
-        print(fecha_actual_nueva, "aaaaaaaaaa")
+        utc=pytz.UTC
+        
+        fecha_actual = datetime.now()
+        fecha_actual_nueva = utc.localize(fecha_actual)
 
         
         if self.fecha_limite > fecha_actual_nueva:

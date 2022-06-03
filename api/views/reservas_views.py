@@ -19,14 +19,22 @@ class ReservasViewSet(viewsets.ModelViewSet):
     search_fields = ['id_estudiante__doc_estudiante__doc', 'id_estudiante__nombres', 'id_estudiante__apellidos', 'ejemplares__id_libro__nombre', 'ejemplares__id_libro__isbn', 'ejemplares__id_libro__autores__nombres', 'ejemplares__id_libro__autores__apellidos', 'ejemplares__id_libro__categorias__nombre']
     ordering_fields = ['id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro__nombre','estado', 'fecha_reserva', 'fecha_limite']
 
+    #Cuando la fecha limite de una reserva termine que el estado de la reserva pase a inactivo y el ejemplar o ejemplares pasen a disponibles
     reservas = Reservas.objects.filter()
-
     for reserva in reservas:
         if reserva.reserva_cancelada_por_fecha_limite:
-            print("Se pasó de la fecha limite aaaaaaaa")
-            #serializer.estado = "IV"
+                ejemplares = reserva.ejemplares.filter()
+                for ejemplar in ejemplares:
+                    print(ejemplar)
+                    if reserva.estado == "AV":
+                        ejemplar.estado = "D"
+                        ejemplar.save()
+                print("Se pasó de la fecha limite la reserva "+str(reserva))
+                reserva.estado = "IV"
+                reserva.save()
         else:
-            print("No se pasó de la fecha limite aaaaaaaaaaa")
+            print("No se ha pasado de la fecha limite la reserva "+str(reserva))
+
 
     def get_queryset(self, pk=None):
         if pk == None:
@@ -39,7 +47,7 @@ class ReservasViewSet(viewsets.ModelViewSet):
         #Y la fecha limite es la fecha de reserva con 3 dias sumados
         request.data._mutable = True
         fecha_reserva = datetime.now()
-        fecha_limite = fecha_reserva + timedelta(minutes= 2)
+        fecha_limite = fecha_reserva + timedelta(minutes= 1)
 
         error_datos_reserva = {}
         estado_ejemplares={}
@@ -47,6 +55,7 @@ class ReservasViewSet(viewsets.ModelViewSet):
         validacion_estado_ejemplares=True
         id_estudiante = request.data.get('id_estudiante')
         estudiante_infraccion = Infracciones.objects.filter(id_estudiante = id_estudiante, estado="AV").first()
+        #Este request de los ejemplares solo trae el ultimo ejemplar si son varios ejemplares
         ejemplares_reserva = request.data.get('ejemplares')
 
         request.data['fecha_reserva'] = fecha_reserva
@@ -76,7 +85,6 @@ class ReservasViewSet(viewsets.ModelViewSet):
                 elif ejemplar.estado == "INF":
                     validacion_estado_ejemplares=False
                     estado_ejemplares['ejemplar '+str(ejemplar_reserva)] = 'El ejemplar está en infracción'
-
                 if validacion_estado_ejemplares:
                     ejemplar.estado = "R"
                     ejemplar.save()
@@ -105,3 +113,4 @@ class ReservasViewSet(viewsets.ModelViewSet):
         reserva = Reservas.objects.filter(id_reserva = pk).first()
         reserva.delete()
         return Response({'message':'Reserva eliminada correctamente'}, status= status.HTTP_200_OK)
+
