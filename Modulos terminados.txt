@@ -2,7 +2,7 @@ instalar desde consola: pyparsing pydot
 
 Funciones por terminar:
 
-Crear un registro de prestamo cuando el estado de una reserva pase a completada
+Crear un registro de prestamo cuando el estado de una reserva pase a completada TERMINADO
 
 Si un ejemplar esta siendo prestado que no se pueda prestar el mismo ejemplar / No es necesario
 
@@ -10,7 +10,7 @@ Si un estudiante tiene una infracción que no pueda reservar un libro en la plat
 
 Cuando se cambie el estado a inactivo de un libro tambien cambie el estado de los ejemplares existentes / Terminado
 
-Cuando la fecha limite de una reserva termine que el estado de la reserva pase a inactivo y el ejemplar o ejemplares pasen a disponibles
+Cuando la fecha limite de una reserva termine que el estado de la reserva pase a inactivo y el ejemplar o ejemplares pasen a disponibles TERMINADO
 
 Cuando el prestamo pase de la fecha de devolucion, que se cree una infracción de ese estudiante, que el estado del prestamo pase a infraccion 
 y que el estado del ejemplar pase a infracción

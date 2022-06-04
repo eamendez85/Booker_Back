@@ -35,7 +35,6 @@ class ReservasViewSet(viewsets.ModelViewSet):
         #El mutable sirve para poder agregar datos al request.data
         #Saco la fecha de reserva con el datetime.now que es la fecha cuando se cree la reserva
         #Y la fecha limite es la fecha de reserva con 3 dias sumados
-        request.data._mutable = True
         fecha_reserva = datetime.now()
         tiempo_limite = 1
         fecha_limite = fecha_reserva + timedelta(minutes= tiempo_limite)
