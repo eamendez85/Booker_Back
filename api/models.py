@@ -273,6 +273,7 @@ class Reservas(models.Model):
         elif fecha_actual_nueva > self.fecha_limite:
             return True
 
+
 """class Eventos(models.Model):
     id_evento = models.AutoField(primary_key=True)
     descripcion = models.TextField(blank=True, null=True)"""
