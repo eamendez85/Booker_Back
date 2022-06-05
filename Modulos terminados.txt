@@ -12,7 +12,7 @@ Cuando se cambie el estado a inactivo de un libro tambien cambie el estado de lo
 
 Cuando la fecha limite de una reserva termine que el estado de la reserva pase a inactivo y el ejemplar o ejemplares pasen a disponibles TERMINADO
 
-Cuando el prestamo pase de la fecha de devolucion, que se cree una infracción de ese estudiante, que el estado del prestamo pase a infraccion 
+Cuando el prestamo pase de la fecha de devolucion si su estado no es completado, que se cree una infracción de ese estudiante, que el estado del prestamo pase a infraccion 
 y que el estado del ejemplar pase a infracción
 
 Crear modelo de eventos y su serializer / views
