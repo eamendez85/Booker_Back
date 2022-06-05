@@ -1,10 +1,15 @@
 from warnings import catch_warnings
 from rest_framework.response import Response
 from rest_framework import viewsets
-from api.models import DePrestamos, Prestamos
+from api.models import TipoInfraccion
+from api.models import DePrestamos, Prestamos, Estudiantes, Ejemplares, Infracciones
 from rest_framework import status, filters
 from api.serializers.detalles_prestamo_serializer import DetallePrestamosListSerializer, DetallePrestamosSerializer, PrestamosSerializer
 from django_filters.rest_framework import DjangoFilterBackend
+from datetime import datetime
+from apscheduler.schedulers.background import BackgroundScheduler
+
+scheduler = BackgroundScheduler()
 
 #ViewSet del modelo Detalles prestamos
 class DetallePrestamoViewSet(viewsets.ModelViewSet):
@@ -16,7 +21,6 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
     ordering_fields = ['fec_prestamo', 'prestamos__fec_devolucion']
 
 
-
     def get_queryset(self, pk=None):
         if pk == None:
             return DetallePrestamosListSerializer.Meta.model.objects.all()
@@ -26,8 +30,11 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
         errors={}
         error=False
         prestamos_data = request.data.get('prestamos')
+        fecha_prestamo = datetime.now()
+        request.data['fec_prestamo'] = fecha_prestamo
         request.data.pop('prestamos')
         de_prestamo_serializer = DetallePrestamosSerializer(data = request.data)
+        
         
         if de_prestamo_serializer.is_valid():
             de_prestamo_serializer.save()
@@ -87,3 +94,39 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
         prestamos.delete()
         de_prestamo.delete()
         return Response({'message':'Prestamo eliminado correctamente'}, status= status.HTTP_200_OK)
+
+    @scheduler.scheduled_job('interval', seconds=1)
+    def validacion_infraccion_fec_devolucion():
+        #Cuando el prestamo pase de la fecha de devolucion y esté en estado AC, 
+        # que se cree una infracción de ese estudiante, que el estado del prestamo pase a infraccion 
+        #y que el estado del ejemplar pase a infracción
+        detalle_prestamos = DePrestamos.objects.filter()
+        for de_prestamo in detalle_prestamos:
+            prestamos = de_prestamo.prestamos.filter()
+            for prestamo in prestamos:
+                if prestamo.fec_devolucion == None:
+                    print("error no hay fec devolucion")
+                else:
+                    if prestamo.infraccion_prestamo_por_fecha_devolucion == True and prestamo.estado == "AC": 
+                        prestamo.estado = "INF"
+                        
+                        if prestamo.estado == "INF":
+                            #Datos para la infracción
+                            id_estudiante_prestamo = de_prestamo.id_estudiante.id_estudiante
+                            estudiante = Estudiantes.objects.get(id_estudiante = id_estudiante_prestamo)
+                            id_ejemplar_prestamo = prestamo.id_ejemplar.id_ejemplar
+                            ejemplar = Ejemplares.objects.get(id_ejemplar = id_ejemplar_prestamo)
+                            tipo_infraccion = TipoInfraccion.objects.get(id_tipo_infraccion = "2")
+                            #Se crea la infracción
+                            infraccion_estudiante = Infracciones(id_estudiante = estudiante, id_ejemplar = ejemplar, id_tipo_infraccion = tipo_infraccion, estado= "AV")
+                            infraccion_estudiante.save()
+
+                            #Cambio el estado de los ejemplares
+                            ejemplar.estado = "INF"
+                            ejemplar.save()
+                        prestamo.save()
+                    elif prestamo.infraccion_prestamo_por_fecha_devolucion == True and prestamo.estado == "C":   
+                        pass
+                    else:
+                        pass
+    scheduler.start()

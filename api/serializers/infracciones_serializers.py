@@ -12,17 +12,16 @@ class LibrosInfraccionesSerializer(serializers.ModelSerializer):
         fields=['nombre','imagen_libro']
 
 
-
 #Serializer infracciones para get
 class InfraccionesListSerializer(serializers.ModelSerializer):
     id_bibliotecario = BibliotecariosInformacionGeneralSerializer(many=False, read_only=True)
     id_estudiante = EstudianteInformacionGeneralSerializer(many=False, read_only=True)
-    ejemplares = EjemplaresListSerializer(many = True, read_only=True )
+    id_ejemplar = EjemplaresListSerializer(many = False, read_only=True )
     id_tipo_infraccion = TipoInfraccionesSerializer(many= False, read_only = True)
 
     class Meta:
         model = Infracciones
-        fields = ['id_infraccion','id_bibliotecario', 'id_estudiante','ejemplares','id_tipo_infraccion','descripcion','estado' ]  
+        fields = ['id_infraccion','id_bibliotecario', 'id_estudiante','id_ejemplar','id_tipo_infraccion','descripcion','estado' ]  
 
 #Serializer infracciones para post
 class InfraccionesSerializer(serializers.ModelSerializer):

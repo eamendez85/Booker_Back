@@ -110,15 +110,18 @@ class ReservasViewSet(viewsets.ModelViewSet):
     def validacion_fecha_reserva():
         reservas = Reservas.objects.filter()
         for reserva in reservas:
-            if reserva.reserva_cancelada_por_fecha_limite == True:
-                ejemplares = reserva.ejemplares.filter()
-                for ejemplar in ejemplares:
-                    if reserva.estado == "AC":
-                        ejemplar.estado = "D"
-                        ejemplar.save()
-                reserva.estado = "IV"
-                reserva.save()
+            if reserva.fecha_limite == None:
+                print("error no hay fecha limite")
             else:
-                pass
+                if reserva.reserva_cancelada_por_fecha_limite == True:
+                    ejemplares = reserva.ejemplares.filter()
+                    for ejemplar in ejemplares:
+                        if reserva.estado == "AC":
+                            ejemplar.estado = "D"
+                            ejemplar.save()
+                    reserva.estado = "IV"
+                    reserva.save()
+                else:
+                    pass
 
     scheduler.start()

@@ -228,9 +228,9 @@ class Infracciones(models.Model):
 class DePrestamos(models.Model):
     id_de_prestamo = models.AutoField(primary_key=True)
     id_estudiante = models.ForeignKey('Estudiantes', models.DO_NOTHING, db_column='id_estudiante')
-    fec_prestamo = models.DateTimeField()
-    estado = models.CharField(max_length=3)
-    id_bibliotecario = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_bibliotecario')
+    fec_prestamo = models.DateTimeField(null=True)
+    estado = models.CharField(max_length=3, null=True)
+    id_bibliotecario = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_bibliotecario', null=True)
 
     class Meta:
         db_table = 'de_prestamos'
@@ -245,6 +245,20 @@ class Prestamos(models.Model):
 
     class Meta:
         db_table = 'prestamos'
+
+    #Sucede un error si no hay fechas de devolucion o esta en null o vacio
+    @property
+    def infraccion_prestamo_por_fecha_devolucion(self):
+        utc=pytz.UTC
+        
+        fecha_actual = datetime.now()
+        fecha_actual_nueva = utc.localize(fecha_actual)
+
+        
+        if self.fec_devolucion > fecha_actual_nueva:
+            return False
+        elif fecha_actual_nueva > self.fec_devolucion:
+            return True
 
 #Reservas
 

@@ -127,6 +127,21 @@ ejemplo de formato de fechas = "2006-10-25 14:30:59" (aaaa-mm-dd hh-mm-ss)
     "estado": ""
 }
 
+{
+    "id_estudiante": ,
+    "prestamos": [
+        {
+            "fec_devolucion": "2022-06-05 16:30:00",
+            "estado": null,
+            "id_ejemplar": 3,
+            "id_de_prestamo":2
+        }
+    ],
+    "id_bibliotecario": 1,
+    "estado": "AC"
+}
+
+
 
 Reservas
 estados(AC=Actual, C=Completada, IV=inactiva)
