@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 
 #ViewSet del modelo reservas
 class ReservasViewSet(viewsets.ModelViewSet):
-    serializer_class = ReservasSerializer
+    serializer_class = ReservasListSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
 
     filterset_fields= ['id_reserva', 'id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro', 'estado']
