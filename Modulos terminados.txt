@@ -17,7 +17,11 @@ y que el estado del ejemplar pase a infracción
 
 Crear modelo de eventos y su serializer / views
 
-Cuando se complete un prestamo que su ejemplar cambie a estado Disponible
+Cuando se complete un prestamo que su ejemplar cambie a estado Disponible TERMINADO
+
+Cuando se cree un prestamo cambie el estado de los ejemplares a Prestado TERMINADO
+
+Cuando se elimine una reserva se cambie el estado de los ejemplares a disponibles TERMINADO
 
 
 Admin

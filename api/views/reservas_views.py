@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 
 #ViewSet del modelo reservas
 class ReservasViewSet(viewsets.ModelViewSet):
-    serializer_class = ReservasListSerializer
+    serializer_class = ReservasSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
 
     filterset_fields= ['id_reserva', 'id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro', 'estado']
@@ -81,9 +81,11 @@ class ReservasViewSet(viewsets.ModelViewSet):
                 return Response([estado_ejemplares, error_datos_reserva], status= status.HTTP_400_BAD_REQUEST)
             
     def update(self, request, pk):
+        validacion_err_ejemplares = False
         #Crear un registro de prestamo cuando el estado de una reserva pase a inactivo 
         reserva = Reservas.objects.filter(id_reserva = pk).first()
         reservas_serializer = ReservasSerializer(reserva, data = request.data)
+        ejemplares=request.data.get('ejemplares')
         
         
         if reservas_serializer.is_valid():
@@ -95,8 +97,6 @@ class ReservasViewSet(viewsets.ModelViewSet):
                 #Creacion de prestamo
                 errores_ejemplares = {}
                 ejemplares_prestamos = {}
-                validacion_err_ejemplares = False
-                ejemplares=request.data.get('ejemplares')
 
                 #Creacion detalles de prestamo
                 estudiante = Estudiantes.objects.filter(id_estudiante = request.data.get('id_estudiante')).first()
@@ -123,11 +123,33 @@ class ReservasViewSet(viewsets.ModelViewSet):
                         prestamo.save()
                     reservas_serializer.save()
                     return Response({'data' : reservas_serializer.data, 'message':'Se ha actualizado la reserva y se ha creado el prestamo'}, status= status.HTTP_200_OK)
-
+                
+            elif estado == "IV":
+                ejemplares_disponibles = {}
+                for id_ejemplar in ejemplares:
+                    ejemplar = Ejemplares.objects.filter(id_ejemplar = id_ejemplar).first()
+                    if ejemplar.estado == "R":
+                        ejemplar.estado = "D"
+                        ejemplares_disponibles['ejemplar '+ str(id_ejemplar)]=ejemplar
+                    else:
+                        validacion_err_ejemplares = True
+                        errores_ejemplares['ejemplar '+ str(id_ejemplar)]='No se encuentra reservado'
+                
+                if validacion_err_ejemplares:
+                    return Response(errores_ejemplares, status=status.HTTP_409_CONFLICT)
+                else:
+                    for key in ejemplares_disponibles:
+                        value = ejemplares_disponibles[key]
+                        value.save()
+                    reservas_serializer.save()
+                    return Response({'data' : reservas_serializer.data, 'message':'Se ha actualizado la reserva correctamente'}, status= status.HTTP_200_OK)
             
         return Response(reservas_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk):
         reserva = Reservas.objects.filter(id_reserva = pk).first()
+        for ejemplar in reserva.ejemplares.all():
+            ejemplar.estado = "D"
+            ejemplar.save()
         reserva.delete()
         return Response({'message':'Reserva eliminada correctamente'}, status= status.HTTP_200_OK)
