@@ -212,7 +212,7 @@ class TipoInfraccion(models.Model):
 class Infracciones(models.Model):
     id_infraccion = models.AutoField(primary_key=True)
     id_estudiante = models.ForeignKey(Estudiantes, models.DO_NOTHING, db_column='id_estudiante', blank=True, null=True)
-    ejemplares = models.ManyToManyField(Ejemplares)
+    id_ejemplar = models.ForeignKey(Ejemplares, models.DO_NOTHING, null=True, db_column='id_ejemplar')
     id_tipo_infraccion = models.ForeignKey('TipoInfraccion', models.DO_NOTHING, db_column='id_tipo_infraccion', blank=True, null=True)
     descripcion = models.TextField(blank=True, null=True)
     estado = models.CharField(max_length=3, blank=True, null=True)
