@@ -97,6 +97,7 @@ class ReservasViewSet(viewsets.ModelViewSet):
                 #Creacion de prestamo
                 errores_ejemplares = {}
                 ejemplares_prestamos = {}
+                data_front ={}
 
                 #Creacion detalles de prestamo
                 estudiante = Estudiantes.objects.filter(id_estudiante = request.data.get('id_estudiante')).first()
@@ -116,13 +117,15 @@ class ReservasViewSet(viewsets.ModelViewSet):
                     return Response(errores_ejemplares, status=status.HTTP_409_CONFLICT)
                 else:
                     de_prestamo.save()
+                    #data_front['id_de_prestamo']=de_prestamo.id_de_prestamo
                     for key in ejemplares_prestamos:
                         value = ejemplares_prestamos[key]
                         value.save()
                         prestamo = Prestamos(id_de_prestamo = de_prestamo, id_ejemplar = value, estado = "AC")
                         prestamo.save()
                     reservas_serializer.save()
-                    return Response({'data' : reservas_serializer.data, 'message':'Se ha actualizado la reserva y se ha creado el prestamo'}, status= status.HTTP_200_OK)
+                    #data_front['data_reserva']=
+                    return Response({'data' : reservas_serializer.data, 'id_de_prestamo':de_prestamo.id_de_prestamo,'message':'Se ha actualizado la reserva y se ha creado el prestamo'}, status= status.HTTP_200_OK)
                 
             elif estado == "IV":
                 ejemplares_disponibles = {}
