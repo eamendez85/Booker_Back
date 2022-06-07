@@ -228,7 +228,7 @@ class Infracciones(models.Model):
 class DePrestamos(models.Model):
     id_de_prestamo = models.AutoField(primary_key=True)
     id_estudiante = models.ForeignKey('Estudiantes', models.DO_NOTHING, db_column='id_estudiante')
-    fec_prestamo = models.DateTimeField(null=True)
+    fec_prestamo = models.DateField(null=True)
     estado = models.CharField(max_length=3, null=True)
     id_bibliotecario = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_bibliotecario', null=True)
 
@@ -240,7 +240,7 @@ class Prestamos(models.Model):
     id_prestamo = models.AutoField(primary_key=True)
     id_de_prestamo = models.ForeignKey(DePrestamos, models.DO_NOTHING, related_name='prestamos',db_column='id_de_prestamos')
     id_ejemplar = models.ForeignKey(Ejemplares, models.DO_NOTHING, db_column='id_ejemplar')
-    fec_devolucion=models.DateTimeField()
+    fec_devolucion=models.DateField()
     estado = models.CharField(max_length=3, blank=True, null=True)
 
     class Meta:
@@ -265,8 +265,8 @@ class Prestamos(models.Model):
 class Reservas(models.Model):
     id_reserva = models.AutoField(primary_key=True)
     id_estudiante = models.ForeignKey(Estudiantes, models.DO_NOTHING, db_column='id_estudiante')
-    fecha_reserva = models.DateTimeField(null=True)
-    fecha_limite = models.DateTimeField(null=True)
+    fecha_reserva = models.DateField(null=True)
+    fecha_limite = models.DateField(null=True)
     ejemplares = models.ManyToManyField(Ejemplares)
     estado = models.CharField(max_length=3, blank=True, null=True)
 
