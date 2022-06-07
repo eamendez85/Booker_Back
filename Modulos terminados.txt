@@ -131,14 +131,14 @@ ejemplo de formato de fechas = "2006-10-25 14:30:59" (aaaa-mm-dd hh-mm-ss)
     "id_estudiante": ,
     "prestamos": [
         {
-            "fec_devolucion": "2022-06-05 16:30:00",
+            "fec_devolucion": "AAAA-mm-dd",
             "estado": null,
-            "id_ejemplar": 3,
-            "id_de_prestamo":2
+            "id_ejemplar": ,
+            "id_de_prestamo":
         }
     ],
-    "id_bibliotecario": 1,
-    "estado": "AC"
+    "id_bibliotecario": ,
+    "estado": ""
 }
 
 

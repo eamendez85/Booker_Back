@@ -3,9 +3,8 @@ from email.policy import default
 from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from datetime import date, datetime
-from time import strftime, localtime
-import pytz
+from datetime import date
+
 # Create your models here.
 
 
@@ -249,15 +248,13 @@ class Prestamos(models.Model):
     #Sucede un error si no hay fechas de devolucion o esta en null o vacio
     @property
     def infraccion_prestamo_por_fecha_devolucion(self):
-        utc=pytz.UTC
         
-        fecha_actual = datetime.now()
-        fecha_actual_nueva = utc.localize(fecha_actual)
-
+        fecha_actual = date.today()
+       
         
-        if self.fec_devolucion > fecha_actual_nueva:
+        if self.fec_devolucion > fecha_actual:
             return False
-        elif fecha_actual_nueva > self.fec_devolucion:
+        elif fecha_actual > self.fec_devolucion:
             return True
 
 #Reservas
@@ -276,15 +273,13 @@ class Reservas(models.Model):
     
     @property
     def reserva_cancelada_por_fecha_limite(self):
-        utc=pytz.UTC
         
-        fecha_actual = datetime.now()
-        fecha_actual_nueva = utc.localize(fecha_actual)
-
+        fecha_actual = date.today()
         
-        if self.fecha_limite > fecha_actual_nueva:
+        
+        if self.fecha_limite > fecha_actual:
             return False
-        elif fecha_actual_nueva > self.fecha_limite:
+        elif fecha_actual > self.fecha_limite:
             return True
 
 

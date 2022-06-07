@@ -6,8 +6,7 @@ from api.models import Reservas
 from django_filters.rest_framework import DjangoFilterBackend
 from api.serializers.infracciones_serializers import InfraccionesListSerializer, InfraccionesSerializer
 from api.serializers.reservas_serializer import ReservasListSerializer, ReservasSerializer
-from time import strftime, localtime
-from datetime import datetime, timedelta
+from datetime import timedelta, date
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
@@ -35,9 +34,9 @@ class ReservasViewSet(viewsets.ModelViewSet):
         #El mutable sirve para poder agregar datos al request.data
         #Saco la fecha de reserva con el datetime.now que es la fecha cuando se cree la reserva
         #Y la fecha limite es la fecha de reserva con 3 dias sumados
-        fecha_reserva = datetime.now()
-        tiempo_limite = 1
-        fecha_limite = fecha_reserva + timedelta(minutes= tiempo_limite)
+        fecha_reserva = date.today()
+        
+        fecha_limite = fecha_reserva + timedelta(days=1)
 
         error_datos_reserva = {}
         estado_ejemplares={}

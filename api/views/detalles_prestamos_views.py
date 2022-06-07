@@ -6,7 +6,7 @@ from api.models import DePrestamos, Prestamos, Estudiantes, Ejemplares, Infracci
 from rest_framework import status, filters
 from api.serializers.detalles_prestamo_serializer import DetallePrestamosListSerializer, DetallePrestamosSerializer, PrestamosSerializer
 from django_filters.rest_framework import DjangoFilterBackend
-from datetime import datetime
+from datetime import date
 from apscheduler.schedulers.background import BackgroundScheduler
 
 scheduler = BackgroundScheduler()
@@ -30,7 +30,7 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
         errors={}
         error=False
         prestamos_data = request.data.get('prestamos')
-        fecha_prestamo = datetime.now()
+        fecha_prestamo = date.today()
         request.data['fec_prestamo'] = fecha_prestamo
         request.data.pop('prestamos')
         de_prestamo_serializer = DetallePrestamosSerializer(data = request.data)
