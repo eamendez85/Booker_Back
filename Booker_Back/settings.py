@@ -89,12 +89,12 @@ WSGI_APPLICATION = 'Booker_Back.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd1l2pgaivif6h2',
-        'USER':'lqwdbfavspmgkm',
-        'PASSWORD': '32fa979eee83628d3cd557795b6e27fe8eb9ba5be9fc1b2cf012e862965c6983',
-        'HOST':'ec2-3-211-221-185.compute-1.amazonaws.com',
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'booker',
+        'USER':'root',
+        'PASSWORD': '12345',
+        'HOST':'localhost',
+        'PORT': '3306'
     }
 }
 
