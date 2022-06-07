@@ -95,7 +95,7 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
         de_prestamo.delete()
         return Response({'message':'Prestamo eliminado correctamente'}, status= status.HTTP_200_OK)
 
-    @scheduler.scheduled_job('interval', seconds=1)
+    @scheduler.scheduled_job('interval', seconds=3)
     def validacion_infraccion_fec_devolucion():
         #Cuando el prestamo pase de la fecha de devolucion y esté en estado AC, 
         # que se cree una infracción de ese estudiante, que el estado del prestamo pase a infraccion 
