@@ -177,3 +177,16 @@ Bibliotecarios
         "usuario_activo": true
     }
 }
+
+
+Eventos
+estado(AV, IV)
+{
+    "descripcion": "",
+    "imagen_evento": "",
+    "titulo": "",
+    "fec_inicio": null,
+    "fec_fin": null,
+    "estado": "",
+    "id_bibliotecario": ,
+}

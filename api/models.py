@@ -257,6 +257,13 @@ class Reservas(models.Model):
     class Meta:
         db_table = 'reservas'
     
-"""class Eventos(models.Model):
+class Eventos(models.Model):
     id_evento = models.AutoField(primary_key=True)
-    descripcion = models.TextField(blank=True, null=True)"""
+    descripcion = models.TextField(blank=True, null=True)
+    imagen_evento = models.TextField('Imagen del evento', blank=True, null=True)
+    titulo = models.TextField(blank=True, null=True)
+    fec_inicio = models.DateField(blank=True, null=True)
+    fec_fin = models.DateField(blank=True, null=True)
+    estado = models.CharField(max_length=3, blank=True, null=True)
+    id_bibliotecario = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_bibliotecario', blank=True, null=True)
+

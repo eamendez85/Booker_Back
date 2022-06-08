@@ -3,6 +3,7 @@ from django import urls
 from django.urls import URLPattern
 from rest_framework.routers import DefaultRouter
 from api.views.detalles_prestamos_views import DetallePrestamoViewSet
+from api.views.eventos_views import EventosViewSet
 from api.views.general_views import *
 from api.views.usuarios_views import UsuariosViewSet, EstudiantesViewSet, BibliotecariosViewSet
 from api.views.libros_views import LibrosViewSet
@@ -26,6 +27,7 @@ router.register(r'reservas', ReservasViewSet, basename= 'reservas')
 router.register(r'usuarios', UsuariosViewSet, basename= 'usuarios')
 router.register(r'estudiantes', EstudiantesViewSet, basename= 'estudiantes')
 router.register(r'bibliotecarios', BibliotecariosViewSet, basename= 'bibliotecarios')
+router.register(r'eventos', EventosViewSet, basename= 'eventos')
 
 
 urlpatterns = router.urls
