@@ -105,7 +105,7 @@ class ReservasViewSet(viewsets.ModelViewSet):
 
 
     #Validación constante de si la fecha limite de reserva ya pasó o no, usando APScheduler, se le pone la validacion cada 1 segundo
-    @scheduler.scheduled_job('interval', seconds=1)
+    @scheduler.scheduled_job('interval', seconds=60)
     def validacion_fecha_reserva():
         reservas = Reservas.objects.filter()
         for reserva in reservas:
