@@ -6,13 +6,13 @@ Crear un registro de prestamo cuando el estado de una reserva pase a completada 
 
 Si un ejemplar esta siendo prestado que no se pueda prestar el mismo ejemplar TERMINADO
 
-Si un estudiante tiene una infracción que no pueda reservar un libro en la plataforma  Terminado
+Si un estudiante tiene una infracción que no pueda reservar un libro en la plataforma / Terminado
 
-Cuando se cambie el estado a inactivo de un libro tambien cambie el estado de los ejemplares existentes Terminado
+Cuando se cambie el estado a inactivo de un libro tambien cambie el estado de los ejemplares existentes / Terminado
 
-Cuando la fecha limite de una reserva termine que el estado de la reserva pase a inactivo y el ejemplar o ejemplares pasen a disponibles
+Cuando la fecha limite de una reserva termine que el estado de la reserva pase a inactivo y el ejemplar o ejemplares pasen a disponibles TERMINADO
 
-Cuando el prestamo pase de la fecha de devolucion, que se cree una infracción de ese estudiante, que el estado del prestamo pase a infraccion 
+Cuando el prestamo pase de la fecha de devolucion si su estado no es completado, que se cree una infracción de ese estudiante, que el estado del prestamo pase a infraccion 
 y que el estado del ejemplar pase a infracción
 
 Crear modelo de eventos y su serializer / views
@@ -131,6 +131,21 @@ ejemplo de formato de fechas = "2006-10-25 14:30:59" (aaaa-mm-dd hh-mm-ss)
     "fec_prestamo": "",
     "estado": ""
 }
+
+{
+    "id_estudiante": ,
+    "prestamos": [
+        {
+            "fec_devolucion": "AAAA-mm-dd",
+            "estado": null,
+            "id_ejemplar": ,
+            "id_de_prestamo":
+        }
+    ],
+    "id_bibliotecario": ,
+    "estado": ""
+}
+
 
 
 Reservas

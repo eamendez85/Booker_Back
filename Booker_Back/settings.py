@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'django_filters'
 ]
 
+
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',

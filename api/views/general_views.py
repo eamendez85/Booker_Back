@@ -12,6 +12,7 @@ from api.serializers.favoritos_serializers import FavoritosListSerializer, Favor
 from api.serializers.reservas_serializer import ReservasListSerializer, ReservasSerializer
 
 
+
 #Viewset del modelo grados
 class GradoViewSet(viewsets.ModelViewSet):
     serializer_class = GradosSerializer
@@ -299,4 +300,3 @@ class InfraccionesViewSet(viewsets.ModelViewSet):
         infraccion = Infracciones.objects.filter(id_infraccion = pk).first()
         infraccion.delete()
         return Response({'message':'Infracción eliminada correctamente'}, status= status.HTTP_200_OK)
-

@@ -6,8 +6,12 @@ from api.models import Reservas
 from django_filters.rest_framework import DjangoFilterBackend
 from api.serializers.infracciones_serializers import InfraccionesListSerializer, InfraccionesSerializer
 from api.serializers.reservas_serializer import ReservasListSerializer, ReservasSerializer
-from time import strftime, localtime
-from datetime import datetime, timedelta
+from datetime import timedelta, date
+from apscheduler.schedulers.background import BackgroundScheduler
+
+
+scheduler = BackgroundScheduler({'apscheduler.job_defaults.max_instances': 1})
+
 
 #ViewSet del modelo reservas
 class ReservasViewSet(viewsets.ModelViewSet):
@@ -18,6 +22,9 @@ class ReservasViewSet(viewsets.ModelViewSet):
     search_fields = ['id_estudiante__doc_estudiante__doc', 'id_estudiante__nombres', 'id_estudiante__apellidos', 'ejemplares__id_libro__nombre', 'ejemplares__id_libro__isbn', 'ejemplares__id_libro__autores__nombres', 'ejemplares__id_libro__autores__apellidos', 'ejemplares__id_libro__categorias__nombre']
     ordering_fields = ['id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro__nombre','estado', 'fecha_reserva', 'fecha_limite']
 
+    #Cuando la fecha limite de una reserva termine que el estado de la reserva pase a inactivo y el ejemplar o ejemplares pasen a disponibles
+
+
     def get_queryset(self, pk=None):
         if pk == None:
             return ReservasListSerializer.Meta.model.objects.all()
@@ -27,9 +34,9 @@ class ReservasViewSet(viewsets.ModelViewSet):
         #El mutable sirve para poder agregar datos al request.data
         #Saco la fecha de reserva con el datetime.now que es la fecha cuando se cree la reserva
         #Y la fecha limite es la fecha de reserva con 3 dias sumados
-        #request.data._mutable = True
-        fecha_reserva = datetime.now()
-        fecha_limite = fecha_reserva + timedelta(minutes= 2)
+        fecha_reserva = date.today()
+        
+        fecha_limite = fecha_reserva + timedelta(days=1)
 
         error_datos_reserva = {}
         estado_ejemplares={}
@@ -37,13 +44,11 @@ class ReservasViewSet(viewsets.ModelViewSet):
         validacion_estado_ejemplares=True
         id_estudiante = request.data.get('id_estudiante')
         estudiante_infraccion = Infracciones.objects.filter(id_estudiante = id_estudiante, estado="AV").first()
+        #Este request de los ejemplares solo trae el ultimo ejemplar si son varios ejemplares
         ejemplares_reserva = request.data.get('ejemplares')
 
         request.data['fecha_reserva'] = fecha_reserva
         request.data['fecha_limite'] = fecha_limite
-
-        print(fecha_reserva)
-        print(fecha_limite)
 
         reserva_serializer = ReservasSerializer(data = request.data)
 
@@ -66,7 +71,6 @@ class ReservasViewSet(viewsets.ModelViewSet):
                 elif ejemplar.estado == "INF":
                     validacion_estado_ejemplares=False
                     estado_ejemplares['ejemplar '+str(ejemplar_reserva)] = 'El ejemplar está en infracción'
-
                 if validacion_estado_ejemplares:
                     ejemplar.estado = "R"
                     ejemplar.save()
@@ -101,7 +105,7 @@ class ReservasViewSet(viewsets.ModelViewSet):
 
                 #Creacion detalles de prestamo
                 estudiante = Estudiantes.objects.filter(id_estudiante = request.data.get('id_estudiante')).first()
-                de_prestamo = DePrestamos(id_estudiante = estudiante, fec_prestamo = strftime("%Y-%m-%d %H:%M:%S", localtime()), estado="AC")
+                de_prestamo = DePrestamos(id_estudiante = estudiante, fec_prestamo = date.today(), estado="AC")
                 
                 #Creacion de prestamos
                 for id_ejemplar in ejemplares:
@@ -149,6 +153,7 @@ class ReservasViewSet(viewsets.ModelViewSet):
             
         return Response(reservas_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
+
     def destroy(self, request, pk):
         reserva = Reservas.objects.filter(id_reserva = pk).first()
         for ejemplar in reserva.ejemplares.all():
@@ -156,3 +161,25 @@ class ReservasViewSet(viewsets.ModelViewSet):
             ejemplar.save()
         reserva.delete()
         return Response({'message':'Reserva eliminada correctamente'}, status= status.HTTP_200_OK)
+
+
+    #Validación constante de si la fecha limite de reserva ya pasó o no, usando APScheduler, se le pone la validacion cada 1 segundo
+    @scheduler.scheduled_job('interval', seconds=60)
+    def validacion_fecha_reserva():
+        reservas = Reservas.objects.filter()
+        for reserva in reservas:
+            if reserva.fecha_limite == None:
+                pass
+            else:
+                if reserva.reserva_cancelada_por_fecha_limite == True:
+                    ejemplares = reserva.ejemplares.filter()
+                    for ejemplar in ejemplares:
+                        if reserva.estado == "AC":
+                            ejemplar.estado = "D"
+                            ejemplar.save()
+                    reserva.estado = "IV"
+                    reserva.save()
+                else:
+                    pass
+
+    scheduler.start()

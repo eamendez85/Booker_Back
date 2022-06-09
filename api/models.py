@@ -3,6 +3,7 @@ from email.policy import default
 from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from datetime import date
 
 # Create your models here.
 
@@ -210,7 +211,7 @@ class TipoInfraccion(models.Model):
 class Infracciones(models.Model):
     id_infraccion = models.AutoField(primary_key=True)
     id_estudiante = models.ForeignKey(Estudiantes, models.DO_NOTHING, db_column='id_estudiante', blank=True, null=True)
-    ejemplares = models.ManyToManyField(Ejemplares)
+    id_ejemplar = models.ForeignKey(Ejemplares, models.DO_NOTHING, null=True, db_column='id_ejemplar')
     id_tipo_infraccion = models.ForeignKey('TipoInfraccion', models.DO_NOTHING, db_column='id_tipo_infraccion', blank=True, null=True)
     descripcion = models.TextField(blank=True, null=True)
     estado = models.CharField(max_length=3, blank=True, null=True)
@@ -226,9 +227,9 @@ class Infracciones(models.Model):
 class DePrestamos(models.Model):
     id_de_prestamo = models.AutoField(primary_key=True)
     id_estudiante = models.ForeignKey('Estudiantes', models.DO_NOTHING, db_column='id_estudiante')
-    fec_prestamo = models.DateTimeField()
-    estado = models.CharField(max_length=3)
-    id_bibliotecario = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_bibliotecario', blank=True, null=True)
+    fec_prestamo = models.DateField(null=True)
+    estado = models.CharField(max_length=3, null=True)
+    id_bibliotecario = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_bibliotecario', null=True)
 
     class Meta:
         db_table = 'de_prestamos'
@@ -238,25 +239,50 @@ class Prestamos(models.Model):
     id_prestamo = models.AutoField(primary_key=True)
     id_de_prestamo = models.ForeignKey(DePrestamos, models.DO_NOTHING, related_name='prestamos',db_column='id_de_prestamos')
     id_ejemplar = models.ForeignKey(Ejemplares, models.DO_NOTHING, db_column='id_ejemplar')
-    fec_devolucion=models.DateTimeField(null=True, blank=True)
+    fec_devolucion=models.DateField()
     estado = models.CharField(max_length=3, blank=True, null=True)
 
     class Meta:
         db_table = 'prestamos'
+
+    #Sucede un error si no hay fechas de devolucion o esta en null o vacio
+    @property
+    def infraccion_prestamo_por_fecha_devolucion(self):
+        
+        fecha_actual = date.today()
+       
+        
+        if self.fec_devolucion > fecha_actual:
+            return False
+        elif fecha_actual > self.fec_devolucion:
+            return True
 
 #Reservas
 
 class Reservas(models.Model):
     id_reserva = models.AutoField(primary_key=True)
     id_estudiante = models.ForeignKey(Estudiantes, models.DO_NOTHING, db_column='id_estudiante')
-    fecha_reserva = models.DateTimeField(null=True)
-    fecha_limite = models.DateTimeField(null=True)
+    fecha_reserva = models.DateField(null=True)
+    fecha_limite = models.DateField(null=True)
     ejemplares = models.ManyToManyField(Ejemplares)
     estado = models.CharField(max_length=3, blank=True, null=True)
 
     class Meta:
         db_table = 'reservas'
+
     
+    @property
+    def reserva_cancelada_por_fecha_limite(self):
+        
+        fecha_actual = date.today()
+        
+        
+        if self.fecha_limite > fecha_actual:
+            return False
+        elif fecha_actual > self.fecha_limite:
+            return True
+
+
 class Eventos(models.Model):
     id_evento = models.AutoField(primary_key=True)
     descripcion = models.TextField(blank=True, null=True)

@@ -8,3 +8,4 @@ django-extensions
 whitenoise
 django-heroku
 gunicorn
+APScheduler
