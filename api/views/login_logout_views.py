@@ -11,19 +11,19 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from api.models import Bibliotecarios, Estudiantes, Usuario
 from api.serializers.usuarios_serializers import BibliotecariosListSerializer, EstudiantesListSerializer, UsuariosSerializer
 from api.serializers.usuarios_serializers import UsuariosListSerializer
+from api.authentication_mixins import Authentication
 
-#Obtener token refrescado
-class UserToken(APIView):
+#Valida el token
+class UserToken(Authentication, APIView):
     
     def get(self, request, *args, **kwargs):
-        doc = request.GET.get('doc')
         try:
             #Traer token del usuario obtenido por GET
-            user_token = Token.objects.get(
-                user = UsuariosSerializer().Meta.model.objects.filter(doc = doc).first()
-            )
+            user_token,_ = Token.objects.get_or_create(user = self.user)
+            user = UsuariosSerializer(self.user)
             return Response({
-                'token':user_token.key
+                'token':user_token.key,
+                'user':user.data
             })
         except:
             return Response({
