@@ -5,6 +5,7 @@ from rest_framework.routers import DefaultRouter
 from api.views.detalles_prestamos_views import DetallePrestamoViewSet
 from api.views.eventos_views import EventosViewSet
 from api.views.general_views import *
+from api.views.recomendados_views import RecomendadosViewSet
 from api.views.usuarios_views import UsuariosViewSet, EstudiantesViewSet, BibliotecariosViewSet
 from api.views.libros_views import LibrosViewSet
 from api.views.reservas_views import ReservasViewSet
@@ -28,6 +29,7 @@ router.register(r'usuarios', UsuariosViewSet, basename= 'usuarios')
 router.register(r'estudiantes', EstudiantesViewSet, basename= 'estudiantes')
 router.register(r'bibliotecarios', BibliotecariosViewSet, basename= 'bibliotecarios')
 router.register(r'eventos', EventosViewSet, basename= 'eventos')
+router.register(r'recomendados', RecomendadosViewSet, basename= 'recomendados')
 
 
 urlpatterns = router.urls
