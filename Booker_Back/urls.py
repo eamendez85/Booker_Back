@@ -1,13 +1,17 @@
 from django.contrib import admin
 from django.urls import path, include
+from api.views.importar_csv_estudiantes import importar_csv_estudiantes
 from api.views.login_logout_views import Login, Logout, UserToken
 from django.conf.urls.static import static
+from api.views.csv_views import CsvCreateApiView
 from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path('modulos/', include('api.routers')),
+    path('importar-estudiantes/', CsvCreateApiView.as_view(), name="importar estudiantes"),
+    path('cargar-estudiantes/', importar_csv_estudiantes, name="cargar estudiantes"),
     path('', Login.as_view(), name='Login'),
     path('logout/', Logout.as_view(), name='Logout'),
     

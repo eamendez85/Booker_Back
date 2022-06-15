@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'api',
     'rest_framework.authtoken',
     'django_extensions',
-    'django_filters'
+    'django_filters',
+    'import_export'
 ]
 
 
@@ -92,7 +93,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'booker',
         'USER':'root',
-        'PASSWORD': '',
+        'PASSWORD': '1019',
         'HOST':'localhost',
         'PORT': '3306'
     }
