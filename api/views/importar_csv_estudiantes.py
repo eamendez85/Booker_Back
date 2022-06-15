@@ -1,7 +1,5 @@
-from import_export import resources
 import csv
 from api.models import Estudiantes, Grados, Grupos, Usuario
-import tablib
 from rest_framework.response import Response
 from django.http import HttpResponse
 
@@ -9,7 +7,7 @@ def importar_csv_estudiantes(request):
     #Native Import CSV
     
     estudiantes = []
-    with open("Libro1.csv", "r") as csv_file:
+    with open("Libro12.csv", "r") as csv_file:
         data = list(csv.reader(csv_file, delimiter=";"))
         for row in data[1:]:
             id_grupo_request = Grupos.objects.filter(id_grupo = row[6]).first()
