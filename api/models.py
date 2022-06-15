@@ -293,3 +293,9 @@ class Eventos(models.Model):
     estado = models.CharField(max_length=3, blank=True, null=True)
     id_bibliotecario = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_bibliotecario', blank=True, null=True)
 
+class CsvEstudiantes(models.Model):
+    id_csv = models.IntegerField(primary_key=True, default=1)
+    csv = models.FileField(upload_to="csv_estudiantes/")
+
+    class Meta:
+        db_table = 'csv_estudiantes'

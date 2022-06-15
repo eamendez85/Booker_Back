@@ -1,13 +1,16 @@
 import csv
-from api.models import Estudiantes, Grados, Grupos, Usuario
-from rest_framework.response import Response
-from django.http import HttpResponse
 
-def importar_csv_estudiantes(request):
-    #Native Import CSV
+from django.conf import settings
+from api.models import CsvEstudiantes, Estudiantes, Grados, Grupos, Usuario
+import os
+
+def importar_csv_estudiantes():
     
+    csv_bd = CsvEstudiantes.objects.filter(id_csv = 1).first().csv
+    url_csv = "media/"+ str(csv_bd)
+    print("CSV", url_csv)
     estudiantes = []
-    with open("Libro12.csv", "r") as csv_file:
+    with open(url_csv, "r") as csv_file:
         data = list(csv.reader(csv_file, delimiter=";"))
         for row in data[1:]:
             id_grupo_request = Grupos.objects.filter(id_grupo = row[6]).first()
@@ -37,19 +40,9 @@ def importar_csv_estudiantes(request):
             )
     if len(estudiantes) > 0:
         Estudiantes.objects.bulk_create(estudiantes)
-    
-    return HttpResponse("Importación completada correctamente.")
 
-    # Import-Export library
-"""
-    with open("libro1.csv", "r") as csv_file:
+    csv_objeto = CsvEstudiantes.objects.filter(id_csv = 1).first()
+    csv_objeto.delete()
 
-        estudiante_resource = resources.modelresource_factory(model=Estudiantes)()
-        dataset = tablib.Dataset(headers=[field.name for field in Estudiantes._meta.fields]).load(csv_file)
-        result = estudiante_resource.import_data(dataset, dry_run=True)
-        if not result.has_errors():
-            estudiante_resource.import_data(dataset, dry_run=False)
-        return Response(
-            "Successfully imported"
-        )
-"""
+    ruta_csv = "media/" + str(csv_bd)
+    os.remove(ruta_csv)

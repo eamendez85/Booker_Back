@@ -11,7 +11,6 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('modulos/', include('api.routers')),
     path('importar-estudiantes/', CsvCreateApiView.as_view(), name="importar estudiantes"),
-    path('cargar-estudiantes/', importar_csv_estudiantes, name="cargar estudiantes"),
     path('', Login.as_view(), name='Login'),
     path('logout/', Logout.as_view(), name='Logout'),
     
