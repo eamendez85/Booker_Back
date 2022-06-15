@@ -7,6 +7,14 @@ from rest_framework.response import Response
 class EventosViewSet(viewsets.ModelViewSet):
 
     serializer_class = EventosListSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+
+    filterset_fields= ['estado']
+    search_fields = ['titulo']
+    ordering_fields = ['fec_inicio','fec_fin']
+
+
+
 
     def get_queryset(self, pk=None):
         if pk == None:
