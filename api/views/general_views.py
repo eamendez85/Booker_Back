@@ -1,15 +1,12 @@
-from django import views
 from rest_framework import status, filters
 from rest_framework.response import Response
 from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from api.serializers.ejemplares_serializers import EjemplaresSerializer, EjemplaresListSerializer
-from api.serializers.infracciones_serializers import InfraccionesListSerializer, InfraccionesSerializer
-from api.models import Autores, Categorias, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Idiomas, Infracciones, Reservas, TipoInfraccion
+from api.models import Autores, Categorias, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Idiomas, TipoInfraccion
 from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, EditorialesSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer, TipoInfraccionesSerializer
 from api.authentication_mixins import Authentication
 from api.serializers.favoritos_serializers import FavoritosListSerializer, FavoritosSerializer
-from api.serializers.reservas_serializer import ReservasListSerializer, ReservasSerializer
 
 
 
@@ -266,37 +263,4 @@ class TipoInfraccionViewSet(viewsets.ModelViewSet):
             return TipoInfraccionesSerializer.Meta.model.objects.all()
         return TipoInfraccion.objects.filter(id_tipo_infraccion = pk).first()
 
-#ViewSet del modelo Infracciones
-class InfraccionesViewSet(viewsets.ModelViewSet):
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    
-    filterset_fields= ['id_tipo_infraccion','estado']
-    search_fields = ['id_bibliotecario__doc_bibliotecario__doc', 'id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro__nombre', 'ejemplares__id_libro__isbn']
-    ''' ordering_fields = ['ejemplares','id_tipo_infraccion','estado', 'id_bibliotecario', 'id_estudiante', 'ejemplares__id_libro']
- '''
-    serializer_class = InfraccionesListSerializer
-    def get_queryset(self, pk=None):
-        if pk == None:
-            return InfraccionesListSerializer.Meta.model.objects.all()
-        return Infracciones.objects.filter(id_infraccion = pk).first()
 
-    def create(self, request):
-            serializer = InfraccionesSerializer(data = request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response({'data' : serializer.data, 'message':'Se ha agregado la infracción al estudiante correctamente'}, status= status.HTTP_201_CREATED)
-        
-            return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-
-    def update(self, request, pk):
-        infraccion = Infracciones.objects.filter(id_infraccion = pk).first()
-        serializer = InfraccionesSerializer(infraccion, data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'data' : serializer.data, 'message':'Infracción actualizada correctamente'}, status= status.HTTP_200_OK)
-        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-
-    def destroy(self, request, pk):
-        infraccion = Infracciones.objects.filter(id_infraccion = pk).first()
-        infraccion.delete()
-        return Response({'message':'Infracción eliminada correctamente'}, status= status.HTTP_200_OK)

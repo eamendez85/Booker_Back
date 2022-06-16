@@ -207,21 +207,6 @@ class TipoInfraccion(models.Model):
     class Meta:
         db_table = 'tipo_infraccion'
 
-
-class Infracciones(models.Model):
-    id_infraccion = models.AutoField(primary_key=True)
-    id_estudiante = models.ForeignKey(Estudiantes, models.DO_NOTHING, db_column='id_estudiante', blank=True, null=True)
-    id_ejemplar = models.ForeignKey(Ejemplares, models.DO_NOTHING, null=True, db_column='id_ejemplar')
-    id_tipo_infraccion = models.ForeignKey('TipoInfraccion', models.DO_NOTHING, db_column='id_tipo_infraccion', blank=True, null=True)
-    descripcion = models.TextField(blank=True, null=True)
-    estado = models.CharField(max_length=3, blank=True, null=True)
-    id_bibliotecario = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_bibliotecario', blank=True, null=True)
-
-    class Meta:
-        db_table = 'infracciones'
-
-
-
 #Prestamos
 
 class DePrestamos(models.Model):
@@ -256,6 +241,19 @@ class Prestamos(models.Model):
             return False
         elif fecha_actual > self.fec_devolucion:
             return True
+
+class Infracciones(models.Model):
+    id_infraccion = models.AutoField(primary_key=True)
+    id_estudiante = models.ForeignKey(Estudiantes, models.DO_NOTHING, db_column='id_estudiante', blank=True, null=True)
+    id_prestamo = models.ForeignKey(Prestamos, models.DO_NOTHING, null=True, db_column='id_prestamo')
+    id_tipo_infraccion = models.ForeignKey('TipoInfraccion', models.DO_NOTHING, db_column='id_tipo_infraccion', blank=True, null=True)
+    descripcion = models.TextField(blank=True, null=True)
+    estado = models.CharField(max_length=3, blank=True, null=True)
+    id_bibliotecario = models.ForeignKey(Bibliotecarios, models.DO_NOTHING, db_column='id_bibliotecario', blank=True, null=True)
+    fecha_infraccion = models.DateField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'infracciones'
 
 #Reservas
 

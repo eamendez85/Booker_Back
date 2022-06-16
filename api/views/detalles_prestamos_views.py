@@ -5,6 +5,7 @@ from api.models import TipoInfraccion
 from api.models import DePrestamos, Prestamos, Estudiantes, Ejemplares, Infracciones
 from rest_framework import status, filters
 from api.serializers.detalles_prestamo_serializer import DetallePrestamosListSerializer, DetallePrestamosSerializer, PrestamosSerializer
+from api.serializers.infracciones_serializers import InfraccionesSerializer, InfraccionesListSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from datetime import date
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -100,6 +101,16 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
                     ejemplar = Ejemplares.objects.filter(id_ejemplar = prestamo_request['id_ejemplar']).first()
                     ejemplar.estado = "INF"
                     ejemplar.save()
+                    id_estudiante_prestamo = de_prestamo.id_estudiante.id_estudiante
+                    estudiante = Estudiantes.objects.get(id_estudiante = id_estudiante_prestamo)
+                    fecha_actual = date.today()
+                    print(prestamo_request)
+                    prestamo = Prestamos.objects.filter(id_prestamo = prestamo_request['id_prestamo']).first()
+                    infraccion_prestamo = Infracciones(id_estudiante = estudiante, id_prestamo = prestamo, fecha_infraccion = fecha_actual, estado = 'AV')
+                    print("ENTRAAAAAAAAA")
+                    print(infraccion_prestamo)
+                    infraccion_prestamo.save()
+
                 elif prestamo_request['estado'] == "AC":
                     ejemplar = Ejemplares.objects.filter(id_ejemplar = prestamo_request['id_ejemplar']).first()
                     ejemplar.estado = "P"

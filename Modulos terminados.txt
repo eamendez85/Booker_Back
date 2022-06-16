@@ -23,6 +23,13 @@ Cuando se cree un prestamo cambie el estado de los ejemplares a Prestado TERMINA
 
 Cuando se elimine una reserva se cambie el estado de los ejemplares a disponibles TERMINADO
 
+Crear una infraccion al actualizar el estado de un prestamo y que cambie el estado del ejemplar y del prestamo a infraccion TERMINADO
+
+Cuando se actualice la infraccion a Completada que cambie el estado del ejemplar a disponible y el prestamo cambie a completado
+
+Cuando se elimine la infraccion cambie el estado del ejemplar a disponible y el prestamo cambie a completado
+
+
 
 Admin
 doc: 48362373243
@@ -110,7 +117,7 @@ estados(AV=Activa, C = Completada)
     "id_estudiante": null,
     "id_tipo_infraccion": null,
     "id_administrador": null,
-    "ejemplares": []
+    "id_ejemplar": 
 }
 
 

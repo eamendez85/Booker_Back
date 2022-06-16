@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from api.models import Infracciones, Libros, TipoInfraccion
+from api.serializers.detalles_prestamo_serializer import PrestamosListSerializer
 from api.serializers.ejemplares_serializers import EjemplaresListSerializer
 from api.serializers.general_serializers import TipoInfraccionesSerializer
 from api.serializers.usuarios_serializers import BibliotecariosInformacionGeneralSerializer, EstudianteInformacionGeneralSerializer
@@ -16,12 +17,12 @@ class LibrosInfraccionesSerializer(serializers.ModelSerializer):
 class InfraccionesListSerializer(serializers.ModelSerializer):
     id_bibliotecario = BibliotecariosInformacionGeneralSerializer(many=False, read_only=True)
     id_estudiante = EstudianteInformacionGeneralSerializer(many=False, read_only=True)
-    id_ejemplar = EjemplaresListSerializer(many = False, read_only=True )
+    id_prestamo = PrestamosListSerializer(many = False, read_only=True )
     id_tipo_infraccion = TipoInfraccionesSerializer(many= False, read_only = True)
 
     class Meta:
         model = Infracciones
-        fields = ['id_infraccion','id_bibliotecario', 'id_estudiante','id_ejemplar','id_tipo_infraccion','descripcion','estado' ]  
+        fields = ['id_infraccion','id_bibliotecario', 'id_estudiante','id_prestamo','id_tipo_infraccion','descripcion','estado' ]  
 
 #Serializer infracciones para post
 class InfraccionesSerializer(serializers.ModelSerializer):
