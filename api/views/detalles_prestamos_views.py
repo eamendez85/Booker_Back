@@ -104,11 +104,9 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
                     id_estudiante_prestamo = de_prestamo.id_estudiante.id_estudiante
                     estudiante = Estudiantes.objects.get(id_estudiante = id_estudiante_prestamo)
                     fecha_actual = date.today()
-                    print(prestamo_request)
+                    #Al actualizar el prestamo se tiene que poner en la data el id del prestamo
                     prestamo = Prestamos.objects.filter(id_prestamo = prestamo_request['id_prestamo']).first()
                     infraccion_prestamo = Infracciones(id_estudiante = estudiante, id_prestamo = prestamo, fecha_infraccion = fecha_actual, estado = 'AV')
-                    print("ENTRAAAAAAAAA")
-                    print(infraccion_prestamo)
                     infraccion_prestamo.save()
 
                 elif prestamo_request['estado'] == "AC":

@@ -23,21 +23,26 @@ class InfraccionesViewSet(viewsets.ModelViewSet):
     def update(self, request, pk):
         infraccion = Infracciones.objects.filter(id_infraccion = pk).first()
         serializer = InfraccionesSerializer(infraccion, data = request.data)
+        
         if serializer.is_valid():
+            if request.data['estado'] == "C":
+                prestamo_infraccion = Prestamos.objects.filter(id_prestamo = request.data.get('id_prestamo')).first() 
+                prestamo_infraccion.estado="C"
+                ejemplar_prestamo = prestamo_infraccion.id_ejemplar
+                ejemplar_prestamo.estado="D"
+                prestamo_infraccion.save()
+                ejemplar_prestamo.save() 
             serializer.save()
             return Response({'data' : serializer.data, 'message':'Infracción actualizada correctamente'}, status= status.HTTP_200_OK)
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk):
         infraccion = Infracciones.objects.filter(id_infraccion = pk).first()
+        prestamo_infraccion = Prestamos.objects.filter(id_prestamo = request.data.get('id_prestamo')).first() 
+        prestamo_infraccion.estado="C"
+        ejemplar_prestamo = prestamo_infraccion.id_ejemplar
+        ejemplar_prestamo.estado="D"
+        prestamo_infraccion.save()
+        ejemplar_prestamo.save() 
         infraccion.delete()
         return Response({'message':'Infracción eliminada correctamente'}, status= status.HTTP_200_OK)
-
-#Cambiar el estado al actualizar la infraccion a c
-        """             if request.data['estado'] == "C":
-                prestamo_infraccion = Prestamos.objects.filter(id_infraccion = pk).first() 
-                prestamo_infraccion.estado="C"
-                ejemplar_prestamo = Ejemplares.objects.filter(id_ejemplar = prestamo_infraccion.id_ejemplar).first()
-                ejemplar_prestamo.estado="D"
-                prestamo_infraccion.save()
-                ejemplar_prestamo.save() """
