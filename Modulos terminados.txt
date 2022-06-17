@@ -27,7 +27,10 @@ Crear una infraccion al actualizar el estado de un prestamo y que cambie el esta
 
 Cuando se actualice la infraccion a Completada que cambie el estado del ejemplar a disponible y el prestamo cambie a completado TERMINADO
 
-Cuando se elimine la infraccion cambie el estado del ejemplar a disponible y el prestamo cambie a completado
+Cuando se elimine la infraccion cambie el estado del ejemplar a disponible y el prestamo cambie a completado TERMINADO
+
+Cuando los prestamos pasen de infraccion a completados que el estado del de_prestamos pase a completado tambien
+
 
 
 
@@ -137,7 +140,7 @@ ejemplo de formato de fechas = "2006-10-25 14:30:59" (aaaa-mm-dd hh-mm-ss)
         {
             "fec_devolucion": "AAAA-mm-dd",
             "estado": null,
-            "id_ejemplar": ,
+            "id_ejemplar": 
         }
     ],
     "id_bibliotecario": ,

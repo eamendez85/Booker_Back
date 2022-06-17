@@ -26,7 +26,7 @@ class InfraccionesViewSet(viewsets.ModelViewSet):
         
         if serializer.is_valid():
             if request.data['estado'] == "C":
-                prestamo_infraccion = Prestamos.objects.filter(id_prestamo = request.data.get('id_prestamo')).first() 
+                prestamo_infraccion = infraccion.id_prestamo 
                 prestamo_infraccion.estado="C"
                 ejemplar_prestamo = prestamo_infraccion.id_ejemplar
                 ejemplar_prestamo.estado="D"
@@ -38,7 +38,7 @@ class InfraccionesViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk):
         infraccion = Infracciones.objects.filter(id_infraccion = pk).first()
-        prestamo_infraccion = Prestamos.objects.filter(id_prestamo = request.data.get('id_prestamo')).first() 
+        prestamo_infraccion = infraccion.id_prestamo 
         prestamo_infraccion.estado="C"
         ejemplar_prestamo = prestamo_infraccion.id_ejemplar
         ejemplar_prestamo.estado="D"
