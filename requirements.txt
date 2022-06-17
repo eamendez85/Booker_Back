@@ -9,5 +9,3 @@ whitenoise
 django-heroku
 gunicorn
 APScheduler
-tablib==3.0.0
-django-import-export==2.6.0
