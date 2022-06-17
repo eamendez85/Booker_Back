@@ -9,6 +9,7 @@ from api.views.recomendados_views import RecomendadosViewSet
 from api.views.usuarios_views import UsuariosViewSet, EstudiantesViewSet, BibliotecariosViewSet
 from api.views.libros_views import LibrosViewSet
 from api.views.reservas_views import ReservasViewSet
+from api.views.infracciones_views import InfraccionesViewSet
 
 router = DefaultRouter()
 

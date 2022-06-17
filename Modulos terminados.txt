@@ -23,6 +23,16 @@ Cuando se cree un prestamo cambie el estado de los ejemplares a Prestado TERMINA
 
 Cuando se elimine una reserva se cambie el estado de los ejemplares a disponibles TERMINADO
 
+Crear una infraccion al actualizar el estado de un prestamo y que cambie el estado del ejemplar y del prestamo a infraccion TERMINADO
+
+Cuando se actualice la infraccion a Completada que cambie el estado del ejemplar a disponible y el prestamo cambie a completado TERMINADO
+
+Cuando se elimine la infraccion cambie el estado del ejemplar a disponible y el prestamo cambie a completado TERMINADO
+
+Cuando los prestamos pasen de infraccion a completados que el estado del de_prestamos pase a completado tambien
+
+
+
 
 Admin
 doc: 48362373243
@@ -104,33 +114,25 @@ estados(IV=inactivo, D=Disponible, P=Prestado, R=Reservado, INF=Infraccion)
 
 Infracciones
 estados(AV=Activa, C = Completada)
-{
-    "descripcion": "",
-    "estado": "",
-    "id_estudiante": null,
-    "id_tipo_infraccion": null,
-    "id_administrador": null,
-    "ejemplares": []
-}
-
+Las infracciones ya no se pueden hacer con un post, se hacen por medio de un prestamo
+estas solo se actualizan o borran
+Actualizar infracción:
+Los datos son los mismos de la infracción, solo se cambia lo que se quiere actualizar
+    {
+        "id_infraccion": ,
+        "descripcion": ,
+        "estado": "",
+        "fecha_infraccion": "",
+        "id_estudiante": ,
+        "id_prestamo": ,
+        "id_tipo_infraccion": ,
+        "id_bibliotecario": 
+    }
 
 de_prestamos
 estados_de_prestamos(AC=Actual, C=Completado, INF=Infraccion)
 estados_prestamos(AC=Actual, C=Completado, INF=Infraccion)
 ejemplo de formato de fechas = "2006-10-25 14:30:59" (aaaa-mm-dd hh-mm-ss)
-{
-    "id_estudiante": ,
-    "prestamos": [
-        {
-            "fec_devolucion": "",
-            "estado": null,
-            "id_ejemplar": 
-        }
-    ],
-    "id_bibliotecario": ,
-    "fec_prestamo": "",
-    "estado": ""
-}
 
 {
     "id_estudiante": ,
@@ -138,12 +140,29 @@ ejemplo de formato de fechas = "2006-10-25 14:30:59" (aaaa-mm-dd hh-mm-ss)
         {
             "fec_devolucion": "AAAA-mm-dd",
             "estado": null,
-            "id_ejemplar": ,
-            "id_de_prestamo":
+            "id_ejemplar": 
         }
     ],
     "id_bibliotecario": ,
     "estado": ""
+}
+
+Crear una infracción al cambiarle el estado a un prestamo (esto se pone al actualizar el prestamo):
+{
+    "id_de_prestamo": ,
+    "id_estudiante": ,
+    "prestamos": [
+        {
+            "id_prestamo": ,
+            "fec_devolucion": "AAAA-MM-DD",
+            "estado": "INF",
+            "id_ejemplar":,
+            "id_de_prestamo": 
+        }
+    ],
+    "fec_prestamo": "",
+    "id_bibliotecario": ,
+    "estado": "AC"
 }
 
 
