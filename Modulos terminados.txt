@@ -29,7 +29,7 @@ Cuando se actualice la infraccion a Completada que cambie el estado del ejemplar
 
 Cuando se elimine la infraccion cambie el estado del ejemplar a disponible y el prestamo cambie a completado TERMINADO
 
-Cuando los prestamos pasen de infraccion a completados que el estado del de_prestamos pase a completado tambien
+Cuando los prestamos pasen de infraccion a completados que el estado del de_prestamos pase a actual tambien TERMINADO
 
 
 
