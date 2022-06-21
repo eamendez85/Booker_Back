@@ -14,7 +14,7 @@ scheduler = BackgroundScheduler()
 
 #ViewSet del modelo Detalles prestamos
 class DetallePrestamoViewSet(viewsets.ModelViewSet):
-    serializer_class = DetallePrestamosSerializer
+    serializer_class = DetallePrestamosListSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     
     filterset_fields= ['estado']

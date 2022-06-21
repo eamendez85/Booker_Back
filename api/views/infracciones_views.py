@@ -14,7 +14,7 @@ class InfraccionesViewSet(viewsets.ModelViewSet):
     search_fields = ['id_bibliotecario__doc_bibliotecario__doc', 'id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro__nombre', 'ejemplares__id_libro__isbn']
     ''' ordering_fields = ['ejemplares','id_tipo_infraccion','estado', 'id_bibliotecario', 'id_estudiante', 'ejemplares__id_libro']
  '''
-    serializer_class = InfraccionesSerializer
+    serializer_class = InfraccionesListSerializer
     def get_queryset(self, pk=None):
         if pk == None:
             return InfraccionesListSerializer.Meta.model.objects.all()
