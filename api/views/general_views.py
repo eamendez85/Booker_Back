@@ -226,7 +226,7 @@ class EjemplaresViewSet(viewsets.ModelViewSet):
 
     filterset_fields= ['estado', 'id_libro__id_libro']
     search_fields = ['id_libro__nombre', 'id_libro__autores__nombres', 'id_libro__autores__apellidos', 'id_libro__categorias__nombre']
-    ordering_fields = ['id_libro__nombre']
+    ordering_fields = ['num_ejemplar']
 
     serializer_class = EjemplaresListSerializer
     def get_queryset(self, pk=None):
