@@ -35,15 +35,34 @@ class ReservasViewSet(viewsets.ModelViewSet):
         #Saco la fecha de reserva con el datetime.now que es la fecha cuando se cree la reserva
         #Y la fecha limite es la fecha de reserva con 3 dias sumados
         fecha_reserva = date.today()
+        error_datos_reserva = {}
+        estado_ejemplares={}
+        validacion_estado_ejemplares=True
+        prestamos_ac_estudiante = []
+        prestamos_filtrados = []
         
         fecha_limite = fecha_reserva + timedelta(days=1)
 
-        error_datos_reserva = {}
-        estado_ejemplares={}
-
-        validacion_estado_ejemplares=True
+        #Datos de validacion de estudiante
         id_estudiante = request.data.get('id_estudiante')
         estudiante_infraccion = Infracciones.objects.filter(id_estudiante = id_estudiante, estado="AV").first()
+        reservas_ac_estudiante = Reservas.objects.filter(id_estudiante = id_estudiante)
+        for reserva in reservas_ac_estudiante:
+            print(reserva)
+            """"aADSdAJHDjkaSJDhahsdhjaSDjhahdjhksajhajhdhjdajhajhkdajhkda jhkad"""
+            print(len(reserva.ejemplares.all()))
+            
+
+        de_prestamos_estudiante = DePrestamos.objects.filter(id_estudiante = id_estudiante)
+        for objecto in de_prestamos_estudiante:
+            prestamos_filtrados = Prestamos.objects.filter(id_de_prestamo = objecto.id_de_prestamo, estado = "AC")
+            if prestamos_filtrados:
+                for prestamo_filtrado in prestamos_filtrados: 
+                    prestamos_ac_estudiante.append(prestamo_filtrado)
+
+        total_ejemplares_estudiante = len(reservas_ac_estudiante) + len(prestamos_ac_estudiante)
+        print("TOTAL EJEMPLARES: ", total_ejemplares_estudiante)
+
         #Este request de los ejemplares solo trae el ultimo ejemplar si son varios ejemplares
         ejemplares_reserva = request.data.get('ejemplares')
 
@@ -55,6 +74,8 @@ class ReservasViewSet(viewsets.ModelViewSet):
         #Si un estudiante tiene una infracción que no pueda reservar un libro en la plataforma
         if estudiante_infraccion:
             return Response({'message':'El estudiante tiene una infracción vigente'}, status= status.HTTP_409_CONFLICT)
+        elif (total_ejemplares_estudiante >= 3):
+            return Response({'message':'El estudiante ha superado al limite de ejemplares prestados o reservados (3)'}, status= status.HTTP_401_UNAUTHORIZED)
         else:
             #Validaciones de ejemplares y sus estados
             for ejemplar_reserva in ejemplares_reserva:
