@@ -40,6 +40,7 @@ class ReservasViewSet(viewsets.ModelViewSet):
         validacion_estado_ejemplares=True
         prestamos_ac_estudiante = []
         prestamos_filtrados = []
+        total_ejem_reservados = 0
         
         fecha_limite = fecha_reserva + timedelta(days=1)
 
@@ -48,11 +49,9 @@ class ReservasViewSet(viewsets.ModelViewSet):
         estudiante_infraccion = Infracciones.objects.filter(id_estudiante = id_estudiante, estado="AV").first()
         reservas_ac_estudiante = Reservas.objects.filter(id_estudiante = id_estudiante)
         for reserva in reservas_ac_estudiante:
-            print(reserva)
-            """"aADSdAJHDjkaSJDhahsdhjaSDjhahdjhksajhajhdhjdajhajhkdajhkda jhkad"""
-            print(len(reserva.ejemplares.all()))
+            total_ejem_reservados+=len(reserva.ejemplares.all())
             
-
+        print("TOTAL EJEMPLARES RESERVADOS", total_ejem_reservados)
         de_prestamos_estudiante = DePrestamos.objects.filter(id_estudiante = id_estudiante)
         for objecto in de_prestamos_estudiante:
             prestamos_filtrados = Prestamos.objects.filter(id_de_prestamo = objecto.id_de_prestamo, estado = "AC")
@@ -60,8 +59,7 @@ class ReservasViewSet(viewsets.ModelViewSet):
                 for prestamo_filtrado in prestamos_filtrados: 
                     prestamos_ac_estudiante.append(prestamo_filtrado)
 
-        total_ejemplares_estudiante = len(reservas_ac_estudiante) + len(prestamos_ac_estudiante)
-        print("TOTAL EJEMPLARES: ", total_ejemplares_estudiante)
+        total_ejemplares_estudiante = total_ejem_reservados+ len(prestamos_ac_estudiante)
 
         #Este request de los ejemplares solo trae el ultimo ejemplar si son varios ejemplares
         ejemplares_reserva = request.data.get('ejemplares')
