@@ -47,7 +47,7 @@ class ReservasViewSet(viewsets.ModelViewSet):
         #Datos de validacion de estudiante
         id_estudiante = request.data.get('id_estudiante')
         estudiante_infraccion = Infracciones.objects.filter(id_estudiante = id_estudiante, estado="AV").first()
-        reservas_ac_estudiante = Reservas.objects.filter(id_estudiante = id_estudiante)
+        reservas_ac_estudiante = Reservas.objects.filter(id_estudiante = id_estudiante, estado = "AC")
         for reserva in reservas_ac_estudiante:
             total_ejem_reservados+=len(reserva.ejemplares.all())
             
