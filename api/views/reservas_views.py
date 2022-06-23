@@ -72,7 +72,7 @@ class ReservasViewSet(viewsets.ModelViewSet):
         #Si un estudiante tiene una infracción que no pueda reservar un libro en la plataforma
         if estudiante_infraccion:
             return Response({'message':'El estudiante tiene una infracción vigente'}, status= status.HTTP_409_CONFLICT)
-        elif (total_ejemplares_estudiante >= 3):
+        elif (total_ejemplares_estudiante >= 3 or (total_ejemplares_estudiante + len(ejemplares_reserva)) >= 3):
             return Response({'message':'El estudiante ha superado al limite de ejemplares prestados o reservados (3)'}, status= status.HTTP_401_UNAUTHORIZED)
         else:
             #Validaciones de ejemplares y sus estados
