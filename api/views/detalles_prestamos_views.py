@@ -148,11 +148,13 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
         de_prestamo.delete()
         return Response({'message':'Prestamo eliminado correctamente'}, status= status.HTTP_200_OK)
 
-    @scheduler.scheduled_job('interval', seconds=60)
+    @scheduler.scheduled_job('interval', seconds=5)
     def validacion_infraccion_fec_devolucion():
         #Cuando el prestamo pase de la fecha de devolucion y esté en estado AC, 
         # que se cree una infracción de ese estudiante, que el estado del prestamo pase a infraccion 
         #y que el estado del ejemplar pase a infracción
+
+        print("VALIDACIOOOON")
         detalle_prestamos = DePrestamos.objects.filter()
         for de_prestamo in detalle_prestamos:
             prestamos = de_prestamo.prestamos.filter()
@@ -171,13 +173,17 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
                             ejemplar = Ejemplares.objects.get(id_ejemplar = id_ejemplar_prestamo)
                             tipo_infraccion = TipoInfraccion.objects.get(id_tipo_infraccion = "2")
                             #Se crea la infracción
-                            infraccion_estudiante = Infracciones(id_estudiante = estudiante, id_ejemplar = ejemplar, id_tipo_infraccion = tipo_infraccion, estado= "AV")
+                            infraccion_estudiante = Infracciones(id_estudiante = estudiante, id_prestamo = prestamo, id_tipo_infraccion = tipo_infraccion, estado= "AV")
                             infraccion_estudiante.save()
-
+                            #Cambio el estado del prestamo
+                            prestamo.estado = "INF"
                             #Cambio el estado de los ejemplares
                             ejemplar.estado = "INF"
                             ejemplar.save()
+                            de_prestamo.estado = "INF"
+                            de_prestamo.save()
                         prestamo.save()
+
                     elif prestamo.infraccion_prestamo_por_fecha_devolucion == True and prestamo.estado == "C":   
                         pass
                     else:
