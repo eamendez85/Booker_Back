@@ -31,7 +31,7 @@ Cuando se elimine la infraccion cambie el estado del ejemplar a disponible y el 
 
 Cuando los prestamos pasen de infraccion a completados que el estado del de_prestamos pase a actual tambien TERMINADO
 
-
+La fecha de devolución no pueda ser menor a la actual
 
 
 Admin

@@ -180,8 +180,6 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
                             #Cambio el estado de los ejemplares
                             ejemplar.estado = "INF"
                             ejemplar.save()
-                            de_prestamo.estado = "INF"
-                            de_prestamo.save()
                         prestamo.save()
 
                     elif prestamo.infraccion_prestamo_por_fecha_devolucion == True and prestamo.estado == "C":   
