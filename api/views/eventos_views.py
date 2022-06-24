@@ -11,7 +11,7 @@ class EventosViewSet(viewsets.ModelViewSet):
 
     filterset_fields= ['estado']
     search_fields = ['titulo']
-    ordering_fields = ['fec_inicio','fec_fin']
+    ordering_fields = ['fec_inicio','fec_fin', 'id_evento']
 
 
 

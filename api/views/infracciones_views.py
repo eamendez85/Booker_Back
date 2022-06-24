@@ -12,14 +12,13 @@ class InfraccionesViewSet(viewsets.ModelViewSet):
     
     filterset_fields= ['id_tipo_infraccion','estado']
     search_fields = ['id_bibliotecario__doc_bibliotecario__doc', 'id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro__nombre', 'ejemplares__id_libro__isbn']
-    ''' ordering_fields = ['ejemplares','id_tipo_infraccion','estado', 'id_bibliotecario', 'id_estudiante', 'ejemplares__id_libro']
- '''
+    ordering_fields = ['ejemplares','id_tipo_infraccion', 'id_infraccion']
+
     serializer_class = InfraccionesListSerializer
     def get_queryset(self, pk=None):
         if pk == None:
             return InfraccionesListSerializer.Meta.model.objects.all()
         return Infracciones.objects.filter(id_infraccion = pk).first()
-
     def update(self, request, pk):
         infraccion = Infracciones.objects.filter(id_infraccion = pk).first()
         serializer = InfraccionesSerializer(infraccion, data = request.data)

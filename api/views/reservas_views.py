@@ -50,8 +50,6 @@ class ReservasViewSet(viewsets.ModelViewSet):
         reservas_ac_estudiante = Reservas.objects.filter(id_estudiante = id_estudiante, estado = "AC")
         for reserva in reservas_ac_estudiante:
             total_ejem_reservados+=len(reserva.ejemplares.all())
-            
-        print("TOTAL EJEMPLARES RESERVADOS", total_ejem_reservados)
         de_prestamos_estudiante = DePrestamos.objects.filter(id_estudiante = id_estudiante)
         for objecto in de_prestamos_estudiante:
             prestamos_filtrados = Prestamos.objects.filter(id_de_prestamo = objecto.id_de_prestamo, estado = "AC")

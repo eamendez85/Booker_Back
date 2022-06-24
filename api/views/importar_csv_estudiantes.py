@@ -8,7 +8,6 @@ def importar_csv_estudiantes():
     
     csv_bd = CsvEstudiantes.objects.filter(id_csv = 1).first().csv
     url_csv = "media/"+ str(csv_bd)
-    print("CSV", url_csv)
     estudiantes = []
     with open(url_csv, "r") as csv_file:
         data = list(csv.reader(csv_file, delimiter=";"))

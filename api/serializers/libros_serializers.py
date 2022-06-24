@@ -25,15 +25,6 @@ class LibrosListSerializer(serializers.ModelSerializer):
     fields= ['id_libro', 'isbn', 'imagen_libro', 'nombre', 'id_editorial', 'edicion', 'autores', 'id_idioma', 'categorias', 'descripcion', 'numero_paginas', 'numero_capitulos', 'presentacion', 'anexos', 'palabras_clave', 'estado']
 
 
-
-
-"""class EjemplaresLibrosSerializer(serializers.Serializer):
-
-    class Meta:
-            model = Ejemplares
-            fields = ["id_libro", ]"""
-
-
 class LibrosConEjemplaresSerializer(serializers.ModelSerializer):  
     cant_ejemplares = serializers.IntegerField(default=0)
 

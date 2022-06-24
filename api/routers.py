@@ -5,7 +5,7 @@ from rest_framework.routers import DefaultRouter
 from api.views.detalles_prestamos_views import DetallePrestamoViewSet
 from api.views.eventos_views import EventosViewSet
 from api.views.general_views import *
-from api.views.recomendados_views import RecomendadosViewSet
+from api.views.prestamos_views import PrestamosViewset
 from api.views.usuarios_views import UsuariosViewSet, EstudiantesViewSet, BibliotecariosViewSet
 from api.views.libros_views import LibrosViewSet
 from api.views.reservas_views import ReservasViewSet
@@ -23,14 +23,14 @@ router.register(r'favoritos', FavoritosViewSet, basename= 'favoritos')
 router.register(r'ejemplares', EjemplaresViewSet, basename= 'ejemplares')
 router.register(r'tipo_infraccion', TipoInfraccionViewSet, basename= 'tipoInfraccion')
 router.register(r'infracciones', InfraccionesViewSet, basename= 'infracciones')
-router.register(r'de_prestamos', DetallePrestamoViewSet, basename= 'prestamos')
+router.register(r'de_prestamos', DetallePrestamoViewSet, basename= 'detalles de prestamos')
+router.register(r'prestamos', PrestamosViewset, basename= 'prestamos')
 router.register(r'libros', LibrosViewSet, basename= 'libros')
 router.register(r'reservas', ReservasViewSet, basename= 'reservas')
 router.register(r'usuarios', UsuariosViewSet, basename= 'usuarios')
 router.register(r'estudiantes', EstudiantesViewSet, basename= 'estudiantes')
 router.register(r'bibliotecarios', BibliotecariosViewSet, basename= 'bibliotecarios')
 router.register(r'eventos', EventosViewSet, basename= 'eventos')
-router.register(r'recomendados', RecomendadosViewSet, basename= 'recomendados')
 
 
 urlpatterns = router.urls

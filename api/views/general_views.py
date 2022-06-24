@@ -5,7 +5,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from api.serializers.ejemplares_serializers import EjemplaresSerializer, EjemplaresListSerializer
 from api.models import Autores, Categorias, Editoriales, Ejemplares, Favoritos, Grados, Grupos, Idiomas, TipoInfraccion
 from api.serializers.general_serializers import AutoresSerializer, CategoriasSerializer, EditorialesSerializer, GradosSerializer, GruposSerializer, IdiomasSerializer, TipoInfraccionesSerializer
-from api.authentication_mixins import Authentication
 from api.serializers.favoritos_serializers import FavoritosListSerializer, FavoritosSerializer
 
 

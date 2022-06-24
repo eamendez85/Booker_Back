@@ -23,9 +23,9 @@ class LibrosViewSet(viewsets.ModelViewSet):
     #Para poder ordenar la información de manera ascendente es ?ordering=(campo que quiere ordenar en especifico) el campo tiene que estar 
     #igual de escrito que los campos de ordering_fields
     # ejemplo ?ordering=id_idioma__nombre
-    ''' ordering_fields = ['isbn','nombre',
+    ordering_fields = ['isbn','nombre',
     'estado','categorias__nombre'
-    ,'autores__nombres','autores__apellidos'] '''
+    ,'autores__nombres','autores__apellidos', 'id_libro'] 
 
 
     def get_queryset(self, pk=None):
@@ -55,13 +55,9 @@ class LibrosViewSet(viewsets.ModelViewSet):
         serializer_libro = LibrosSerializer(libro, data = request.data)
         estado_libro = request.data.get("estado")
         ejemplares_libro = Ejemplares.objects.filter(id_libro = pk)
-        print(estado_libro)
-        print(ejemplares_libro)
         if serializer_libro.is_valid():
             if estado_libro == "IV":
                 for ejemplar in ejemplares_libro: 
-                    print("entro")
-                    print(ejemplar)
                     ejemplar.estado = "IV"
                     ejemplar.save()
                 serializer_libro.save()
