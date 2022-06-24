@@ -34,6 +34,7 @@ Cuando los prestamos pasen de infraccion a completados que el estado del de_pres
 La fecha de devolución no pueda ser menor a la actual
 
 
+
 Admin
 doc: 48362373243
 password: bwenb2j32hb

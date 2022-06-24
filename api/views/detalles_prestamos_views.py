@@ -154,7 +154,6 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
         # que se cree una infracción de ese estudiante, que el estado del prestamo pase a infraccion 
         #y que el estado del ejemplar pase a infracción
 
-        print("VALIDACIOOOON")
         detalle_prestamos = DePrestamos.objects.filter()
         for de_prestamo in detalle_prestamos:
             prestamos = de_prestamo.prestamos.filter()
