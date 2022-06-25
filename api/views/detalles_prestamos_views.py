@@ -17,7 +17,7 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
     serializer_class = DetallePrestamosListSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     
-    filterset_fields= ['estado', 'id_estudiante__id_estudiante', 'prestamos__id_ejemplar__id_libro__id_libro']
+    filterset_fields= ['estado', 'id_estudiante__id_estudiante', 'prestamos__id_ejemplar__id_libro__id_libro', 'prestamos__id_ejemplar__id_ejemplar']
     search_fields = ['id_estudiante__doc_estudiante__doc', 'id_bibliotecario__doc_bibliotecario__doc','prestamos__id_ejemplar__id_libro__isbn', 'prestamos__id_ejemplar__id_libro__nombre']
     ordering_fields = ['fec_prestamo', 'prestamos__fec_devolucion']
 
