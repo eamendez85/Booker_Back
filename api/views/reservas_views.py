@@ -66,8 +66,6 @@ class ReservasViewSet(viewsets.ModelViewSet):
         request.data['fecha_limite'] = fecha_limite
 
         reserva_serializer = ReservasSerializer(data = request.data)
-        print("RESERVAS REQUEST", len(ejemplares_reserva))
-        print("Total ejemplares ", total_ejemplares_estudiante)
         #Si un estudiante tiene una infracción que no pueda reservar un libro en la plataforma
         if estudiante_infraccion:
             return Response({'message':'El estudiante tiene una infracción vigente'}, status= status.HTTP_409_CONFLICT)

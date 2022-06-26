@@ -89,6 +89,7 @@ class Usuario(AbstractBaseUser):
     imagen = models.TextField('Imagen del perfil', blank=True, null=True)
     usuario_activo = models.BooleanField(default = True)
     tipo_usuario = models.CharField('Tipo usuario', max_length=1)
+    codigo_recuperacion = models.IntegerField(max_length=6, blank=True, null=True)
     #[A, B, E]
     objects = UsuarioManager()
     USERNAME_FIELD = 'doc'
