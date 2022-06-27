@@ -191,6 +191,12 @@ class IdiomasViewSet(viewsets.ModelViewSet):
 
 #ViewSet del modelo Favoritos
 class FavoritosViewSet(viewsets.ModelViewSet):
+    
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+
+    filterset_fields= ['id_estudiante', 'id_favorito']
+    ordering_fields = ['id_favorito']
+    
     serializer_class = FavoritosListSerializer
     def get_queryset(self, pk=None):
         if pk == None:
