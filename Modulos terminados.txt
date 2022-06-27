@@ -79,6 +79,7 @@ tipoinfraccion
 
 libros
 estados(AV=Activo, IV=Inactivo)
+seleccionado(SL = seleccionado, NS = No seleccionado)
 {
     "isbn": "",
     "imagen_libro": null,
