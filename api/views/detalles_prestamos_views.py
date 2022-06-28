@@ -91,6 +91,7 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
                     error=True
                     errors['prestamo '+ str(counter)]=prestamo_serializer.errors
         else:
+            id_infracciones_list=[]
             for prestamo_request in prestamos_request:
                 if prestamo_request['estado'] == "C":
                     ejemplar = Ejemplares.objects.filter(id_ejemplar = prestamo_request['id_ejemplar']).first()
@@ -108,6 +109,7 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
                     prestamo = Prestamos.objects.filter(id_prestamo = prestamo_request['id_prestamo']).first()
                     infraccion_prestamo = Infracciones(id_estudiante = estudiante, id_prestamo = prestamo, fecha_infraccion = fecha_actual, estado = 'AV')
                     infraccion_prestamo.save()
+                    id_infracciones_list.append(infraccion_prestamo.id_infraccion)
 
                 elif prestamo_request['estado'] == "AC":
                     ejemplar = Ejemplares.objects.filter(id_ejemplar = prestamo_request['id_ejemplar']).first()
@@ -130,7 +132,9 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
             
         if de_prestamo_serializer.is_valid():
             de_prestamo_serializer.save()
-            if error == False:
+            if de_prestamo_inf:
+                return Response({'message':'El prestamo se ha actualizado correctamente', 'infracciones': id_infracciones_list}, status= status.HTTP_200_OK)
+            elif error == False:
                 return Response({'message':'El prestamo se ha actualizado correctamente'}, status= status.HTTP_200_OK)
         else:
             errors['detalles_prestamo']=de_prestamo_serializer.errors
