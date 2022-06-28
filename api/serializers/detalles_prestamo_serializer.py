@@ -16,7 +16,7 @@ class PrestamosListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Prestamos
-        fields = ['id_prestamo', 'fec_devolucion', 'estado', 'id_ejemplar']
+        fields = ['id_prestamo', 'id_de_prestamo','fec_devolucion', 'estado', 'id_ejemplar']
 
 #Serializer DePrestamos
 class DetallePrestamosSerializer(serializers.ModelSerializer):
