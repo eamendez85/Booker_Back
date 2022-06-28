@@ -22,7 +22,7 @@ class LibrosListSerializer(serializers.ModelSerializer):
   
   class Meta:
     model= Libros
-    fields= ['id_libro', 'isbn', 'imagen_libro', 'nombre', 'id_editorial', 'edicion', 'autores', 'id_idioma', 'categorias', 'descripcion', 'numero_paginas', 'numero_capitulos', 'presentacion', 'anexos', 'palabras_clave', 'estado']
+    fields= ['id_libro', 'isbn', 'imagen_libro', 'nombre', 'id_editorial', 'edicion', 'autores', 'id_idioma', 'categorias', 'descripcion', 'numero_paginas', 'numero_capitulos', 'presentacion', 'anexos', 'palabras_clave', 'estado', 'seleccionado']
 
 
 class LibrosConEjemplaresSerializer(serializers.ModelSerializer):  
@@ -30,4 +30,4 @@ class LibrosConEjemplaresSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Libros
-        fields = ["id_libro","isbn","imagen_libro","nombre","edicion","descripcion","numero_paginas","numero_capitulos","presentacion","anexos","palabras_clave","estado","id_editorial","id_idioma","autores","categorias", "cant_ejemplares"]
+        fields = ["id_libro","isbn","imagen_libro","nombre","edicion","descripcion","numero_paginas","numero_capitulos","presentacion","anexos","palabras_clave","estado", "seleccionado","id_editorial","id_idioma","autores","categorias", "cant_ejemplares"]
