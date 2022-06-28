@@ -173,6 +173,7 @@ class Libros(models.Model):
     anexos = models.CharField(max_length=200, blank=True, null=True)
     palabras_clave = models.TextField(blank=True, null=True)
     estado = models.CharField(max_length=3, blank=True, null=True)
+    seleccionado = models.CharField(max_length=3, blank=True, null=True)
 
 
     class Meta:
