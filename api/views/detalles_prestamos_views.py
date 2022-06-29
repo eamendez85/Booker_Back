@@ -14,7 +14,7 @@ scheduler = BackgroundScheduler()
 
 #ViewSet del modelo Detalles prestamos
 class DetallePrestamoViewSet(viewsets.ModelViewSet):
-    serializer_class = DetallePrestamosListSerializer
+    serializer_class = DetallePrestamosSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     
     filterset_fields= ['estado', 'id_estudiante__id_estudiante', 'prestamos__id_ejemplar__id_libro__id_libro', 'prestamos__id_ejemplar__id_ejemplar']
@@ -98,18 +98,20 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
                     ejemplar.estado = "D"
                     ejemplar.save()
                 elif prestamo_request['estado'] == "INF":
-                    de_prestamo_inf = True
-                    ejemplar = Ejemplares.objects.filter(id_ejemplar = prestamo_request['id_ejemplar']).first()
-                    ejemplar.estado = "INF"
-                    ejemplar.save()
-                    id_estudiante_prestamo = de_prestamo.id_estudiante.id_estudiante
-                    estudiante = Estudiantes.objects.get(id_estudiante = id_estudiante_prestamo)
-                    fecha_actual = date.today()
-                    #Al actualizar el prestamo se tiene que poner en la data el id del prestamo
-                    prestamo = Prestamos.objects.filter(id_prestamo = prestamo_request['id_prestamo']).first()
-                    infraccion_prestamo = Infracciones(id_estudiante = estudiante, id_prestamo = prestamo, fecha_infraccion = fecha_actual, estado = 'AV')
-                    infraccion_prestamo.save()
-                    id_infracciones_list.append(infraccion_prestamo.id_infraccion)
+                    infraccion_existente = Infracciones.objects.filter(id_prestamo = prestamo_request['id_prestamo']).first()
+                    if not infraccion_existente:
+                        de_prestamo_inf = True
+                        ejemplar = Ejemplares.objects.filter(id_ejemplar = prestamo_request['id_ejemplar']).first()
+                        ejemplar.estado = "INF"
+                        ejemplar.save()
+                        id_estudiante_prestamo = de_prestamo.id_estudiante.id_estudiante
+                        estudiante = Estudiantes.objects.get(id_estudiante = id_estudiante_prestamo)
+                        fecha_actual = date.today()
+                        #Al actualizar el prestamo se tiene que poner en la data el id del prestamo
+                        prestamo = Prestamos.objects.filter(id_prestamo = prestamo_request['id_prestamo']).first()
+                        infraccion_prestamo = Infracciones(id_estudiante = estudiante, id_prestamo = prestamo, fecha_infraccion = fecha_actual, estado = 'AV')
+                        infraccion_prestamo.save()
+                        id_infracciones_list.append(infraccion_prestamo.id_infraccion)
 
                 elif prestamo_request['estado'] == "AC":
                     ejemplar = Ejemplares.objects.filter(id_ejemplar = prestamo_request['id_ejemplar']).first()
