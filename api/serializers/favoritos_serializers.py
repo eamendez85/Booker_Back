@@ -18,7 +18,7 @@ class LibrosFavoritosSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Libros
-        fields = ['isbn','imagen_libro','nombre','autores','categorias','id_editorial','id_idioma']
+        fields = ['id_libro','isbn','imagen_libro','nombre','autores','categorias','id_editorial','id_idioma']
 
 class FavoritosListSerializer(serializers.ModelSerializer):
     
