@@ -10,7 +10,7 @@ from api.models import Ejemplares, Infracciones, Prestamos
 class InfraccionesViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     
-    filterset_fields= ['id_tipo_infraccion','estado']
+    filterset_fields= ['id_tipo_infraccion', 'id_estudiante__id_estudiante','estado']
     search_fields = ['id_bibliotecario__doc_bibliotecario__doc', 'id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro__nombre', 'ejemplares__id_libro__isbn']
     ordering_fields = ['ejemplares','id_tipo_infraccion', 'id_infraccion']
 
