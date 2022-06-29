@@ -68,7 +68,9 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
         errors={}
         error=False
         counter=0
+        cant_completados = 0
         de_prestamo_inf = False
+        de_prestamo_ac = False
         prestamo_request={}
         prestamos_request=request.data.get('prestamos')
         de_prestamo = DePrestamos.objects.filter(id_de_prestamo = pk).first()
@@ -86,6 +88,10 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
                 prestamo_serializer = PrestamosSerializer(prestamo, prestamo_request)
                 counter+=1
                 if prestamo_serializer.is_valid():
+                    infraccion_prestamo = Infracciones.objects.filter(id_prestamo = prestamo.id_prestamo).first()
+                    if infraccion_prestamo:
+                        infraccion_prestamo.estado = "C"
+                        infraccion_prestamo.save()
                     prestamo_serializer.save()
                 else:
                     error=True
@@ -94,13 +100,18 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
             id_infracciones_list=[]
             for prestamo_request in prestamos_request:
                 if prestamo_request['estado'] == "C":
+                    cant_completados+=1
                     ejemplar = Ejemplares.objects.filter(id_ejemplar = prestamo_request['id_ejemplar']).first()
                     ejemplar.estado = "D"
+                    infraccion_prestamo = Infracciones.objects.filter(id_prestamo = prestamo_request['id_prestamo']).first()
+                    if infraccion_prestamo:
+                        infraccion_prestamo.estado = "C"
+                        infraccion_prestamo.save()
                     ejemplar.save()
                 elif prestamo_request['estado'] == "INF":
+                    de_prestamo_inf = True
                     infraccion_existente = Infracciones.objects.filter(id_prestamo = prestamo_request['id_prestamo']).first()
                     if not infraccion_existente:
-                        de_prestamo_inf = True
                         ejemplar = Ejemplares.objects.filter(id_ejemplar = prestamo_request['id_ejemplar']).first()
                         ejemplar.estado = "INF"
                         ejemplar.save()
@@ -114,8 +125,13 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
                         id_infracciones_list.append(infraccion_prestamo.id_infraccion)
 
                 elif prestamo_request['estado'] == "AC":
+                    de_prestamo_ac = True
                     ejemplar = Ejemplares.objects.filter(id_ejemplar = prestamo_request['id_ejemplar']).first()
                     ejemplar.estado = "P"
+                    infraccion_prestamo = Infracciones.objects.filter(id_prestamo = prestamo_request['id_prestamo']).first()
+                    if infraccion_prestamo:
+                        infraccion_prestamo.estado = "C"
+                        infraccion_prestamo.save()
                     ejemplar.save()
 
             for prestamo in prestamos:
@@ -126,10 +142,13 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
                 else:
                     error=True
                     errors['prestamo '+ str(counter)]=prestamo_serializer.errors
-        
         request.data.pop('prestamos')
-        if de_prestamo_inf:
+        if de_prestamo_inf and de_prestamo_ac==False:
             request.data['estado']="INF"
+        elif de_prestamo_ac and de_prestamo_inf==False:
+            request.data['estado']="AC"
+        elif len(prestamos_request) == cant_completados:
+            request.data['estado']="C"
         de_prestamo_serializer= DetallePrestamosSerializer(de_prestamo, data = request.data)
             
         if de_prestamo_serializer.is_valid():

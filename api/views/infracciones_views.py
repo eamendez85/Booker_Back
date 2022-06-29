@@ -24,13 +24,36 @@ class InfraccionesViewSet(viewsets.ModelViewSet):
         serializer = InfraccionesSerializer(infraccion, data = request.data)
         
         if serializer.is_valid():
+            prestamo_infraccion = infraccion.id_prestamo
+            de_prestamo = prestamo_infraccion.id_de_prestamo
+            ejemplar_prestamo = prestamo_infraccion.id_ejemplar
+
             if request.data['estado'] == "C":
-                prestamo_infraccion = infraccion.id_prestamo 
+                cant_completados = 0
+                de_prestamo_inf = False
                 prestamo_infraccion.estado="C"
-                de_prestamo = prestamo_infraccion.id_de_prestamo
-                de_prestamo.estado = "AC"
-                ejemplar_prestamo = prestamo_infraccion.id_ejemplar
+                prestamo_infraccion.save()
                 ejemplar_prestamo.estado="D"
+                prestamos = Prestamos.objects.filter(id_de_prestamo = de_prestamo)
+                for prestamo in prestamos:
+                    if prestamo.estado == "C":
+                        cant_completados+=1
+                    elif prestamo.estado == "INF":
+                        de_prestamo_inf = True
+
+                if len(prestamos)==cant_completados:
+                    de_prestamo.estado = "C"
+                elif de_prestamo_inf:
+                    de_prestamo.estado = "INF"
+                else:
+                    de_prestamo.estado = "AC"
+                ejemplar_prestamo.save() 
+                de_prestamo.save()
+
+            elif request.data['estado'] == "AV":
+                prestamo_infraccion.estado="INF"
+                de_prestamo.estado = "INF"
+                ejemplar_prestamo.estado="INF"
                 prestamo_infraccion.save()
                 ejemplar_prestamo.save() 
                 de_prestamo.save()
