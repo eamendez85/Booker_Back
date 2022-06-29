@@ -196,8 +196,9 @@ class DetallePrestamoViewSet(viewsets.ModelViewSet):
                             id_ejemplar_prestamo = prestamo.id_ejemplar.id_ejemplar
                             ejemplar = Ejemplares.objects.get(id_ejemplar = id_ejemplar_prestamo)
                             tipo_infraccion = TipoInfraccion.objects.get(id_tipo_infraccion = "2")
+                            descripcion = "No entregó el libro antes de la fecha de devolución acordada"
                             #Se crea la infracción
-                            infraccion_estudiante = Infracciones(id_estudiante = estudiante, id_prestamo = prestamo, id_tipo_infraccion = tipo_infraccion, estado= "AV")
+                            infraccion_estudiante = Infracciones(id_estudiante = estudiante, id_prestamo = prestamo, id_tipo_infraccion = tipo_infraccion, estado= "AV", descripcion=descripcion)
                             infraccion_estudiante.save()
                             #Cambio el estado del prestamo
                             prestamo.estado = "INF"
