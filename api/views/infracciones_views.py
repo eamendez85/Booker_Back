@@ -11,7 +11,7 @@ class InfraccionesViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     
     filterset_fields= ['id_tipo_infraccion', 'id_estudiante__id_estudiante','estado']
-    search_fields = ['id_bibliotecario__doc_bibliotecario__doc', 'id_estudiante__doc_estudiante__doc', 'ejemplares__id_libro__nombre', 'ejemplares__id_libro__isbn']
+    search_fields = ['id_bibliotecario__doc_bibliotecario', 'id_estudiante__doc_estudiante', 'id_prestamo__id_ejemplar__id_libro__nombre', 'id_prestamo__id_ejemplar__id_libro__isbn', 'id_estudiante__nombres', 'id_estudiante__apellidos']
     ordering_fields = ['ejemplares','id_tipo_infraccion', 'id_infraccion']
 
     serializer_class = InfraccionesListSerializer
